@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Kogi Lifestyle</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background: #0a0a0a; color: #fff; min-height: 100vh; }
+
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: flex; flex-direction: column; }
+
+  /* LANDING */
+  #landing {
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px;
+    background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.9)),
+      url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1600');
+    background-size: cover;
+    background-position: center;
+  }
+  #landing .top { width: 100%; text-align: right; font-size: 11px; color: rgba(255,255,255,0.5); }
+  #landing .mid { text-align: center; }
+  #landing h1 {
+    font-size: 52px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -1px;
+    background: linear-gradient(90deg, #f59e0b, #ef4444, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  #landing .tag { margin-top: 14px; color: rgba(255,255,255,0.8); font-size: 15px; font-style: italic; }
+  #landing .bottom { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; }
+  #landing .bottom button {
+    padding: 16px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  #landing .btn-primary { background: #f59e0b; color: #000; }
+  #landing .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+  #landing .footer { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 10px; }
+
+  /* FORM PAGES */
+  .form-page { align-items: center; justify-content: center; padding: 24px; background: #0a0a0a; }
+  .form-card { width: 100%; max-width: 380px; background: #161b22; border: 1px solid #30363d; border-radius: 18px; padding: 24px; }
+  .form-card h2 { color: #f59e0b; font-size: 22px; margin-bottom: 18px; }
+  .form-card input {
+    width: 100%;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 14px;
+    color: #fff;
+    font-size: 15px;
+    margin-bottom: 12px;
+    outline: none;
+    font-family: inherit;
+  }
+  .form-card input:focus { border-color: #f59e0b; }
+  .form-card button {
+    width: 100%;
+    background: #f59e0b;
+    color: #000;
+    font-weight: 800;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .form-card button:disabled { opacity: 0.5; }
+  .form-card .err { color: #f87171; font-size: 13px; margin-top: 6px; }
+  .form-card .switch { color: #8b949e; font-size: 13px; text-align: center; margin-top: 14px; }
+  .form-card .switch a { color: #f59e0b; cursor: pointer; text-decoration: none; }
+
+  /* GAME */
+  #game { padding: 16px; padding-bottom: 40px; }
+  .card {
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 14px;
+  }
+  .card.nepo { background: linear-gradient(135deg, #d97706, #92400e); }
+  .card.lapo { background: linear-gradient(135deg, #047857, #064e3b); }
+  .card .class-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.75); }
+  .card .city { font-size: 26px; font-weight: 900; margin-top: 4px; }
+  .card .zone { font-size: 14px; color: rgba(255,255,255,0.85); }
+  .card .logout { float: right; color: rgba(255,255,255,0.7); font-size: 12px; background: none; border: none; cursor: pointer; font-family: inherit; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .stat { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 12px 8px; text-align: center; }
+  .stat .label { font-size: 10px; color: #8b949e; }
+  .stat .value { font-size: 15px; font-weight: 800; margin-top: 4px; }
+  .stat.money .value { color: #10b981; }
+  .stat.energy .value { color: #f59e0b; }
+  .stat.cred .value { color: #58a6ff; }
+
+  .debt { background: #450a0a; border: 1px solid #7f1d1d; border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+  .debt .label { font-size: 11px; color: #fca5a5; }
+  .debt .value { font-size: 18px; font-weight: 800; color: #f87171; }
+
+  .panel { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 20px; }
+  .panel .mini-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #8b949e; }
+  .panel p { margin-top: 8px; font-size: 14px; color: #c9d1d9; line-height: 1.6; }
+  .panel .btn-delete { margin-top: 16px; background: none; border: none; color: #f87171; font-size: 12px; text-decoration: underline; cursor: pointer; font-family: inherit; }
+
+  .center-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  .big-btn { background: #f59e0b; color: #000; font-weight: 800; padding: 16px 32px; border-radius: 14px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
+
+  .loading { color: #8b949e; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- LANDING -->
+<div id="landing" class="page active">
+  <div class="top">v0.1 — Alpha</div>
+  <div class="mid">
+    <h1>KOGI<br>LIFESTYLE</h1>
+    <div class="tag">Which Kogi you go live today?</div>
+  </div>
+  <div class="bottom">
+    <button class="btn-primary" onclick="go('signup')">SIGN UP</button>
+    <button class="btn-secondary" onclick="go('login')">LOGIN</button>
+    <div class="footer">© Kogi Lifestyle 2026 — Confluence of Rivers Niger &amp; Benue</div>
+  </div>
+</div>
+
+<!-- SIGNUP -->
+<div id="signup" class="page form-page">
+  <div class="form-card">
+    <h2>Create Account</h2>
+    <input id="signup-username" placeholder="Username" autocapitalize="none" />
+    <input id="signup-password" placeholder="Password (6+ chars)" type="password" />
+    <div class="err" id="signup-err"></div>
+    <button id="signup-btn" onclick="handleSignup()">SIGN UP</button>
+    <div class="switch">Already get account? <a onclick="go('login')">Login</a></div>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="page form-page">
+  <div class="form-card">
+    <h2>Welcome Back</h2>
+    <input id="login-username" placeholder="Username" autocapitalize="none" />
+    <input id="login-password" placeholder="Password" type="password" />
+    <div class="err" id="login-err"></div>
+    <button id="login-btn" onclick="handleLogin()">LOGIN</button>
+    <div class="switch">No account? <a onclick="go('signup')">Sign up</a></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div id="loading" class="page">
+  <div class="center-screen"><div class="loading">Loading...</div></div>
+</div>
+
+<!-- GAME -->
+<div id="game" class="page"></div>
+
+<script>
+  const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
+
+  function go(pageId) {
+    document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+    document.getElementById(pageId).classList.add("active");
+  }
+
+  function getToken() { return localStorage.getItem("kogi_token"); }
+  function setToken(t) { t ? localStorage.setItem("kogi_token", t) : localStorage.removeItem("kogi_token"); }
+
+  async function api(path, options = {}) {
+    const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+    const token = getToken();
+    if (token) headers.Authorization = "Bearer " + token;
+    const res = await fetch(API + path, { ...options, headers });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Request failed");
+    return data;
+  }
+
+  // ---- SIGNUP ----
+  async function handleSignup() {
+    const username = document.getElementById("signup-username").value.trim();
+    const password = document.getElementById("signup-password").value;
+    const err = document.getElementById("signup-err");
+    const btn = document.getElementById("signup-btn");
+    err.textContent = ""; btn.disabled = true; btn.textContent = "Creating...";
+    try {
+      const { token } = await api("/api/auth/signup", { method: "POST", body: JSON.stringify({ username, password }) });
+      setToken(token);
+      await showGame();
+    } catch (e) {
+      err.textContent = e.message;
+    } finally {
+      btn.disabled = false; btn.textContent = "SIGN UP";
+    }
+  }
+
+  // ---- LOGIN ----
+  async function handleLogin() {
+    const username = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value;
+    const err = document.getElementById("login-err");
+    const btn = document.getElementById("login-btn");
+    err.textContent = ""; btn.disabled = true; btn.textContent = "Logging in...";
+    try {
+      const { token } = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
+      setToken(token);
+      await showGame();
+    } catch (e) {
+      err.textContent = e.message;
+    } finally {
+      btn.disabled = false; btn.textContent = "LOGIN";
+    }
+  }
+
+  // ---- GAME ----
+  async function showGame() {
+    go("loading");
+    try {
+      const { player } = await api("/api/player/me");
+      if (!player) return renderNoLife();
+      renderPlayer(player);
+    } catch (e) {
+      setToken(null);
+      go("login");
+    }
+  }
+
+  function renderNoLife() {
+    const g = document.getElementById("game");
+    g.innerHTML = `
+      <div class="center-screen" style="flex-direction:column; gap:20px;">
+        <div>
+          <div style="font-size:48px;">🎲</div>
+          <h2 style="color:#f59e0b; font-size:26px; margin-top:8px;">NO LIFE YET</h2>
+          <p style="color:#8b949e; font-size:14px; margin-top:8px;">Your class go be randomly assigned.<br>Nepo or Lapo — na luck.</p>
+        </div>
+        <button class="big-btn" onclick="createLife()">START NEW LIFE</button>
+        <button style="background:none;border:none;color:#8b949e;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;" onclick="logout()">Logout</button>
+      </div>
+    `;
+    go("game");
+  }
+
+  async function createLife() {
+    try {
+      const player = await api("/api/player/create", { method: "POST" });
+      renderPlayer(player);
+    } catch (e) {
+      alert(e.message);
+    }
+  }
+
+  function renderPlayer(player) {
+    const isNepo = player.class === "nepo";
+    const money = Number(player.money).toLocaleString();
+    const debt = Number(player.bank_debt).toLocaleString();
+    const g = document.getElementById("game");
+    g.innerHTML = `
+      <div class="card ${isNepo ? "nepo" : "lapo"}">
+        <button class="logout" onclick="logout()">Logout</button>
+        <div class="class-label">${isNepo ? "💎 Nepo Pikin" : "🧺 Lapo Pikin"}</div>
+        <div class="city">${player.city}</div>
+        <div class="zone">${player.zone}</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat money"><div class="label">💰 Money</div><div class="value">₦${money}</div></div>
+        <div class="stat energy"><div class="label">⚡ Energy</div><div class="value">${player.energy}</div></div>
+        <div class="stat cred"><div class="label">🤝 Cred</div><div class="value">${player.cred}</div></div>
+      </div>
+
+      ${player.bank_debt > 0 ? `
+        <div class="debt">
+          <div class="label">🏦 Bank Debt</div>
+          <div class="value">₦${debt}</div>
+        </div>
+      ` : ""}
+
+      <div class="panel">
+        <div class="mini-tag">Phase 1 Complete</div>
+        <p>You don enter Kogi Lifestyle. Jobs, cities, relationships, and multiplayer dey come for Phase 2 and 3.</p>
+        <button class="btn-delete" onclick="deleteLife()">Delete this life &amp; reroll</button>
+      </div>
+    `;
+    go("game");
+  }
+
+  async function deleteLife() {
+    if (!confirm("Delete this life? You go get a new random class.")) return;
+    try {
+      await api("/api/player/me", { method: "DELETE" });
+      renderNoLife();
+    } catch (e) { alert(e.message); }
+  }
+
+  function logout() {
+    setToken(null);
+    go("landing");
+  }
+
+  // Boot
+  if (getToken()) showGame();
+  else go("landing");
+</script>
+</body>
+</html>
