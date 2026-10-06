@@ -20,6 +20,9 @@ const pool = new Pool({
     : false
 });
 
+// ==========================================================
+// DB INIT
+// ==========================================================
 async function initDb() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -29,6 +32,7 @@ async function initDb() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
   `);
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS players (
       id SERIAL PRIMARY KEY,
@@ -40,12 +44,37 @@ async function initDb() {
       bank_debt BIGINT NOT NULL DEFAULT 0,
       energy INTEGER NOT NULL DEFAULT 100,
       cred INTEGER NOT NULL DEFAULT 20,
+      hunger INTEGER NOT NULL DEFAULT 100,
+      fun INTEGER NOT NULL DEFAULT 100,
+      social INTEGER NOT NULL DEFAULT 100,
+      hygiene INTEGER NOT NULL DEFAULT 100,
+      job_id VARCHAR(32),
+      last_tick TIMESTAMPTZ DEFAULT NOW(),
+      last_work_at TIMESTAMPTZ,
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
   `);
+
+  // Add missing columns if this is an old DB (safe upgrades)
+  const addCol = async (name, def) => {
+    try {
+      await pool.query(`ALTER TABLE players ADD COLUMN IF NOT EXISTS ${name} ${def}`);
+    } catch (e) { /* ignore */ }
+  };
+  await addCol("hunger", "INTEGER NOT NULL DEFAULT 100");
+  await addCol("fun", "INTEGER NOT NULL DEFAULT 100");
+  await addCol("social", "INTEGER NOT NULL DEFAULT 100");
+  await addCol("hygiene", "INTEGER NOT NULL DEFAULT 100");
+  await addCol("job_id", "VARCHAR(32)");
+  await addCol("last_tick", "TIMESTAMPTZ DEFAULT NOW()");
+  await addCol("last_work_at", "TIMESTAMPTZ");
+
   console.log("DB tables ready");
 }
 
+// ==========================================================
+// HELPERS
+// ==========================================================
 function signToken(userId) {
   return jwt.sign({ userId }, JWT_SECRET, { expiresIn: "30d" });
 }
@@ -80,8 +109,12 @@ const LAPO = [
 ];
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-app.get("/", (req, res) => res.json({ ok: true, game: "Kogi Lifestyle API", version: "1.0" }));
+// ==========================================================
+// ROUTES
+// ==========================================================
+app.get("/", (req, res) => res.json({ ok: true, game: "Kogi Lifestyle API", version: "2.0" }));
 
+// SIGNUP
 app.post("/api/auth/signup", async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ error: "Missing fields" });
@@ -102,6 +135,7 @@ app.post("/api/auth/signup", async (req, res) => {
   }
 });
 
+// LOGIN
 app.post("/api/auth/login", async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -117,6 +151,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
+// CREATE LIFE
 app.post("/api/player/create", auth, async (req, res) => {
   try {
     const existing = await pool.query("SELECT id FROM players WHERE user_id = $1", [req.userId]);
@@ -131,8 +166,8 @@ app.post("/api/player/create", auth, async (req, res) => {
     const cred = isNepo ? 20 : 40;
 
     const r = await pool.query(
-      `INSERT INTO players (user_id, class, city, zone, money, bank_debt, energy, cred)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+      `INSERT INTO players (user_id, class, city, zone, money, bank_debt, energy, cred, hunger, fun, social, hygiene, last_tick)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8, 100, 100, 100, 100, NOW()) RETURNING *`,
       [req.userId, cls, loc.city, loc.zone, money, debt, energy, cred]
     );
     res.json(r.rows[0]);
@@ -141,6 +176,7 @@ app.post("/api/player/create", auth, async (req, res) => {
   }
 });
 
+// GET MY LIFE
 app.get("/api/player/me", auth, async (req, res) => {
   try {
     const r = await pool.query("SELECT * FROM players WHERE user_id = $1", [req.userId]);
@@ -150,6 +186,7 @@ app.get("/api/player/me", auth, async (req, res) => {
   }
 });
 
+// DELETE LIFE
 app.delete("/api/player/me", auth, async (req, res) => {
   try {
     await pool.query("DELETE FROM players WHERE user_id = $1", [req.userId]);
@@ -159,6 +196,15 @@ app.delete("/api/player/me", auth, async (req, res) => {
   }
 });
 
+// ==========================================================
+// GAME ROUTES (Phase 2)
+// ==========================================================
+import gameRoutes from "./routes/game.js";
+app.use("/api/game", gameRoutes);
+
+// ==========================================================
+// START
+// ==========================================================
 initDb()
   .then(() => app.listen(PORT, () => console.log("Kogi Lifestyle on port " + PORT)))
   .catch((e) => {
