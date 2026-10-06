@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Kogi Lifestyle</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
   body { background: #0a0a0a; color: #fff; min-height: 100vh; }
 
-  .page { display: none; min-height: 100vh; }
-  .page.active { display: flex; flex-direction: column; }
+  .page { display: none; min-height: 100vh; flex-direction: column; }
+  .page.active { display: flex; }
 
   /* LANDING */
   #landing {
@@ -24,99 +24,93 @@
   #landing .top { width: 100%; text-align: right; font-size: 11px; color: rgba(255,255,255,0.5); }
   #landing .mid { text-align: center; }
   #landing h1 {
-    font-size: 52px;
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -1px;
+    font-size: 52px; font-weight: 900; line-height: 1; letter-spacing: -1px;
     background: linear-gradient(90deg, #f59e0b, #ef4444, #10b981);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   #landing .tag { margin-top: 14px; color: rgba(255,255,255,0.8); font-size: 15px; font-style: italic; }
   #landing .bottom { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; }
-  #landing .bottom button {
-    padding: 16px;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-  }
+  #landing .bottom button { padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 800; letter-spacing: 1px; border: none; cursor: pointer; font-family: inherit; }
   #landing .btn-primary { background: #f59e0b; color: #000; }
   #landing .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
   #landing .footer { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 10px; }
 
-  /* FORM PAGES */
+  /* FORM */
   .form-page { align-items: center; justify-content: center; padding: 24px; background: #0a0a0a; }
   .form-card { width: 100%; max-width: 380px; background: #161b22; border: 1px solid #30363d; border-radius: 18px; padding: 24px; }
   .form-card h2 { color: #f59e0b; font-size: 22px; margin-bottom: 18px; }
-  .form-card input {
-    width: 100%;
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 12px;
-    padding: 14px;
-    color: #fff;
-    font-size: 15px;
-    margin-bottom: 12px;
-    outline: none;
-    font-family: inherit;
-  }
+  .form-card input { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px; color: #fff; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; }
   .form-card input:focus { border-color: #f59e0b; }
-  .form-card button {
-    width: 100%;
-    background: #f59e0b;
-    color: #000;
-    font-weight: 800;
-    padding: 14px;
-    border-radius: 12px;
-    border: none;
-    font-size: 15px;
-    cursor: pointer;
-    font-family: inherit;
-  }
+  .form-card button { width: 100%; background: #f59e0b; color: #000; font-weight: 800; padding: 14px; border-radius: 12px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
   .form-card button:disabled { opacity: 0.5; }
   .form-card .err { color: #f87171; font-size: 13px; margin-top: 6px; }
   .form-card .switch { color: #8b949e; font-size: 13px; text-align: center; margin-top: 14px; }
   .form-card .switch a { color: #f59e0b; cursor: pointer; text-decoration: none; }
 
-  /* GAME */
-  #game { padding: 16px; padding-bottom: 40px; }
-  .card {
-    border-radius: 18px;
-    padding: 20px;
-    margin-bottom: 14px;
-  }
-  .card.nepo { background: linear-gradient(135deg, #d97706, #92400e); }
-  .card.lapo { background: linear-gradient(135deg, #047857, #064e3b); }
-  .card .class-label { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.75); }
-  .card .city { font-size: 26px; font-weight: 900; margin-top: 4px; }
-  .card .zone { font-size: 14px; color: rgba(255,255,255,0.85); }
-  .card .logout { float: right; color: rgba(255,255,255,0.7); font-size: 12px; background: none; border: none; cursor: pointer; font-family: inherit; }
+  /* GAME LAYOUT */
+  #game { padding: 12px; padding-bottom: 90px; }
 
-  .stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .stat { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 12px 8px; text-align: center; }
-  .stat .label { font-size: 10px; color: #8b949e; }
-  .stat .value { font-size: 15px; font-weight: 800; margin-top: 4px; }
-  .stat.money .value { color: #10b981; }
-  .stat.energy .value { color: #f59e0b; }
-  .stat.cred .value { color: #58a6ff; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px; color: #8b949e; }
+  .topbar .username { color: #f59e0b; font-weight: 700; }
+  .topbar button { background: none; border: none; color: #8b949e; font-size: 12px; cursor: pointer; font-family: inherit; }
 
-  .debt { background: #450a0a; border: 1px solid #7f1d1d; border-radius: 12px; padding: 14px; margin-bottom: 14px; }
-  .debt .label { font-size: 11px; color: #fca5a5; }
-  .debt .value { font-size: 18px; font-weight: 800; color: #f87171; }
+  .header { border-radius: 16px; padding: 16px; margin-bottom: 12px; position: relative; }
+  .header.nepo { background: linear-gradient(135deg, #d97706, #92400e); }
+  .header.lapo { background: linear-gradient(135deg, #047857, #064e3b); }
+  .header .cls { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.75); }
+  .header .city { font-size: 22px; font-weight: 900; margin-top: 2px; }
+  .header .zone { font-size: 13px; color: rgba(255,255,255,0.85); }
 
-  .panel { background: #161b22; border: 1px solid #30363d; border-radius: 16px; padding: 20px; }
-  .panel .mini-tag { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #8b949e; }
-  .panel p { margin-top: 8px; font-size: 14px; color: #c9d1d9; line-height: 1.6; }
-  .panel .btn-delete { margin-top: 16px; background: none; border: none; color: #f87171; font-size: 12px; text-decoration: underline; cursor: pointer; font-family: inherit; }
+  .money-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .money-cell { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 10px 12px; }
+  .money-cell .label { font-size: 10px; color: #8b949e; }
+  .money-cell .value { font-size: 16px; font-weight: 800; color: #10b981; margin-top: 2px; }
+  .money-cell .value.red { color: #f87171; }
 
-  .center-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  /* NEEDS BARS */
+  .needs { background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 14px; margin-bottom: 12px; }
+  .need { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .need:last-child { margin-bottom: 0; }
+  .need .icon { font-size: 16px; width: 22px; }
+  .need .info { flex: 1; }
+  .need .name { font-size: 11px; color: #8b949e; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .need .bar { height: 8px; background: #0d1117; border-radius: 4px; overflow: hidden; }
+  .need .fill { height: 100%; transition: width 0.3s ease; border-radius: 4px; }
+  .need .fill.good { background: #10b981; }
+  .need .fill.mid { background: #f59e0b; }
+  .need .fill.bad { background: #ef4444; }
+
+  /* TABS */
+  .tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 12px; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 4px; }
+  .tab { padding: 10px 4px; text-align: center; font-size: 18px; cursor: pointer; border-radius: 8px; transition: background 0.15s; }
+  .tab.active { background: #f59e0b; }
+  .tab.disabled { opacity: 0.4; }
+
+  .tab-content { background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 16px; }
+  .tab-content h3 { font-size: 15px; color: #f59e0b; margin-bottom: 12px; }
+  .tab-content .sub { font-size: 12px; color: #8b949e; margin-bottom: 14px; line-height: 1.5; }
+
+  .action-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 8px; }
+  .action-btn.primary { background: #f59e0b; color: #000; }
+  .action-btn.secondary { background: #21262d; color: #fff; border: 1px solid #30363d; }
+  .action-btn.danger { background: #7f1d1d; color: #fff; }
+  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .job-card, .food-card, .city-card { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .job-card .info, .food-card .info, .city-card .info { flex: 1; }
+  .job-card .name, .food-card .name, .city-card .name { font-size: 14px; font-weight: 700; }
+  .job-card .meta, .food-card .meta, .city-card .meta { font-size: 11px; color: #8b949e; margin-top: 2px; }
+  .job-card button, .food-card button, .city-card button { background: #f59e0b; color: #000; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .job-card button:disabled, .food-card button:disabled, .city-card button:disabled { opacity: 0.4; cursor: not-allowed; }
+  .job-card.current { border-color: #10b981; background: rgba(16,185,129,0.08); }
+  .job-card .badge { background: #10b981; color: #000; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 700; }
+
+  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #f59e0b; color: #000; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.5); z-index: 100; animation: toastIn 0.3s ease; max-width: 90%; text-align: center; }
+  .toast.error { background: #ef4444; color: #fff; }
+  @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+  .center-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; flex-direction: column; gap: 16px; }
   .big-btn { background: #f59e0b; color: #000; font-weight: 800; padding: 16px 32px; border-radius: 14px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
-
   .loading { color: #8b949e; font-size: 14px; }
 </style>
 </head>
@@ -124,7 +118,7 @@
 
 <!-- LANDING -->
 <div id="landing" class="page active">
-  <div class="top">v0.1 — Alpha</div>
+  <div class="top">v0.2 — Alpha</div>
   <div class="mid">
     <h1>KOGI<br>LIFESTYLE</h1>
     <div class="tag">Which Kogi you go live today?</div>
@@ -170,12 +164,17 @@
 
 <script>
   const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
+  let state = { player: null, cities: null, jobs: null, foods: null, tab: "home", username: null };
+  let pollTimer = null;
 
+  // ---- Navigation ----
   function go(pageId) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     document.getElementById(pageId).classList.add("active");
+    if (pageId !== "game") stopPoll();
   }
 
+  // ---- Auth helpers ----
   function getToken() { return localStorage.getItem("kogi_token"); }
   function setToken(t) { t ? localStorage.setItem("kogi_token", t) : localStorage.removeItem("kogi_token"); }
 
@@ -189,7 +188,16 @@
     return data;
   }
 
-  // ---- SIGNUP ----
+  // ---- Toast ----
+  function toast(msg, isError = false) {
+    const t = document.createElement("div");
+    t.className = "toast" + (isError ? " error" : "");
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2500);
+  }
+
+  // ---- Signup ----
   async function handleSignup() {
     const username = document.getElementById("signup-username").value.trim();
     const password = document.getElementById("signup-password").value;
@@ -197,17 +205,15 @@
     const btn = document.getElementById("signup-btn");
     err.textContent = ""; btn.disabled = true; btn.textContent = "Creating...";
     try {
-      const { token } = await api("/api/auth/signup", { method: "POST", body: JSON.stringify({ username, password }) });
+      const { token, username: uname } = await api("/api/auth/signup", { method: "POST", body: JSON.stringify({ username, password }) });
       setToken(token);
+      state.username = uname;
       await showGame();
-    } catch (e) {
-      err.textContent = e.message;
-    } finally {
-      btn.disabled = false; btn.textContent = "SIGN UP";
-    }
+    } catch (e) { err.textContent = e.message; }
+    finally { btn.disabled = false; btn.textContent = "SIGN UP"; }
   }
 
-  // ---- LOGIN ----
+  // ---- Login ----
   async function handleLogin() {
     const username = document.getElementById("login-username").value.trim();
     const password = document.getElementById("login-password").value;
@@ -215,103 +221,320 @@
     const btn = document.getElementById("login-btn");
     err.textContent = ""; btn.disabled = true; btn.textContent = "Logging in...";
     try {
-      const { token } = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
+      const { token, username: uname } = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
       setToken(token);
+      state.username = uname;
       await showGame();
-    } catch (e) {
-      err.textContent = e.message;
-    } finally {
-      btn.disabled = false; btn.textContent = "LOGIN";
-    }
+    } catch (e) { err.textContent = e.message; }
+    finally { btn.disabled = false; btn.textContent = "LOGIN"; }
   }
 
-  // ---- GAME ----
+  // ---- Game ----
   async function showGame() {
     go("loading");
     try {
       const { player } = await api("/api/player/me");
       if (!player) return renderNoLife();
-      renderPlayer(player);
+      await refreshState();
+      renderGame();
+      startPoll();
     } catch (e) {
-      setToken(null);
-      go("login");
+      setToken(null); go("login");
     }
   }
 
+  async function refreshState() {
+    const data = await api("/api/game/state");
+    state.player = data.player;
+    state.cities = data.cities;
+    state.jobs = data.jobs;
+    state.foods = data.foods;
+  }
+
+  function startPoll() {
+    stopPoll();
+    pollTimer = setInterval(async () => {
+      try {
+        await refreshState();
+        renderGame();
+      } catch (e) { /* silent */ }
+    }, 60000); // refresh every 60s
+  }
+  function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
+
+  // ---- Render ----
   function renderNoLife() {
     const g = document.getElementById("game");
     g.innerHTML = `
-      <div class="center-screen" style="flex-direction:column; gap:20px;">
+      <div class="center-screen">
+        <div style="font-size:48px;">🎲</div>
         <div>
-          <div style="font-size:48px;">🎲</div>
-          <h2 style="color:#f59e0b; font-size:26px; margin-top:8px;">NO LIFE YET</h2>
-          <p style="color:#8b949e; font-size:14px; margin-top:8px;">Your class go be randomly assigned.<br>Nepo or Lapo — na luck.</p>
+          <h2 style="color:#f59e0b; font-size:24px;">NO LIFE YET</h2>
+          <p style="color:#8b949e; font-size:13px; margin-top:8px; max-width:280px;">Your class go be randomly assigned.<br>Nepo or Lapo — na luck.</p>
         </div>
         <button class="big-btn" onclick="createLife()">START NEW LIFE</button>
         <button style="background:none;border:none;color:#8b949e;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;" onclick="logout()">Logout</button>
       </div>
     `;
     go("game");
+    stopPoll();
   }
 
   async function createLife() {
     try {
-      const player = await api("/api/player/create", { method: "POST" });
-      renderPlayer(player);
-    } catch (e) {
-      alert(e.message);
-    }
+      await api("/api/player/create", { method: "POST" });
+      await refreshState();
+      renderGame();
+      startPoll();
+    } catch (e) { toast(e.message, true); }
   }
 
-  function renderPlayer(player) {
-    const isNepo = player.class === "nepo";
-    const money = Number(player.money).toLocaleString();
-    const debt = Number(player.bank_debt).toLocaleString();
+  function renderGame() {
+    const p = state.player;
+    if (!p) return;
+    const isNepo = p.class === "nepo";
+    const money = Number(p.money).toLocaleString();
     const g = document.getElementById("game");
     g.innerHTML = `
-      <div class="card ${isNepo ? "nepo" : "lapo"}">
-        <button class="logout" onclick="logout()">Logout</button>
-        <div class="class-label">${isNepo ? "💎 Nepo Pikin" : "🧺 Lapo Pikin"}</div>
-        <div class="city">${player.city}</div>
-        <div class="zone">${player.zone}</div>
+      <div class="topbar">
+        <span>👤 <span class="username">${state.username || "player"}</span></span>
+        <button onclick="logout()">Logout</button>
       </div>
 
-      <div class="stats">
-        <div class="stat money"><div class="label">💰 Money</div><div class="value">₦${money}</div></div>
-        <div class="stat energy"><div class="label">⚡ Energy</div><div class="value">${player.energy}</div></div>
-        <div class="stat cred"><div class="label">🤝 Cred</div><div class="value">${player.cred}</div></div>
+      <div class="header ${isNepo ? "nepo" : "lapo"}">
+        <div class="cls">${isNepo ? "💎 Nepo Pikin" : "🧺 Lapo Pikin"}</div>
+        <div class="city">${p.city}</div>
+        <div class="zone">${p.zone}</div>
       </div>
 
-      ${player.bank_debt > 0 ? `
-        <div class="debt">
-          <div class="label">🏦 Bank Debt</div>
-          <div class="value">₦${debt}</div>
+      <div class="money-strip">
+        <div class="money-cell">
+          <div class="label">💰 Money</div>
+          <div class="value">₦${money}</div>
         </div>
-      ` : ""}
-
-      <div class="panel">
-        <div class="mini-tag">Phase 1 Complete</div>
-        <p>You don enter Kogi Lifestyle. Jobs, cities, relationships, and multiplayer dey come for Phase 2 and 3.</p>
-        <button class="btn-delete" onclick="deleteLife()">Delete this life &amp; reroll</button>
+        <div class="money-cell">
+          <div class="label">${p.bank_debt > 0 ? "🏦 Debt" : "🤝 Cred"}</div>
+          <div class="value ${p.bank_debt > 0 ? "red" : ""}">${p.bank_debt > 0 ? "₦" + Number(p.bank_debt).toLocaleString() : p.cred}</div>
+        </div>
       </div>
+
+      ${renderNeeds(p)}
+
+      <div class="tabs">
+        ${tabBtn("home", "🏠")}
+        ${tabBtn("job", "💼")}
+        ${tabBtn("food", "🍽️")}
+        ${tabBtn("travel", "🗺️")}
+        ${tabBtn("profile", "👤")}
+      </div>
+
+      <div class="tab-content" id="tab-content">${renderTab()}</div>
     `;
     go("game");
   }
 
+  function tabBtn(id, icon) {
+    return `<div class="tab ${state.tab === id ? "active" : ""}" onclick="switchTab('${id}')">${icon}</div>`;
+  }
+
+  function switchTab(id) {
+    state.tab = id;
+    renderGame();
+  }
+
+  function renderNeeds(p) {
+    const needs = [
+      { key: "hunger", label: "Hunger", icon: "🍽️" },
+      { key: "energy", label: "Energy", icon: "⚡" },
+      { key: "fun", label: "Fun", icon: "🎉" },
+      { key: "social", label: "Social", icon: "👥" },
+      { key: "hygiene", label: "Hygiene", icon: "🚿" }
+    ];
+    return `
+      <div class="needs">
+        ${needs.map(n => {
+          const v = p[n.key] ?? 100;
+          const cls = v > 60 ? "good" : v > 30 ? "mid" : "bad";
+          return `
+            <div class="need">
+              <div class="icon">${n.icon}</div>
+              <div class="info">
+                <div class="name">${n.label} — ${v}%</div>
+                <div class="bar"><div class="fill ${cls}" style="width:${v}%"></div></div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function renderTab() {
+    switch (state.tab) {
+      case "home": return renderHome();
+      case "job": return renderJob();
+      case "food": return renderFood();
+      case "travel": return renderTravel();
+      case "profile": return renderProfile();
+      default: return "";
+    }
+  }
+
+  function renderHome() {
+    const p = state.player;
+    const city = state.cities[p.city];
+    return `
+      <h3>🏠 Home — ${p.city}</h3>
+      <div class="sub">${city.tagline}</div>
+      <button class="action-btn primary" onclick="doWork()" ${p.job_id ? "" : "disabled"}>
+        ${p.job_id ? `💼 Work as ${state.jobs[p.job_id].name} (+₦${state.jobs[p.job_id].pay.toLocaleString()})` : "❌ No job yet — go Career tab"}
+      </button>
+      <button class="action-btn secondary" onclick="doSleep()">😴 Sleep (+40 energy, -5 hunger)</button>
+      ${p.job_id ? `<div class="sub" style="margin-top:12px;">Work cooldown: 30 mins between shifts</div>` : ""}
+    `;
+  }
+
+  function renderJob() {
+    const p = state.player;
+    const city = state.cities[p.city];
+    const jobsHere = city.jobs.map(id => ({ id, ...state.jobs[id] }));
+    return `
+      <h3>💼 Career — ${p.city}</h3>
+      <div class="sub">Jobs wey dey available for ${p.city}. Travel go find more.</div>
+      ${jobsHere.map(j => `
+        <div class="job-card ${p.job_id === j.id ? "current" : ""}">
+          <div class="info">
+            <div class="name">${j.emoji} ${j.name}</div>
+            <div class="meta">₦${j.pay.toLocaleString()} / shift · ⚡${j.energyCost} cost · +${j.cred} cred</div>
+          </div>
+          ${p.job_id === j.id
+            ? `<span class="badge">CURRENT</span>`
+            : `<button onclick="doApply('${j.id}')">Apply</button>`}
+        </div>
+      `).join("")}
+    `;
+  }
+
+  function renderFood() {
+    const p = state.player;
+    return `
+      <h3>🍽️ Food & Drinks</h3>
+      <div class="sub">Buy food to restore hunger and energy. Prices dey same everywhere.</div>
+      ${Object.entries(state.foods).map(([id, f]) => {
+        const canAfford = Number(p.money) >= f.cost;
+        return `
+          <div class="food-card">
+            <div class="info">
+              <div class="name">${f.emoji} ${f.name}</div>
+              <div class="meta">₦${f.cost.toLocaleString()} · +${f.hunger}🍽️ · +${f.energy}⚡</div>
+            </div>
+            <button onclick="doEat('${id}')" ${canAfford ? "" : "disabled"}>Buy</button>
+          </div>
+        `;
+      }).join("")}
+    `;
+  }
+
+  function renderTravel() {
+    const p = state.player;
+    return `
+      <h3>🗺️ Travel</h3>
+      <div class="sub">Transport: ₦3,000 + ⚡15 energy. Travel to find new jobs and cities.</div>
+      ${Object.entries(state.cities).map(([id, c]) => `
+        <div class="city-card">
+          <div class="info">
+            <div class="name">${id === p.city ? "📍 " : "🌍 "}${c.name}</div>
+            <div class="meta">${c.tagline}</div>
+          </div>
+          ${id === p.city
+            ? `<span class="badge">HERE</span>`
+            : `<button onclick="doTravel('${id}')">Go</button>`}
+        </div>
+      `).join("")}
+    `;
+  }
+
+  function renderProfile() {
+    const p = state.player;
+    return `
+      <h3>👤 Profile</h3>
+      <div class="sub">
+        Class: <b style="color:#f59e0b;">${p.class === "nepo" ? "💎 Nepo Pikin" : "🧺 Lapo Pikin"}</b><br>
+        City: <b>${p.city}</b> — ${p.zone}<br>
+        Money: <b style="color:#10b981;">₦${Number(p.money).toLocaleString()}</b><br>
+        Cred: <b>${p.cred}</b><br>
+        ${p.bank_debt > 0 ? `Bank Debt: <b style="color:#f87171;">₦${Number(p.bank_debt).toLocaleString()}</b><br>` : ""}
+        Job: <b>${p.job_id ? state.jobs[p.job_id].emoji + " " + state.jobs[p.job_id].name : "None"}</b>
+      </div>
+      <button class="action-btn danger" onclick="deleteLife()">🗑️ Delete this life &amp; reroll</button>
+      <div class="sub" style="margin-top:12px; font-size:11px;">Coming soon: Needs, Goals, Skills, People, Settings — just like Lagos Life</div>
+    `;
+  }
+
+  // ---- Actions ----
+  async function doWork() {
+    try {
+      const r = await api("/api/game/work", { method: "POST" });
+      state.player = r.player;
+      if (r.mishap) toast("😬 " + r.mishap + " (+₦" + r.earned.toLocaleString() + ")", true);
+      else toast("💼 Worked! +₦" + r.earned.toLocaleString());
+      renderGame();
+    } catch (e) { toast(e.message, true); }
+  }
+
+  async function doSleep() {
+    try {
+      const r = await api("/api/game/sleep", { method: "POST" });
+      state.player = r.player;
+      toast("😴 Rested. +40 energy");
+      renderGame();
+    } catch (e) { toast(e.message, true); }
+  }
+
+  async function doApply(jobId) {
+    try {
+      await api("/api/game/apply", { method: "POST", body: JSON.stringify({ jobId }) });
+      state.player.job_id = jobId;
+      toast("🎉 Hired!");
+      state.tab = "home";
+      renderGame();
+    } catch (e) { toast(e.message, true); }
+  }
+
+  async function doEat(foodId) {
+    try {
+      const r = await api("/api/game/eat", { method: "POST", body: JSON.stringify({ foodId }) });
+      state.player = r.player;
+      toast("🍽️ " + r.food.name + " chop!");
+      renderGame();
+    } catch (e) { toast(e.message, true); }
+  }
+
+  async function doTravel(city) {
+    try {
+      const r = await api("/api/game/travel", { method: "POST", body: JSON.stringify({ city }) });
+      state.player = r.player;
+      toast("🚌 You don reach " + city);
+      renderGame();
+    } catch (e) { toast(e.message, true); }
+  }
+
   async function deleteLife() {
-    if (!confirm("Delete this life? You go get a new random class.")) return;
+    if (!confirm("Delete this life? You go get new random class.")) return;
     try {
       await api("/api/player/me", { method: "DELETE" });
       renderNoLife();
-    } catch (e) { alert(e.message); }
+    } catch (e) { toast(e.message, true); }
   }
 
   function logout() {
     setToken(null);
+    state = { player: null, cities: null, jobs: null, foods: null, tab: "home", username: null };
+    stopPoll();
     go("landing");
   }
 
-  // Boot
+  // ---- Boot ----
   if (getToken()) showGame();
   else go("landing");
 </script>
