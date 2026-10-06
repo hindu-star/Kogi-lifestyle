@@ -172,6 +172,13 @@
   .toggle::after { content: ''; position: absolute; width: 24px; height: 24px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
   .toggle.on::after { left: 24px; }
 
+  .slider-row { padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+  .slider-row .label { font-size: 14px; font-weight: 700; color: #1a1a1a; margin-bottom: 10px; display: flex; justify-content: space-between; }
+  .slider-row .label span { color: #f4a300; font-weight: 800; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; outline: none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: #f4a300; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+  input[type=range]::-moz-range-thumb { width: 24px; height: 24px; background: #f4a300; border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+
   .link-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
   .link-row .label { font-size: 14px; font-weight: 700; color: #1a1a1a; }
 
@@ -261,26 +268,27 @@
   let audioCtx = null;
   let soundEnabled = true;
   let musicEnabled = true;
+  let musicVolume = 0.35;     // 0.0 - 1.0
+  let soundVolume = 0.5;      // 0.0 - 1.0
 
   function initAudio() {
     if (audioCtx) return;
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     } catch (e) {}
-    if (audioCtx && audioCtx.state === "suspended") {
-      audioCtx.resume();
-    }
+    if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
   }
 
   function playTone(freq, duration = 0.1, type = "sine", volume = 0.15) {
     if (!soundEnabled) return;
     initAudio();
     if (!audioCtx) return;
+    const v = volume * soundVolume;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = type;
     osc.frequency.value = freq;
-    gain.gain.value = volume;
+    gain.gain.value = v;
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
     osc.connect(gain);
     gain.connect(audioCtx.destination);
@@ -288,39 +296,39 @@
     osc.stop(audioCtx.currentTime + duration);
   }
 
+  // Softer, warmer UI sounds
   const Sounds = {
-    click:    () => playTone(800, 0.06, "sine", 0.08),
-    success:  () => { playTone(660, 0.08, "sine", 0.12); setTimeout(() => playTone(880, 0.12, "sine", 0.12), 80); },
-    error:    () => playTone(200, 0.15, "sawtooth", 0.10),
-    cash:     () => { playTone(1200, 0.08, "triangle", 0.12); setTimeout(() => playTone(1600, 0.10, "triangle", 0.12), 70); },
-    levelup:  () => { [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.15, "sine", 0.14), i * 90)); },
-    notify:   () => { playTone(880, 0.08, "sine", 0.10); setTimeout(() => playTone(1100, 0.10, "sine", 0.10), 100); },
-    open:     () => playTone(440, 0.08, "sine", 0.07),
-    close:    () => playTone(330, 0.08, "sine", 0.07),
-    eat:      () => { playTone(180, 0.05, "square", 0.08); setTimeout(() => playTone(200, 0.05, "square", 0.08), 120); },
-    work:     () => { for (let i = 0; i < 4; i++) setTimeout(() => playTone(500 + i * 40, 0.05, "square", 0.06), i * 80); },
-    travel:   () => { playTone(300, 0.15, "sawtooth", 0.09); setTimeout(() => playTone(400, 0.15, "sawtooth", 0.09), 150); },
-    sleep:    () => playTone(250, 0.3, "sine", 0.07),
-    heart:    () => { playTone(700, 0.08, "sine", 0.1); setTimeout(() => playTone(700, 0.08, "sine", 0.1), 150); }
+    click: () => { playTone(520, 0.04, "sine", 0.10); playTone(1040, 0.05, "sine", 0.04); },
+    success: () => { playTone(523.25, 0.10, "sine", 0.13); setTimeout(() => playTone(659.25, 0.10, "sine", 0.13), 90); setTimeout(() => playTone(783.99, 0.16, "sine", 0.13), 180); },
+    error: () => { playTone(220, 0.14, "sine", 0.13); setTimeout(() => playTone(174.61, 0.18, "sine", 0.11), 90); },
+    cash: () => { playTone(880, 0.07, "sine", 0.13); setTimeout(() => playTone(1174.66, 0.08, "sine", 0.13), 70); setTimeout(() => playTone(1567.98, 0.10, "sine", 0.10), 150); },
+    levelup: () => { [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => setTimeout(() => playTone(f, 0.16, "sine", 0.15), i * 95)); },
+    notify: () => { playTone(880, 0.08, "sine", 0.12); setTimeout(() => playTone(1174.66, 0.12, "sine", 0.11), 90); },
+    open: () => { playTone(392, 0.06, "sine", 0.08); setTimeout(() => playTone(523.25, 0.08, "sine", 0.08), 60); },
+    close: () => { playTone(523.25, 0.06, "sine", 0.08); setTimeout(() => playTone(392, 0.08, "sine", 0.08), 60); },
+    eat: () => { playTone(329.63, 0.05, "sine", 0.10); setTimeout(() => playTone(392, 0.06, "sine", 0.10), 110); setTimeout(() => playTone(523.25, 0.08, "sine", 0.09), 210); },
+    work: () => { playTone(440, 0.06, "triangle", 0.09); setTimeout(() => playTone(554.37, 0.06, "triangle", 0.09), 90); setTimeout(() => playTone(659.25, 0.09, "triangle", 0.09), 180); },
+    travel: () => { playTone(261.63, 0.20, "sine", 0.10); setTimeout(() => playTone(392, 0.22, "sine", 0.10), 180); },
+    sleep: () => { playTone(196, 0.5, "sine", 0.08); },
+    heart: () => { playTone(587.33, 0.09, "sine", 0.13); setTimeout(() => playTone(587.33, 0.10, "sine", 0.13), 160); }
   };
 
   // ============================================================
-  // AMBIENT MUSIC — generated with Web Audio API
-  // Soft chord pad cycling every 4 seconds. No external files.
+  // AMBIENT MUSIC — generated Web Audio pad
   // ============================================================
   let musicNodes = null;
   let musicTimer = null;
   let musicStep = 0;
 
   const CHORDS = [
-    [130.81, 164.81, 196.00],
-    [146.83, 174.61, 220.00],
-    [164.81, 196.00, 246.94],
-    [174.61, 220.00, 261.63],
-    [196.00, 246.94, 293.66],
-    [174.61, 220.00, 261.63],
-    [164.81, 196.00, 246.94],
-    [146.83, 174.61, 220.00]
+    [130.81, 164.81, 196.00, 261.63],
+    [146.83, 174.61, 220.00, 293.66],
+    [164.81, 196.00, 246.94, 329.63],
+    [174.61, 220.00, 261.63, 349.23],
+    [196.00, 246.94, 293.66, 392.00],
+    [174.61, 220.00, 261.63, 349.23],
+    [164.81, 196.00, 246.94, 329.63],
+    [146.83, 174.61, 220.00, 293.66]
   ];
 
   function playBgMusic() {
@@ -330,39 +338,48 @@
     if (musicNodes) return;
 
     const masterGain = audioCtx.createGain();
-    masterGain.gain.value = 0.06;
+    masterGain.gain.value = musicVolume * 0.6;
     masterGain.connect(audioCtx.destination);
 
     const filter = audioCtx.createBiquadFilter();
     filter.type = "lowpass";
-    filter.frequency.value = 800;
-    filter.Q.value = 0.7;
+    filter.frequency.value = 1200;
+    filter.Q.value = 0.5;
     filter.connect(masterGain);
 
-    musicNodes = { masterGain, filter };
+    // Slight reverb via delay
+    const delay = audioCtx.createDelay();
+    delay.delayTime.value = 0.4;
+    const delayGain = audioCtx.createGain();
+    delayGain.gain.value = 0.25;
+    filter.connect(delay);
+    delay.connect(delayGain);
+    delayGain.connect(masterGain);
+
+    musicNodes = { masterGain, filter, delay, delayGain };
 
     const playChord = () => {
       if (!musicEnabled || !musicNodes) return;
       const chord = CHORDS[musicStep % CHORDS.length];
       musicStep++;
-      chord.forEach((freq) => {
+      chord.forEach((freq, idx) => {
         const osc = audioCtx.createOscillator();
         const oscGain = audioCtx.createGain();
-        osc.type = "sine";
+        osc.type = idx % 2 === 0 ? "sine" : "triangle";
         osc.frequency.value = freq;
         const now = audioCtx.currentTime;
         oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.linearRampToValueAtTime(0.35, now + 1.2);
-        oscGain.gain.linearRampToValueAtTime(0, now + 4.0);
+        oscGain.gain.linearRampToValueAtTime(0.22, now + 1.0);
+        oscGain.gain.linearRampToValueAtTime(0, now + 4.5);
         osc.connect(oscGain);
         oscGain.connect(filter);
         osc.start(now);
-        osc.stop(now + 4.2);
+        osc.stop(now + 4.7);
       });
     };
 
     playChord();
-    musicTimer = setInterval(playChord, 4000);
+    musicTimer = setInterval(playChord, 4200);
   }
 
   function stopBgMusic() {
@@ -383,8 +400,22 @@
     }
   }
 
+  function setMusicVolume(v) {
+    musicVolume = v;
+    localStorage.setItem("kogi_music_volume", String(v));
+    if (musicNodes && musicNodes.masterGain) {
+      try { musicNodes.masterGain.gain.value = v * 0.6; } catch (e) {}
+    }
+  }
+
+  function setSoundVolume(v) {
+    soundVolume = v;
+    localStorage.setItem("kogi_sound_volume", String(v));
+  }
+
   function toggleBgMusic() {
     musicEnabled = !musicEnabled;
+    localStorage.setItem("kogi_music_on", musicEnabled ? "1" : "0");
     if (musicEnabled) playBgMusic();
     else stopBgMusic();
     state.music = musicEnabled;
@@ -393,9 +424,22 @@
 
   function toggleSound() {
     soundEnabled = !soundEnabled;
+    localStorage.setItem("kogi_sound_on", soundEnabled ? "1" : "0");
     state.sound = soundEnabled;
     if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
   }
+
+  // Load saved audio prefs
+  (function loadAudioPrefs() {
+    const mOn = localStorage.getItem("kogi_music_on");
+    const sOn = localStorage.getItem("kogi_sound_on");
+    const mv = localStorage.getItem("kogi_music_volume");
+    const sv = localStorage.getItem("kogi_sound_volume");
+    if (mOn !== null) musicEnabled = mOn === "1";
+    if (sOn !== null) soundEnabled = sOn === "1";
+    if (mv !== null) musicVolume = parseFloat(mv);
+    if (sv !== null) soundVolume = parseFloat(sv);
+  })();
 
   // ============================================================
   // STATE
@@ -1008,10 +1052,22 @@
         <div><div class="label">Sound effects</div></div>
         <div class="toggle ${soundEnabled ? "on" : ""}" onclick="toggleSound()"></div>
       </div>
+
+      <div class="slider-row">
+        <div class="label">Sound volume <span id="sound-vol-label">${Math.round(soundVolume * 100)}%</span></div>
+        <input type="range" min="0" max="100" value="${Math.round(soundVolume * 100)}" id="sound-vol-slider" oninput="onSoundVolumeChange(this.value)" />
+      </div>
+
       <div class="toggle-row">
         <div><div class="label">Music</div></div>
         <div class="toggle ${musicEnabled ? "on" : ""}" onclick="toggleBgMusic()"></div>
       </div>
+
+      <div class="slider-row">
+        <div class="label">Music volume <span id="music-vol-label">${Math.round(musicVolume * 100)}%</span></div>
+        <input type="range" min="0" max="100" value="${Math.round(musicVolume * 100)}" id="music-vol-slider" oninput="onMusicVolumeChange(this.value)" />
+      </div>
+
       <div class="toggle-row">
         <div><div class="label">Free will</div></div>
         <div class="toggle on" onclick="this.classList.toggle('on')"></div>
@@ -1040,6 +1096,22 @@
         Terms · Privacy · Disclaimer · 18+
       </div>
     `;
+  }
+
+  function onSoundVolumeChange(val) {
+    const v = parseInt(val, 10) / 100;
+    setSoundVolume(v);
+    const label = document.getElementById("sound-vol-label");
+    if (label) label.textContent = Math.round(v * 100) + "%";
+    // Preview sound
+    playTone(880, 0.08, "sine", 0.12);
+  }
+
+  function onMusicVolumeChange(val) {
+    const v = parseInt(val, 10) / 100;
+    setMusicVolume(v);
+    const label = document.getElementById("music-vol-label");
+    if (label) label.textContent = Math.round(v * 100) + "%";
   }
 
   async function doWork() {
