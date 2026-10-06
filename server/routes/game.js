@@ -1,16 +1,45 @@
 import express from "express";
-import { pool } from "../db.js";
-import { authMiddleware } from "../auth.js";
+import pg from "pg";
+import jwt from "jsonwebtoken";
 import { CITIES, JOBS, FOODS, NEED_DRAIN, WORK_COOLDOWN_MIN, TRAVEL_COST } from "../gameData.js";
 
+const { Pool } = pg;
 const router = express.Router();
 
-// ---------- HELPER: Compute real-time need drain ----------
-// Called every time we read player stats.
-// Compares last_tick to now, applies drain per hour passed.
+// ============================================================
+// Self-contained DB pool (mirrors index.js)
+// ============================================================
+const DATABASE_URL = process.env.DATABASE_URL;
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+  ssl: DATABASE_URL && (DATABASE_URL.includes("render.com") || DATABASE_URL.includes("railway"))
+    ? { rejectUnauthorized: false }
+    : false
+});
+
+// ============================================================
+// Self-contained auth middleware (mirrors index.js)
+// ============================================================
+const JWT_SECRET = process.env.JWT_SECRET || "kogi_lifestyle_secret_2026";
+
+function authMiddleware(req, res, next) {
+  const header = req.headers.authorization;
+  if (!header) return res.status(401).json({ error: "No token" });
+  try {
+    const payload = jwt.verify(header.replace("Bearer ", ""), JWT_SECRET);
+    req.userId = payload.userId;
+    next();
+  } catch {
+    res.status(401).json({ error: "Invalid token" });
+  }
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
 function computeDrain(player) {
   const now = Date.now();
-  const last = new Date(player.last_tick).getTime();
+  const last = new Date(player.last_tick || new Date()).getTime();
   const hoursPassed = (now - last) / (1000 * 60 * 60);
   if (hoursPassed <= 0) return player;
 
@@ -24,16 +53,15 @@ function computeDrain(player) {
 
   return {
     ...player,
-    hunger: Math.max(0, (player.hunger || 100) - drain.hunger),
-    energy: Math.max(0, (player.energy || 100) - drain.energy),
-    fun: Math.max(0, (player.fun || 100) - drain.fun),
-    social: Math.max(0, (player.social || 100) - drain.social),
-    hygiene: Math.max(0, (player.hygiene || 100) - drain.hygiene),
+    hunger: Math.max(0, (player.hunger ?? 100) - drain.hunger),
+    energy: Math.max(0, (player.energy ?? 100) - drain.energy),
+    fun: Math.max(0, (player.fun ?? 100) - drain.fun),
+    social: Math.max(0, (player.social ?? 100) - drain.social),
+    hygiene: Math.max(0, (player.hygiene ?? 100) - drain.hygiene),
     last_tick: new Date().toISOString()
   };
 }
 
-// ---------- HELPER: Save computed stats to DB ----------
 async function persistStats(player) {
   await pool.query(
     `UPDATE players SET hunger=$1, energy=$2, fun=$3, social=$4, hygiene=$5, last_tick=$6 WHERE id=$7`,
@@ -41,7 +69,11 @@ async function persistStats(player) {
   );
 }
 
-// ---------- GET /state — full player state (with fresh drain applied) ----------
+// ============================================================
+// ROUTES
+// ============================================================
+
+// GET /state
 router.get("/state", authMiddleware, async (req, res) => {
   try {
     const r = await pool.query("SELECT * FROM players WHERE user_id = $1", [req.userId]);
@@ -61,7 +93,7 @@ router.get("/state", authMiddleware, async (req, res) => {
   }
 });
 
-// ---------- POST /work — do a shift at current job ----------
+// POST /work
 router.post("/work", authMiddleware, async (req, res) => {
   try {
     const r = await pool.query("SELECT * FROM players WHERE user_id = $1", [req.userId]);
@@ -71,7 +103,6 @@ router.post("/work", authMiddleware, async (req, res) => {
     if (!player.job_id) return res.status(400).json({ error: "You never get job. Find work first." });
     if (player.energy < 15) return res.status(400).json({ error: "You too tired. Rest or chop something." });
 
-    // Cooldown check
     if (player.last_work_at) {
       const minsSince = (Date.now() - new Date(player.last_work_at).getTime()) / 60000;
       if (minsSince < WORK_COOLDOWN_MIN) {
@@ -83,7 +114,6 @@ router.post("/work", authMiddleware, async (req, res) => {
     const job = JOBS[player.job_id];
     if (!job) return res.status(400).json({ error: "Job no dey exist" });
 
-    // Apply work
     const earnings = job.pay;
     const energyCost = job.energyCost;
     const riskRoll = Math.random();
@@ -91,7 +121,6 @@ router.post("/work", authMiddleware, async (req, res) => {
     let finalEarnings = earnings;
 
     if (riskRoll < job.risk) {
-      // Something went wrong
       const mishaps = [
         { text: "Small accident happen. You spend money on treatment.", penalty: 0.5 },
         { text: "Customer refused to pay. Half pay only.", penalty: 0.5 },
@@ -113,18 +142,13 @@ router.post("/work", authMiddleware, async (req, res) => {
       [player.money, player.energy, player.cred, player.hunger, player.fun, player.social, player.hygiene, player.last_tick, player.last_work_at, player.id]
     );
 
-    res.json({
-      ok: true,
-      earned: finalEarnings,
-      mishap,
-      player
-    });
+    res.json({ ok: true, earned: finalEarnings, mishap, player });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
 });
 
-// ---------- POST /apply — apply for a job ----------
+// POST /apply
 router.post("/apply", authMiddleware, async (req, res) => {
   try {
     const { jobId } = req.body;
@@ -134,7 +158,6 @@ router.post("/apply", authMiddleware, async (req, res) => {
     if (!r.rows.length) return res.status(404).json({ error: "No life" });
     const player = r.rows[0];
 
-    // Check job exists in current city
     const city = CITIES[player.city];
     if (!city.jobs.includes(jobId)) {
       return res.status(400).json({ error: `This job no dey ${player.city}. Travel go find am.` });
@@ -147,7 +170,7 @@ router.post("/apply", authMiddleware, async (req, res) => {
   }
 });
 
-// ---------- POST /eat — buy and eat food ----------
+// POST /eat
 router.post("/eat", authMiddleware, async (req, res) => {
   try {
     const { foodId } = req.body;
@@ -175,7 +198,7 @@ router.post("/eat", authMiddleware, async (req, res) => {
   }
 });
 
-// ---------- POST /travel — move to another city ----------
+// POST /travel
 router.post("/travel", authMiddleware, async (req, res) => {
   try {
     const { city } = req.body;
@@ -192,7 +215,6 @@ router.post("/travel", authMiddleware, async (req, res) => {
     player.money = Number(player.money) - TRAVEL_COST.base;
     player.energy = Math.max(0, player.energy - TRAVEL_COST.energyCost);
 
-    // Move to same-tier zone (rich→rich, poor→poor)
     const targetCity = CITIES[city];
     const isNepo = player.class === "nepo";
     const newZone = isNepo ? targetCity.richZone : targetCity.poorZone;
@@ -211,7 +233,7 @@ router.post("/travel", authMiddleware, async (req, res) => {
   }
 });
 
-// ---------- POST /sleep — restore energy (costs nothing, but time passes) ----------
+// POST /sleep
 router.post("/sleep", authMiddleware, async (req, res) => {
   try {
     const r = await pool.query("SELECT * FROM players WHERE user_id = $1", [req.userId]);
