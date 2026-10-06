@@ -4,6 +4,10 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Kogi Lifestyle</title>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
   html, body { height: 100%; overflow: hidden; }
@@ -45,37 +49,21 @@
   .topbar .stats-row { display: flex; gap: 6px; padding: 0 14px 8px; font-size: 10px; background: transparent; }
   .topbar .badge { background: rgba(255,255,255,0.75); color: #1a1a1a; padding: 4px 10px; border-radius: 12px; font-weight: 700; backdrop-filter: blur(4px); }
 
-  .sheet-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; display: none; align-items: flex-end; }
+  .sheet-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 900; display: none; align-items: flex-end; }
   .sheet-wrap.active { display: flex; }
   .sheet { background: #fff; width: 100%; height: 92vh; border-radius: 24px 24px 0 0; overflow-y: auto; padding-bottom: 120px; animation: sheetUp 0.25s ease; }
   @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
   .bottom-nav {
-    position: fixed;
-    bottom: 14px;
-    left: 14px;
-    right: 14px;
-    background: #ffffff;
-    border-radius: 40px;
-    padding: 10px 8px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 4px;
-    z-index: 40;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+    position: fixed; bottom: 14px; left: 14px; right: 14px;
+    background: #ffffff; border-radius: 40px; padding: 10px 8px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+    z-index: 1000; box-shadow: 0 8px 28px rgba(0,0,0,0.18);
     animation: navSlideUp 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
   }
-  @keyframes navSlideUp {
-    from { transform: translateY(120%); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
+  @keyframes navSlideUp { from { transform: translateY(120%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   .bottom-nav.hidden { display: none; }
-  .nav-item {
-    background: none; border: none; padding: 10px 4px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-    cursor: pointer; font-family: inherit; border-radius: 30px;
-    transition: background 0.2s, color 0.2s; color: #8b8f96;
-  }
+  .nav-item { background: none; border: none; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; font-family: inherit; border-radius: 30px; transition: background 0.2s, color 0.2s; color: #8b8f96; }
   .nav-item .nav-icon { font-size: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; height: 26px; }
   .nav-item .nav-icon svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
   .nav-item .nav-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2px; }
@@ -83,111 +71,97 @@
   .nav-item.active .nav-icon svg { stroke: #ffffff; }
 
   /* ============================================================
-     MAP SCREEN
+     MAP SCREEN (Leaflet)
      ============================================================ */
   #map-screen {
-    position: fixed; inset: 0; z-index: 45;
-    background: linear-gradient(160deg, #a8d5e2 0%, #d4e8dc 55%, #f0e6d2 100%);
+    position: fixed; inset: 0; z-index: 950;
+    background: #a8d5e2;
     display: none; flex-direction: column;
-    padding-bottom: 110px;
   }
   #map-screen.active { display: flex; }
 
+  #leaflet-map {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
   .map-header {
-    padding: 14px 18px 10px;
+    position: absolute;
+    top: 12px; left: 12px; right: 12px;
+    z-index: 500;
     display: flex; align-items: center; gap: 10px;
-    background: rgba(255,255,255,0.55);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255,255,255,0.4);
+    pointer-events: none;
   }
   .map-header .back-btn {
-    background: #fff; border: none; width: 38px; height: 38px; border-radius: 50%;
+    pointer-events: auto;
+    background: #fff; border: none; width: 42px; height: 42px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 20px; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
     font-family: inherit;
   }
-  .map-header .title { flex: 1; }
-  .map-header .title h2 { font-size: 16px; color: #0d1b2a; font-weight: 900; }
-  .map-header .title p { font-size: 11px; color: #555; margin-top: 2px; }
-
-  .map-body {
-    flex: 1;
-    display: flex; align-items: center; justify-content: center;
-    padding: 12px;
-    overflow: hidden;
+  .map-header .title-card {
+    pointer-events: auto;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
   }
+  .map-header .title-card h2 { font-size: 14px; color: #0d1b2a; font-weight: 900; }
+  .map-header .title-card p { font-size: 11px; color: #666; margin-top: 1px; }
 
-  .map-svg-wrap {
-    position: relative;
-    width: 100%; max-width: 500px; height: 100%; max-height: 100%;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .map-svg-wrap svg {
-    width: 100%; height: 100%; max-height: 78vh;
-    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15));
-  }
-
-  .map-pin {
-    position: absolute;
-    transform: translate(-50%, -100%);
-    cursor: pointer;
-    transition: transform 0.15s;
-    z-index: 2;
-  }
-  .map-pin:active { transform: translate(-50%, -100%) scale(0.9); }
-
-  .map-pin .pin-dot {
-    width: 32px; height: 32px;
+  /* Custom Leaflet markers */
+  .kogi-marker {
+    width: 40px; height: 40px;
     border-radius: 50% 50% 50% 0;
     transform: rotate(-45deg);
     background: #d64545;
     border: 3px solid #fff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     display: flex; align-items: center; justify-content: center;
   }
-  .map-pin .pin-dot span {
-    transform: rotate(45deg);
-    font-size: 14px; line-height: 1;
-  }
-  .map-pin.current .pin-dot {
+  .kogi-marker span { transform: rotate(45deg); font-size: 16px; line-height: 1; }
+  .kogi-marker.current {
     background: #22c55e;
     animation: pinPulse 1.6s ease-in-out infinite;
   }
   @keyframes pinPulse {
-    0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 0 0 rgba(34,197,94,0.6); }
-    50% { box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 0 12px rgba(34,197,94,0); }
-  }
-  .map-pin .pin-label {
-    position: absolute;
-    top: 100%; left: 50%; transform: translateX(-50%);
-    margin-top: 4px;
-    background: rgba(13,27,42,0.92);
-    color: #fff;
-    font-size: 10px; font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 8px;
-    white-space: nowrap;
-    letter-spacing: 0.3px;
-  }
-  .map-pin.current .pin-label {
-    background: #22c55e;
+    0%, 100% { box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 0 rgba(34,197,94,0.6); }
+    50% { box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 14px rgba(34,197,94,0); }
   }
 
-  /* Legend */
-  .map-legend {
+  /* Travel sheet (pops from bottom when tap pin) */
+  .travel-sheet {
     position: absolute;
-    bottom: 12px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 12px;
-    background: rgba(255,255,255,0.9);
-    padding: 8px 14px;
+    bottom: 90px;
+    left: 12px; right: 12px;
+    background: #fff;
     border-radius: 20px;
-    font-size: 11px; font-weight: 700; color: #333;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-    z-index: 3;
+    padding: 18px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+    z-index: 600;
+    transform: translateY(120%);
+    transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1.1);
   }
-  .map-legend .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
-  .map-legend .dot.green { background: #22c55e; }
-  .map-legend .dot.red { background: #d64545; }
+  .travel-sheet.show { transform: translateY(0); }
+  .travel-sheet .row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .travel-sheet .city-emoji {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: linear-gradient(135deg, #f4a300, #d64545);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .travel-sheet .city-name { font-size: 17px; font-weight: 900; color: #0d1b2a; }
+  .travel-sheet .city-sub { font-size: 12px; color: #666; margin-top: 3px; }
+  .travel-sheet .meta-row { display: flex; gap: 14px; font-size: 12px; color: #444; margin-top: 4px; }
+  .travel-sheet .actions { display: flex; gap: 8px; }
+  .travel-sheet button { flex: 1; padding: 12px; border-radius: 24px; border: none; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; }
+  .travel-sheet .cancel-btn { background: #f4f6f8; color: #0d1b2a; }
+  .travel-sheet .travel-btn { background: #f4a300; color: #0d1b2a; }
+  .travel-sheet .travel-btn:disabled { background: #e5e7eb; color: #999; cursor: not-allowed; }
 
   .sheet-handle { width: 40px; height: 4px; background: #d1d5db; border-radius: 4px; margin: 10px auto 4px; }
 
@@ -314,7 +288,7 @@
   .empty-state .emoji { font-size: 48px; }
   .empty-state .msg { font-size: 14px; color: #666; margin-top: 10px; line-height: 1.6; }
 
-  .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #0d1b2a; color: #fff; padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700; box-shadow: 0 6px 24px rgba(0,0,0,0.3); z-index: 200; max-width: 90%; text-align: center; animation: toastIn 0.25s ease; }
+  .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #0d1b2a; color: #fff; padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700; box-shadow: 0 6px 24px rgba(0,0,0,0.3); z-index: 2000; max-width: 90%; text-align: center; animation: toastIn 0.25s ease; }
   .toast.err { background: #d64545; }
   .toast.ok { background: #22c55e; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
@@ -323,7 +297,7 @@
   .loading { color: #bbb; font-size: 14px; }
   .big-btn { background: #f4a300; color: #0d1b2a; font-weight: 800; padding: 16px 32px; border-radius: 30px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
 
-  .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1500; display: none; align-items: center; justify-content: center; padding: 24px; }
   .modal-wrap.active { display: flex; }
   .modal { background: #fff; border-radius: 20px; padding: 24px; max-width: 340px; width: 100%; text-align: center; animation: sheetUp 0.2s ease; }
   .modal .emoji { font-size: 44px; }
@@ -334,12 +308,17 @@
   .modal .cancel { background: #f4f6f8; color: #0d1b2a; }
   .modal .confirm { background: #f4a300; color: #0d1b2a; }
   .modal .confirm.danger { background: #d64545; color: #fff; }
+
+  /* Leaflet overrides to match Kogi style */
+  .leaflet-container { background: #a8d5e2; font-family: inherit; }
+  .leaflet-control-attribution { font-size: 9px !important; background: rgba(255,255,255,0.7) !important; }
+  .leaflet-control-zoom { display: none !important; }
 </style>
 </head>
 <body>
 
 <div id="landing" class="page active">
-  <div class="top">v0.5 — Alpha</div>
+  <div class="top">v0.6 — Alpha</div>
   <div class="mid">
     <h1>KOGI<br>LIFESTYLE</h1>
     <div class="tag">Which Kogi you go live today?</div>
@@ -381,18 +360,15 @@
 
 <!-- MAP SCREEN -->
 <div id="map-screen">
+  <div id="leaflet-map"></div>
   <div class="map-header">
     <button class="back-btn" onclick="closeMap()">←</button>
-    <div class="title">
-      <h2>Kogi State Map</h2>
+    <div class="title-card">
+      <h2>Kogi State</h2>
       <p id="map-subtitle">You dey: —</p>
     </div>
   </div>
-  <div class="map-body">
-    <div class="map-svg-wrap" id="map-svg-wrap">
-      <!-- SVG map + pins injected by JS -->
-    </div>
-  </div>
+  <div class="travel-sheet" id="travel-sheet"></div>
 </div>
 
 <div id="sheet-wrap" class="sheet-wrap" onclick="if(event.target===this)closeSheet()">
@@ -402,6 +378,9 @@
 <div id="modal-wrap" class="modal-wrap">
   <div class="modal" id="modal"></div>
 </div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
   const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
@@ -459,19 +438,16 @@
   };
 
   // ============================================================
-  // PIN POSITIONS (% within the map wrap, tuned for mobile aspect)
+  // CITY COORDINATES (real lat/lng in Kogi State)
   // ============================================================
-  const MAP_PINS = [
-    { id: "Kabba",    x: 15, y: 48, emoji: "🌾" },
-    { id: "Lokoja",   x: 38, y: 68, emoji: "🌊" },
-    { id: "Okene",    x: 52, y: 52, emoji: "⛏️" },
-    { id: "Ajaokuta", x: 52, y: 78, emoji: "🏭" },
-    { id: "Idah",     x: 78, y: 62, emoji: "🐟" },
-    { id: "Anyigba",  x: 72, y: 32, emoji: "🎓" }
+  const CITIES = [
+    { id: "Lokoja",   lat: 7.8023, lng: 6.7333, emoji: "🌊" },
+    { id: "Anyigba",  lat: 7.5000, lng: 7.1833, emoji: "🎓" },
+    { id: "Okene",    lat: 7.5500, lng: 6.2333, emoji: "⛏️" },
+    { id: "Idah",     lat: 7.1000, lng: 6.7333, emoji: "🐟" },
+    { id: "Kabba",    lat: 7.8333, lng: 6.0667, emoji: "🌾" },
+    { id: "Ajaokuta", lat: 7.5667, lng: 6.6667, emoji: "🏭" }
   ];
-
-  // Rough stylized outline of Kogi State (viewBox 0 0 100 100)
-  const KOGI_PATH = "M 8 42 L 18 30 L 34 26 L 44 32 L 58 24 L 72 20 L 84 26 L 92 40 L 92 58 L 84 72 L 74 82 L 58 88 L 40 86 L 22 76 L 10 60 Z";
 
   function go(pageId) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
@@ -665,8 +641,7 @@
     const activePage = document.querySelector(".page.active");
     const mapActive = document.getElementById("map-screen").classList.contains("active");
     if ((!activePage || activePage.id !== "game" || !state.player) && !mapActive) {
-      nav.classList.add("hidden");
-      return;
+      nav.classList.add("hidden"); return;
     }
     nav.classList.remove("hidden");
     const active = state.activeNav;
@@ -688,104 +663,141 @@
   function handleNav(id) {
     Sounds.click();
     state.activeNav = id;
-    if (id === "map") {
-      openMap();
-    } else if (id === "home") {
-      closeMap();
-      renderBottomNav();
-    } else if (id === "buy") {
-      closeMap();
-      openSheet("career");
-    } else if (id === "phone") {
-      closeMap();
-      openSheet("settings");
-    }
+    if (id === "map") openMap();
+    else if (id === "home") { closeMap(); renderBottomNav(); }
+    else if (id === "buy") { closeMap(); openSheet("career"); }
+    else if (id === "phone") { closeMap(); openSheet("settings"); }
   }
 
   // ============================================================
-  // MAP SCREEN
+  // LEAFLET MAP
   // ============================================================
+  let leafletMap = null;
+  let cityMarkers = {};
+
   function openMap() {
     Sounds.open();
     state.activeNav = "map";
-    const map = document.getElementById("map-screen");
-    map.classList.add("active");
+    document.getElementById("map-screen").classList.add("active");
     document.getElementById("map-subtitle").textContent = `You dey: ${state.player.city}`;
-    renderMap();
+
+    if (!leafletMap) {
+      initLeafletMap();
+    } else {
+      // Re-render markers to reflect new current city
+      updateMapMarkers();
+      // Center on current city
+      const cur = CITIES.find(c => c.id === state.player.city);
+      if (cur) leafletMap.setView([cur.lat, cur.lng], 9);
+    }
     renderBottomNav();
   }
 
-  function closeMap() {
-    Sounds.close();
-    document.getElementById("map-screen").classList.remove("active");
-    state.activeNav = "home";
-    renderBottomNav();
+  function initLeafletMap() {
+    leafletMap = L.map("leaflet-map", {
+      zoomControl: false,
+      attributionControl: true,
+      minZoom: 7,
+      maxZoom: 14
+    }).setView([7.65, 6.7], 9);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; OpenStreetMap',
+      maxZoom: 19
+    }).addTo(leafletMap);
+
+    updateMapMarkers();
   }
 
-  function renderMap() {
-    const wrap = document.getElementById("map-svg-wrap");
-    const currentCity = state.player.city;
+  function updateMapMarkers() {
+    if (!leafletMap) return;
+    // Clear existing
+    Object.values(cityMarkers).forEach(m => leafletMap.removeLayer(m));
+    cityMarkers = {};
 
-    wrap.innerHTML = `
-      <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="kogiGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#7fb069" />
-            <stop offset="100%" stop-color="#4a7c3d" />
-          </linearGradient>
-        </defs>
-        <path d="${KOGI_PATH}" fill="url(#kogiGrad)" stroke="#2f4f2f" stroke-width="1.2" stroke-linejoin="round"/>
-        <!-- Rivers Niger & Benue -->
-        <path d="M 30 92 Q 38 78 40 68 Q 42 60 55 55 Q 68 50 82 55" stroke="#3b82f6" stroke-width="1.6" fill="none" opacity="0.85" stroke-linecap="round"/>
-        <path d="M 5 50 Q 20 52 38 68" stroke="#3b82f6" stroke-width="1.4" fill="none" opacity="0.75" stroke-linecap="round"/>
-        <!-- Text label -->
-        <text x="50" y="46" text-anchor="middle" font-size="6" font-weight="900" fill="rgba(255,255,255,0.85)" letter-spacing="1">KOGI STATE</text>
-      </svg>
-      ${MAP_PINS.map(pin => {
-        const isCurrent = pin.id === currentCity;
-        return `
-          <div class="map-pin ${isCurrent ? "current" : ""}" style="left:${pin.x}%; top:${pin.y}%;" onclick="tapPin('${pin.id}')">
-            <div class="pin-dot"><span>${pin.emoji}</span></div>
-            <div class="pin-label">${pin.id}${isCurrent ? " ⦿" : ""}</div>
-          </div>
-        `;
-      }).join("")}
-      <div class="map-legend">
-        <span><span class="dot green"></span>You dey here</span>
-        <span><span class="dot red"></span>Travel</span>
-      </div>
-    `;
+    CITIES.forEach(city => {
+      const isCurrent = city.id === state.player.city;
+      const cls = "kogi-marker" + (isCurrent ? " current" : "");
+      const icon = L.divIcon({
+        className: "",
+        html: `<div class="${cls}"><span>${city.emoji}</span></div>`,
+        iconSize: [40, 40],
+        iconAnchor: [20, 40]
+      });
+      const marker = L.marker([city.lat, city.lng], { icon }).addTo(leafletMap);
+      marker.on("click", () => tapPin(city));
+      cityMarkers[city.id] = marker;
+    });
   }
 
   function tapPin(city) {
     Sounds.click();
     const current = state.player.city;
-    if (city === current) {
-      toast("📍 You already dey " + city, "ok");
+    const sheet = document.getElementById("travel-sheet");
+
+    if (city.id === current) {
+      sheet.innerHTML = `
+        <div class="row">
+          <div class="city-emoji">${city.emoji}</div>
+          <div style="flex:1;">
+            <div class="city-name">${city.id}</div>
+            <div class="city-sub">You dey ${state.player.zone}</div>
+            <div class="meta-row">📍 Your current location</div>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="cancel-btn" onclick="hideTravelSheet()">Close</button>
+        </div>`;
+      sheet.classList.add("show");
       return;
     }
-    showModal(`
-      <div class="emoji">🚌</div>
-      <h3>Travel to ${city}?</h3>
-      <p>Transport: <b>₦3,000</b> + ⚡15 energy<br>Your zone go change based on your class.</p>
-      <div class="btn-row">
-        <button class="cancel" onclick="closeModal()">Cancel</button>
-        <button class="confirm" onclick="doTravelFromMap('${city}')">Travel</button>
+
+    const canAfford = Number(state.player.money) >= 3000;
+    const canTravel = state.player.energy >= 15;
+
+    sheet.innerHTML = `
+      <div class="row">
+        <div class="city-emoji">${city.emoji}</div>
+        <div style="flex:1;">
+          <div class="city-name">${city.id}</div>
+          <div class="city-sub">${state.cities[city.id]?.tagline || "Kogi State"}</div>
+          <div class="meta-row">🚌 ₦3,000 · ⚡15 energy</div>
+        </div>
       </div>
-    `);
+      <div class="actions">
+        <button class="cancel-btn" onclick="hideTravelSheet()">Cancel</button>
+        <button class="travel-btn" ${canAfford && canTravel ? "" : "disabled"} onclick="doTravelFromMap('${city.id}')">
+          ${!canAfford ? "No money" : !canTravel ? "Too tired" : "Travel Here"}
+        </button>
+      </div>`;
+    sheet.classList.add("show");
+  }
+
+  function hideTravelSheet() {
+    Sounds.close();
+    document.getElementById("travel-sheet").classList.remove("show");
+  }
+
+  function closeMap() {
+    Sounds.close();
+    hideTravelSheet();
+    document.getElementById("map-screen").classList.remove("active");
+    state.activeNav = "home";
+    renderBottomNav();
   }
 
   async function doTravelFromMap(city) {
-    closeModal();
+    hideTravelSheet();
     try {
       const r = await api("/api/game/travel", { method: "POST", body: JSON.stringify({ city }) });
       state.player = r.player;
-      Sounds.travel();
+      Sounds.travel ? Sounds.travel() : Sounds.success();
       toast("🚌 You don reach " + city, "ok");
       document.getElementById("map-subtitle").textContent = `You dey: ${state.player.city}`;
-      renderMap();
+      updateMapMarkers();
+      const cur = CITIES.find(c => c.id === state.player.city);
+      if (cur) leafletMap.setView([cur.lat, cur.lng], 9);
       renderGame();
-      // Re-open map
       document.getElementById("map-screen").classList.add("active");
       state.activeNav = "map";
       renderBottomNav();
@@ -853,8 +865,7 @@
         ${tabPill("people", "👥", "People")}
         ${tabPill("settings", "⚙️", "Settings")}
       </div>
-      <div class="tab-pane" id="tab-pane">${renderPane()}</div>
-    `;
+      <div class="tab-pane" id="tab-pane">${renderPane()}</div>`;
   }
 
   function tabPill(id, emoji, label) {
@@ -945,8 +956,7 @@
       <div class="feelings-title">FEELINGS</div>
       ${feelingCard("🚀", "FUNDED!!!", "Seed round closed. Yaba unicorn loading...", "+40")}
       ${feelingCard("🎉", "Promoted!", "Oga at the top energy.", "+30")}
-      ${feelingCard("💘", "In Love", "Your babe don enter your head.", "+20")}
-    `;
+      ${feelingCard("💘", "In Love", "Your babe don enter your head.", "+20")}`;
   }
 
   function needRow(emoji, label, value, color) {
@@ -987,8 +997,7 @@
       ${wishRow("⚽", "Watch a match at the viewing centre", "+3✨")}
       ${wishRow("🎵", "Play some music", "+2✨")}
       ${wishRow("🍲", "Chop jollof at a party", "+2✨")}
-      ${wishRow("🏖️", "Swim at the confluence", "+5✨")}
-    `;
+      ${wishRow("🏖️", "Swim at the confluence", "+5✨")}`;
   }
 
   function wishRow(icon, text, pts) { return `<div class="wish-row"><span class="icon">${icon}</span><span class="txt">${text}</span><span class="pts">${pts}</span></div>`; }
