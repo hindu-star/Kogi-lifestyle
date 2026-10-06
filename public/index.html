@@ -268,8 +268,8 @@
   let audioCtx = null;
   let soundEnabled = true;
   let musicEnabled = true;
-  let musicVolume = 0.35;     // 0.0 - 1.0
-  let soundVolume = 0.5;      // 0.0 - 1.0
+  let musicVolume = 0.5;     // 0.0 - 1.0
+  let soundVolume = 0.5;     // 0.0 - 1.0
 
   function initAudio() {
     if (audioCtx) return;
@@ -296,7 +296,6 @@
     osc.stop(audioCtx.currentTime + duration);
   }
 
-  // Softer, warmer UI sounds
   const Sounds = {
     click: () => { playTone(520, 0.04, "sine", 0.10); playTone(1040, 0.05, "sine", 0.04); },
     success: () => { playTone(523.25, 0.10, "sine", 0.13); setTimeout(() => playTone(659.25, 0.10, "sine", 0.13), 90); setTimeout(() => playTone(783.99, 0.16, "sine", 0.13), 180); },
@@ -314,97 +313,67 @@
   };
 
   // ============================================================
-  // AMBIENT MUSIC — generated Web Audio pad
+  // AMBIENT MUSIC — external royalty-free MP3 with fallbacks
   // ============================================================
-  let musicNodes = null;
-  let musicTimer = null;
-  let musicStep = 0;
-
-  const CHORDS = [
-    [130.81, 164.81, 196.00, 261.63],
-    [146.83, 174.61, 220.00, 293.66],
-    [164.81, 196.00, 246.94, 329.63],
-    [174.61, 220.00, 261.63, 349.23],
-    [196.00, 246.94, 293.66, 392.00],
-    [174.61, 220.00, 261.63, 349.23],
-    [164.81, 196.00, 246.94, 329.63],
-    [146.83, 174.61, 220.00, 293.66]
+  const MUSIC_SOURCES = [
+    // Pixabay calm ambient loop
+    "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3",
+    // Bensound calm (direct CDN)
+    "https://www.bensound.com/bensound-music/bensound-slowmotion.mp3",
+    // GitHub-hosted fallback
+    "https://raw.githubusercontent.com/anars/blank-audio/master/1-hour-of-silence.mp3"
   ];
+  let bgAudio = null;
+  let musicSourceIdx = 0;
+  let musicStarted = false;
 
   function playBgMusic() {
     if (!musicEnabled) return;
-    initAudio();
-    if (!audioCtx) return;
-    if (musicNodes) return;
+    if (bgAudio && !bgAudio.paused) return;
 
-    const masterGain = audioCtx.createGain();
-    masterGain.gain.value = musicVolume * 0.6;
-    masterGain.connect(audioCtx.destination);
+    if (!bgAudio) {
+      bgAudio = new Audio();
+      bgAudio.loop = true;
+      bgAudio.volume = musicVolume;
+      bgAudio.crossOrigin = "anonymous";
+      bgAudio.addEventListener("error", tryNextMusicSource);
+    }
 
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 1200;
-    filter.Q.value = 0.5;
-    filter.connect(masterGain);
-
-    // Slight reverb via delay
-    const delay = audioCtx.createDelay();
-    delay.delayTime.value = 0.4;
-    const delayGain = audioCtx.createGain();
-    delayGain.gain.value = 0.25;
-    filter.connect(delay);
-    delay.connect(delayGain);
-    delayGain.connect(masterGain);
-
-    musicNodes = { masterGain, filter, delay, delayGain };
-
-    const playChord = () => {
-      if (!musicEnabled || !musicNodes) return;
-      const chord = CHORDS[musicStep % CHORDS.length];
-      musicStep++;
-      chord.forEach((freq, idx) => {
-        const osc = audioCtx.createOscillator();
-        const oscGain = audioCtx.createGain();
-        osc.type = idx % 2 === 0 ? "sine" : "triangle";
-        osc.frequency.value = freq;
-        const now = audioCtx.currentTime;
-        oscGain.gain.setValueAtTime(0, now);
-        oscGain.gain.linearRampToValueAtTime(0.22, now + 1.0);
-        oscGain.gain.linearRampToValueAtTime(0, now + 4.5);
-        osc.connect(oscGain);
-        oscGain.connect(filter);
-        osc.start(now);
-        osc.stop(now + 4.7);
+    bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
+    bgAudio.volume = musicVolume;
+    const p = bgAudio.play();
+    if (p && p.catch) {
+      p.catch(() => {
+        // Autoplay blocked or failed — try next source
+        tryNextMusicSource();
       });
-    };
+    }
+    musicStarted = true;
+  }
 
-    playChord();
-    musicTimer = setInterval(playChord, 4200);
+  function tryNextMusicSource() {
+    musicSourceIdx++;
+    if (musicSourceIdx >= MUSIC_SOURCES.length) {
+      // All failed — no music, but don't crash
+      return;
+    }
+    if (bgAudio) {
+      bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
+      bgAudio.play().catch(() => {});
+    }
   }
 
   function stopBgMusic() {
-    if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
-    if (musicNodes && audioCtx) {
-      try {
-        const now = audioCtx.currentTime;
-        musicNodes.masterGain.gain.cancelScheduledValues(now);
-        musicNodes.masterGain.gain.setValueAtTime(musicNodes.masterGain.gain.value, now);
-        musicNodes.masterGain.gain.linearRampToValueAtTime(0, now + 0.5);
-      } catch (e) {}
-      setTimeout(() => {
-        if (musicNodes) {
-          try { musicNodes.masterGain.disconnect(); } catch (e) {}
-          musicNodes = null;
-        }
-      }, 600);
+    if (bgAudio) {
+      try { bgAudio.pause(); } catch (e) {}
     }
   }
 
   function setMusicVolume(v) {
     musicVolume = v;
     localStorage.setItem("kogi_music_volume", String(v));
-    if (musicNodes && musicNodes.masterGain) {
-      try { musicNodes.masterGain.gain.value = v * 0.6; } catch (e) {}
+    if (bgAudio) {
+      try { bgAudio.volume = v; } catch (e) {}
     }
   }
 
@@ -429,7 +398,6 @@
     if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
   }
 
-  // Load saved audio prefs
   (function loadAudioPrefs() {
     const mOn = localStorage.getItem("kogi_music_on");
     const sOn = localStorage.getItem("kogi_sound_on");
@@ -1103,7 +1071,6 @@
     setSoundVolume(v);
     const label = document.getElementById("sound-vol-label");
     if (label) label.textContent = Math.round(v * 100) + "%";
-    // Preview sound
     playTone(880, 0.08, "sine", 0.12);
   }
 
