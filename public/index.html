@@ -313,7 +313,7 @@
   };
 
   // ============================================================
-  // AMBIENT MUSIC — external royalty-free MP3 with fallbacks
+  // MUSIC — external MP3 with fallbacks
   // ============================================================
   const MUSIC_SOURCES = [
     "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3",
@@ -322,11 +322,12 @@
   ];
   let bgAudio = null;
   let musicSourceIdx = 0;
-  let musicStarted = false;
+  let userInteracted = false;
 
   function playBgMusic() {
     if (!musicEnabled) return;
-    if (document.hidden) return;             // <-- Do not play when tab hidden
+    if (document.hidden) return;
+    if (!userInteracted) return;
     if (bgAudio && !bgAudio.paused) return;
 
     if (!bgAudio) {
@@ -340,10 +341,7 @@
     bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
     bgAudio.volume = musicVolume;
     const p = bgAudio.play();
-    if (p && p.catch) {
-      p.catch(() => { tryNextMusicSource(); });
-    }
-    musicStarted = true;
+    if (p && p.catch) p.catch(() => tryNextMusicSource());
   }
 
   function tryNextMusicSource() {
@@ -364,9 +362,7 @@
   function setMusicVolume(v) {
     musicVolume = v;
     localStorage.setItem("kogi_music_volume", String(v));
-    if (bgAudio) {
-      try { bgAudio.volume = v; } catch (e) {}
-    }
+    if (bgAudio) { try { bgAudio.volume = v; } catch (e) {} }
   }
 
   function setSoundVolume(v) {
@@ -1147,21 +1143,30 @@
   }
 
   // ============================================================
-  // VISIBILITY / FOCUS HANDLING — pause music when tab is hidden
+  // USER INTERACTION UNLOCK
   // ============================================================
-  document.addEventListener("touchstart", () => { initAudio(); if (musicEnabled) playBgMusic(); }, { once: true });
-  document.addEventListener("click", () => { initAudio(); if (musicEnabled) playBgMusic(); }, { once: true });
+  function markInteracted() {
+    if (userInteracted) return;
+    userInteracted = true;
+    initAudio();
+    if (musicEnabled) playBgMusic();
+  }
+  document.addEventListener("touchstart", markInteracted, { once: true });
+  document.addEventListener("click", markInteracted, { once: true });
 
+  // ============================================================
+  // VISIBILITY — pause when tab hidden, resume when visible
+  // ============================================================
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       stopBgMusic();
     } else {
-      if (musicEnabled && getToken()) playBgMusic();
+      // Only resume if user is logged in and music is on
+      if (musicEnabled && userInteracted && getToken()) {
+        setTimeout(() => playBgMusic(), 200);
+      }
     }
   });
-
-  window.addEventListener("blur", () => stopBgMusic());
-  window.addEventListener("focus", () => { if (musicEnabled && getToken()) playBgMusic(); });
 
   if (getToken()) showGame();
   else go("landing");
