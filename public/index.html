@@ -34,7 +34,7 @@
   .form-card .switch { color: #666; font-size: 13px; text-align: center; margin-top: 14px; }
   .form-card .switch a { color: #f4a300; cursor: pointer; text-decoration: none; font-weight: 700; }
 
-  #game { padding: 0 0 80px 0; background: linear-gradient(180deg, #87b7d8 0%, #b8d4e8 45%, #f0e6d2 100%); min-height: 100vh; display: flex; flex-direction: column; }
+  #game { padding: 0 0 100px 0; background: linear-gradient(180deg, #87b7d8 0%, #b8d4e8 45%, #f0e6d2 100%); min-height: 100vh; display: flex; flex-direction: column; }
 
   .topbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12px; background: rgba(255,255,255,0.65); backdrop-filter: blur(8px); color: #1a1a1a; font-weight: 600; }
   .topbar .time { display: flex; align-items: center; gap: 3px; }
@@ -47,13 +47,76 @@
 
   .sheet-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; display: none; align-items: flex-end; }
   .sheet-wrap.active { display: flex; }
-  .sheet { background: #fff; width: 100%; height: 92vh; border-radius: 24px 24px 0 0; overflow-y: auto; padding-bottom: 40px; animation: sheetUp 0.25s ease; }
+  .sheet { background: #fff; width: 100%; height: 92vh; border-radius: 24px 24px 0 0; overflow-y: auto; padding-bottom: 120px; animation: sheetUp 0.25s ease; }
   @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  .bottom-tabs { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: repeat(7, 1fr); padding: 6px 4px 10px; z-index: 40; box-shadow: 0 -2px 16px rgba(0,0,0,0.06); }
-  .bottom-tab { background: none; border: none; padding: 6px 2px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; font-family: inherit; }
-  .bottom-tab .bt-emoji { font-size: 18px; line-height: 1; }
-  .bottom-tab .bt-label { font-size: 9px; color: #666; font-weight: 700; letter-spacing: 0.3px; }
+  /* ============================================================
+     NEW BOTTOM NAV — Lagos Life style (rounded pill, 4 icons)
+     ============================================================ */
+  .bottom-nav {
+    position: fixed;
+    bottom: 14px;
+    left: 14px;
+    right: 14px;
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 10px 8px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    z-index: 40;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+    animation: navSlideUp 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+  @keyframes navSlideUp {
+    from { transform: translateY(120%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .bottom-nav.hidden { display: none; }
+  .nav-item {
+    background: none;
+    border: none;
+    padding: 10px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    border-radius: 30px;
+    transition: background 0.2s, color 0.2s;
+    color: #8b8f96;
+  }
+  .nav-item .nav-icon {
+    font-size: 22px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+  }
+  .nav-item .nav-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .nav-item .nav-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+  .nav-item.active {
+    background: #1a2436;
+    color: #ffffff;
+  }
+  .nav-item.active .nav-icon svg {
+    stroke: #ffffff;
+  }
 
   .sheet-handle { width: 40px; height: 4px; background: #d1d5db; border-radius: 4px; margin: 10px auto 4px; }
 
@@ -186,7 +249,7 @@
   .empty-state .emoji { font-size: 48px; }
   .empty-state .msg { font-size: 14px; color: #666; margin-top: 10px; line-height: 1.6; }
 
-  .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #0d1b2a; color: #fff; padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700; box-shadow: 0 6px 24px rgba(0,0,0,0.3); z-index: 200; max-width: 90%; text-align: center; animation: toastIn 0.25s ease; }
+  .toast { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); background: #0d1b2a; color: #fff; padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700; box-shadow: 0 6px 24px rgba(0,0,0,0.3); z-index: 200; max-width: 90%; text-align: center; animation: toastIn 0.25s ease; }
   .toast.err { background: #d64545; }
   .toast.ok { background: #22c55e; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
@@ -304,115 +367,22 @@
     levelup: () => { [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => setTimeout(() => playTone(f, 0.16, "sine", 0.15), i * 95)); },
     notify: () => { playTone(880, 0.08, "sine", 0.12); setTimeout(() => playTone(1174.66, 0.12, "sine", 0.11), 90); },
     open: () => { playTone(392, 0.06, "sine", 0.08); setTimeout(() => playTone(523.25, 0.08, "sine", 0.08), 60); },
-    close: () => { playTone(523.25, 0.06, "sine", 0.08); setTimeout(() => playTone(392, 0.08, "sine", 0.08), 60); },
-    eat: () => { playTone(329.63, 0.05, "sine", 0.10); setTimeout(() => playTone(392, 0.06, "sine", 0.10), 110); setTimeout(() => playTone(523.25, 0.08, "sine", 0.09), 210); },
-    work: () => { playTone(440, 0.06, "triangle", 0.09); setTimeout(() => playTone(554.37, 0.06, "triangle", 0.09), 90); setTimeout(() => playTone(659.25, 0.09, "triangle", 0.09), 180); },
-    travel: () => { playTone(261.63, 0.20, "sine", 0.10); setTimeout(() => playTone(392, 0.22, "sine", 0.10), 180); },
-    sleep: () => { playTone(196, 0.5, "sine", 0.08); },
-    heart: () => { playTone(587.33, 0.09, "sine", 0.13); setTimeout(() => playTone(587.33, 0.10, "sine", 0.13), 160); }
+    close: () => { playTone(523.25, 0.06, "sine", 0.08); setTimeout(() => playTone(392, 0.08, "sine", 0.08), 60); }
   };
 
-  // ============================================================
-  // MUSIC — GitHub-hosted first, then fallbacks
-  // crossOrigin removed (it blocks playback on many mobile browsers)
-  // ============================================================
-  const MUSIC_SOURCES = [
-    // GitHub-hosted (we'll add this soon - replace USERNAME)
-    "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"
-  ];
-  let bgAudio = null;
-  let musicSourceIdx = 0;
-  let userInteracted = false;
-  let musicPlaying = false;
-
-  function playBgMusic() {
-    if (!musicEnabled) { console.log("[music] off"); return; }
-    if (document.hidden) { console.log("[music] tab hidden"); return; }
-    if (!userInteracted) { console.log("[music] no user interaction yet"); return; }
-    if (bgAudio && !bgAudio.paused) return;
-
-    if (!bgAudio) {
-      bgAudio = new Audio();
-      bgAudio.loop = true;
-      bgAudio.volume = musicVolume;
-      bgAudio.preload = "auto";
-      // NO crossOrigin attribute
-      bgAudio.addEventListener("error", (e) => {
-        console.log("[music] error:", e);
-        tryNextMusicSource();
-      });
-      bgAudio.addEventListener("playing", () => { musicPlaying = true; console.log("[music] playing"); });
-      bgAudio.addEventListener("pause", () => { musicPlaying = false; });
-    }
-
-    bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
-    bgAudio.volume = musicVolume;
-
-    const p = bgAudio.play();
-    if (p && p.catch) {
-      p.then(() => { console.log("[music] play ok"); })
-       .catch((err) => {
-         console.log("[music] play rejected:", err.message);
-         tryNextMusicSource();
-       });
-    }
-  }
-
-  function tryNextMusicSource() {
-    musicSourceIdx++;
-    if (musicSourceIdx >= MUSIC_SOURCES.length) {
-      console.log("[music] all sources failed");
-      return;
-    }
-    if (bgAudio) {
-      bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
-      bgAudio.play().catch(() => {});
-    }
-  }
-
-  function stopBgMusic() {
-    if (bgAudio) {
-      try { bgAudio.pause(); } catch (e) {}
-    }
-  }
-
-  function setMusicVolume(v) {
-    musicVolume = v;
-    localStorage.setItem("kogi_music_volume", String(v));
-    if (bgAudio) { try { bgAudio.volume = v; } catch (e) {} }
-  }
-
-  function setSoundVolume(v) {
-    soundVolume = v;
-    localStorage.setItem("kogi_sound_volume", String(v));
-  }
-
+  // Music disabled for now (parked)
+  function playBgMusic() {}
+  function stopBgMusic() {}
   function toggleBgMusic() {
     musicEnabled = !musicEnabled;
-    localStorage.setItem("kogi_music_on", musicEnabled ? "1" : "0");
-    if (musicEnabled) playBgMusic();
-    else stopBgMusic();
-    state.music = musicEnabled;
     if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
   }
-
   function toggleSound() {
     soundEnabled = !soundEnabled;
-    localStorage.setItem("kogi_sound_on", soundEnabled ? "1" : "0");
-    state.sound = soundEnabled;
     if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
   }
-
-  (function loadAudioPrefs() {
-    const mOn = localStorage.getItem("kogi_music_on");
-    const sOn = localStorage.getItem("kogi_sound_on");
-    const mv = localStorage.getItem("kogi_music_volume");
-    const sv = localStorage.getItem("kogi_sound_volume");
-    if (mOn !== null) musicEnabled = mOn === "1";
-    if (sOn !== null) soundEnabled = sOn === "1";
-    if (mv !== null) musicVolume = parseFloat(mv);
-    if (sv !== null) soundVolume = parseFloat(sv);
-  })();
+  function setMusicVolume(v) { musicVolume = v; }
+  function setSoundVolume(v) { soundVolume = v; }
 
   // ============================================================
   // STATE
@@ -425,8 +395,8 @@
     tab: "profile",
     username: null,
     dirty: false,
-    sound: true,
-    music: true,
+    navVisible: false,      // <-- new: nav only shown after tapping profile
+    activeNav: "home",      // <-- new: which bottom nav item is active
     avatar: {
       gender: "woman",
       skin: "#8B5A3C",
@@ -514,7 +484,6 @@
       await refreshState();
       loadAvatarFromPlayer();
       renderGame();
-      playBgMusic();
     } catch (e) {
       setToken(null);
       go("login");
@@ -553,7 +522,6 @@
       loadAvatarFromPlayer();
       Sounds.levelup();
       renderGame();
-      playBgMusic();
     } catch (e) { toast(e.message, "err"); }
   }
 
@@ -639,26 +607,67 @@
       </div>
 
       <div style="flex:1;"></div>
-
-      <div class="bottom-tabs">
-        ${bottomTab("profile", "✏️", "Profile")}
-        ${bottomTab("needs", "🍽️", "Needs")}
-        ${bottomTab("goals", "🎯", "Goals")}
-        ${bottomTab("skills", "🎓", "Skills")}
-        ${bottomTab("career", "💼", "Work")}
-        ${bottomTab("people", "👥", "People")}
-        ${bottomTab("settings", "⚙️", "More")}
-      </div>
     `;
+
+    // Bottom nav renders separately (fixed position outside game div)
+    renderBottomNav();
     go("game");
     startClock();
   }
 
-  function bottomTab(id, emoji, label) {
-    return `<button class="bottom-tab" onclick="openSheet('${id}')">
-      <span class="bt-emoji">${emoji}</span>
-      <span class="bt-label">${label}</span>
+  function renderBottomNav() {
+    let nav = document.getElementById("bottom-nav");
+    if (!nav) {
+      nav = document.createElement("nav");
+      nav.id = "bottom-nav";
+      nav.className = "bottom-nav";
+      document.body.appendChild(nav);
+    }
+    // Hide on landing, signup, login, loading pages
+    const activePage = document.querySelector(".page.active");
+    if (!activePage || activePage.id !== "game" || !state.player) {
+      nav.classList.add("hidden");
+      return;
+    }
+    nav.classList.remove("hidden");
+    const active = state.activeNav;
+    nav.innerHTML = `
+      ${navItem("home", "Home", `
+        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/></svg>
+      `, active)}
+      ${navItem("buy", "Buy", `
+        <svg viewBox="0 0 24 24"><path d="M4 10h16v10H4z"/><path d="M6 10V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v3"/></svg>
+      `, active)}
+      ${navItem("map", "Map", `
+        <svg viewBox="0 0 24 24"><path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2z"/><path d="M9 3v16"/><path d="M15 5v16"/></svg>
+      `, active)}
+      ${navItem("phone", "Phone", `
+        <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+      `, active)}
+    `;
+  }
+
+  function navItem(id, label, svg, active) {
+    return `<button class="nav-item ${active === id ? "active" : ""}" onclick="handleNav('${id}')">
+      <span class="nav-icon">${svg}</span>
+      <span class="nav-label">${label}</span>
     </button>`;
+  }
+
+  function handleNav(id) {
+    Sounds.click();
+    state.activeNav = id;
+    if (id === "home") {
+      // Home = main screen, nothing to change
+      renderBottomNav();
+    } else if (id === "buy") {
+      openSheet("career");       // placeholder — Buy will become its own screen later
+    } else if (id === "map") {
+      toast("🗺️ Map coming in Batch B", "ok");
+      renderBottomNav();
+    } else if (id === "phone") {
+      openSheet("settings");     // placeholder — Phone will become its own screen later
+    }
   }
 
   function statusText(p) {
@@ -696,8 +705,10 @@
   function openSheet(tab) {
     Sounds.open();
     state.tab = tab || "profile";
+    state.navVisible = true;   // <-- reveal nav when user opens sheet
     renderSheet();
     document.getElementById("sheet-wrap").classList.add("active");
+    renderBottomNav();
   }
   function closeSheet() {
     Sounds.close();
@@ -1032,13 +1043,8 @@
       </div>
 
       <div class="toggle-row">
-        <div><div class="label">Music</div></div>
+        <div><div class="label">Music (parked)</div></div>
         <div class="toggle ${musicEnabled ? "on" : ""}" onclick="toggleBgMusic()"></div>
-      </div>
-
-      <div class="slider-row">
-        <div class="label">Music volume <span id="music-vol-label">${Math.round(musicVolume * 100)}%</span></div>
-        <input type="range" min="0" max="100" value="${Math.round(musicVolume * 100)}" id="music-vol-slider" oninput="onMusicVolumeChange(this.value)" />
       </div>
 
       <div class="toggle-row">
@@ -1077,13 +1083,6 @@
     const label = document.getElementById("sound-vol-label");
     if (label) label.textContent = Math.round(v * 100) + "%";
     playTone(880, 0.08, "sine", 0.12);
-  }
-
-  function onMusicVolumeChange(val) {
-    const v = parseInt(val, 10) / 100;
-    setMusicVolume(v);
-    const label = document.getElementById("music-vol-label");
-    if (label) label.textContent = Math.round(v * 100) + "%";
   }
 
   async function doWork() {
@@ -1148,45 +1147,19 @@
       closeModal();
       closeSheet();
       renderNoLife();
+      renderBottomNav();
     } catch (e) { toast(e.message, "err"); }
   }
 
   function logout() {
     setToken(null);
-    Object.assign(state, { player: null, cities: null, jobs: null, foods: null, username: null });
+    Object.assign(state, { player: null, cities: null, jobs: null, foods: null, username: null, navVisible: false });
     if (clockTimer) clearInterval(clockTimer);
     stopBgMusic();
+    const nav = document.getElementById("bottom-nav");
+    if (nav) nav.classList.add("hidden");
     go("landing");
   }
-
-  // ============================================================
-  // FIRST TAP UNLOCKS AUDIO (mobile browsers require this)
-  // ============================================================
-  function unlockAudio() {
-    if (userInteracted) return;
-    userInteracted = true;
-    initAudio();
-    // Small delay to make sure context resumes
-    setTimeout(() => {
-      if (musicEnabled) playBgMusic();
-    }, 100);
-  }
-  document.addEventListener("touchstart", unlockAudio, { once: true, passive: true });
-  document.addEventListener("click", unlockAudio, { once: true });
-  document.addEventListener("keydown", unlockAudio, { once: true });
-
-  // ============================================================
-  // VISIBILITY — pause when hidden, resume when visible
-  // ============================================================
-  document.addEventListener("visibilitychange", () => {
-    if (document.hidden) {
-      stopBgMusic();
-    } else {
-      if (musicEnabled && userInteracted && getToken()) {
-        setTimeout(() => playBgMusic(), 300);
-      }
-    }
-  });
 
   if (getToken()) showGame();
   else go("landing");
