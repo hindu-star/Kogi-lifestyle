@@ -12,20 +12,11 @@
   .page { display: none; flex-direction: column; min-height: 100vh; }
   .page.active { display: flex; }
 
-  /* ============ LANDING ============ */
-  #landing {
-    align-items: center; justify-content: space-between; padding: 24px;
-    background-image: linear-gradient(rgba(13,27,42,0.55), rgba(13,27,42,0.9)),
-      url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1600');
-    background-size: cover; background-position: center;
-  }
+  /* LANDING */
+  #landing { align-items: center; justify-content: space-between; padding: 24px; background-image: linear-gradient(rgba(13,27,42,0.55), rgba(13,27,42,0.9)), url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1600'); background-size: cover; background-position: center; }
   #landing .top { width: 100%; text-align: right; font-size: 11px; color: rgba(255,255,255,0.5); }
   #landing .mid { text-align: center; }
-  #landing h1 {
-    font-size: 52px; font-weight: 900; line-height: 1; letter-spacing: -1px;
-    background: linear-gradient(90deg, #f4a300, #d64545, #1f9d8c);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
+  #landing h1 { font-size: 52px; font-weight: 900; line-height: 1; letter-spacing: -1px; background: linear-gradient(90deg, #f4a300, #d64545, #1f9d8c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   #landing .tag { margin-top: 14px; color: rgba(255,255,255,0.8); font-size: 15px; font-style: italic; }
   #landing .bottom { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; }
   #landing .bottom button { padding: 16px; border-radius: 30px; font-size: 15px; font-weight: 800; letter-spacing: 1px; border: none; cursor: pointer; font-family: inherit; }
@@ -33,7 +24,7 @@
   #landing .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
   #landing .footer { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 10px; }
 
-  /* ============ FORMS ============ */
+  /* FORMS */
   .form-page { align-items: center; justify-content: center; padding: 24px; background: #0d1b2a; }
   .form-card { width: 100%; max-width: 380px; background: #fff; border-radius: 24px; padding: 24px; }
   .form-card h2 { color: #0d1b2a; font-size: 22px; margin-bottom: 18px; font-weight: 800; }
@@ -45,67 +36,44 @@
   .form-card .switch { color: #666; font-size: 13px; text-align: center; margin-top: 14px; }
   .form-card .switch a { color: #f4a300; cursor: pointer; text-decoration: none; font-weight: 700; }
 
-  /* ============ GAME SHELL ============ */
+  /* GAME */
   #game { padding: 0 0 80px 0; background: linear-gradient(180deg, #87b7d8 0%, #b8d4e8 45%, #f0e6d2 100%); min-height: 100vh; display: flex; flex-direction: column; }
 
-  /* TOP BAR */
-  .topbar {
-    display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12px;
-    background: rgba(255,255,255,0.65); backdrop-filter: blur(8px); color: #1a1a1a; font-weight: 600;
-  }
+  .topbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12px; background: rgba(255,255,255,0.65); backdrop-filter: blur(8px); color: #1a1a1a; font-weight: 600; }
   .topbar .time { display: flex; align-items: center; gap: 3px; }
   .topbar .weather { color: #1f9d8c; font-weight: 700; }
   .topbar .sound { margin-left: auto; font-size: 16px; cursor: pointer; }
-  .topbar .money-chip {
-    background: #0d1b2a; color: #fff; padding: 6px 12px; border-radius: 20px;
-    display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 12px;
-  }
-  .topbar .plus {
-    background: #22c55e; color: #fff; width: 26px; height: 26px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px;
-    cursor: pointer; border: none;
-  }
+  .topbar .money-chip { background: #0d1b2a; color: #fff; padding: 6px 12px; border-radius: 20px; display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 12px; }
+  .topbar .plus { background: #22c55e; color: #fff; width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; cursor: pointer; border: none; }
   .topbar .stats-row { display: flex; gap: 6px; padding: 0 14px 8px; font-size: 10px; background: transparent; }
   .topbar .badge { background: rgba(255,255,255,0.75); color: #1a1a1a; padding: 4px 10px; border-radius: 12px; font-weight: 700; backdrop-filter: blur(4px); }
 
-  /* BOTTOM SHEET */
   .sheet-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50; display: none; align-items: flex-end; }
   .sheet-wrap.active { display: flex; }
   .sheet { background: #fff; width: 100%; height: 92vh; border-radius: 24px 24px 0 0; overflow-y: auto; padding-bottom: 40px; animation: sheetUp 0.25s ease; }
   @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  /* BOTTOM NAV TABS */
-  .bottom-tabs {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: #fff; border-top: 1px solid #eee;
-    display: grid; grid-template-columns: repeat(7, 1fr);
-    padding: 6px 4px 10px; z-index: 40;
-    box-shadow: 0 -2px 16px rgba(0,0,0,0.06);
-  }
+  .bottom-tabs { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #eee; display: grid; grid-template-columns: repeat(7, 1fr); padding: 6px 4px 10px; z-index: 40; box-shadow: 0 -2px 16px rgba(0,0,0,0.06); }
   .bottom-tab { background: none; border: none; padding: 6px 2px; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; font-family: inherit; }
   .bottom-tab .bt-emoji { font-size: 18px; line-height: 1; }
   .bottom-tab .bt-label { font-size: 9px; color: #666; font-weight: 700; letter-spacing: 0.3px; }
 
   .sheet-handle { width: 40px; height: 4px; background: #d1d5db; border-radius: 4px; margin: 10px auto 4px; }
 
-  /* PROFILE HEADER */
   .profile-head { padding: 12px 16px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid #f0f0f0; }
   .avatar-circle { width: 54px; height: 54px; border-radius: 50%; background: #f4f6f8; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 2px solid #f4a300; overflow: hidden; }
   .profile-head .name { font-size: 17px; font-weight: 800; color: #0d1b2a; }
   .profile-head .status { font-size: 12px; color: #888; margin-top: 2px; }
 
-  /* TAB ROW (inside sheet) */
   .tab-row { display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #f0f0f0; }
   .tab-row::-webkit-scrollbar { display: none; }
   .tab-pill { padding: 10px 18px; background: #f4f6f8; border-radius: 20px; font-size: 13px; font-weight: 700; color: #555; white-space: nowrap; cursor: pointer; border: none; font-family: inherit; transition: all 0.15s; }
   .tab-pill.active { background: #0d1b2a; color: #fff; }
   .tab-pill .emoji { margin-right: 4px; }
 
-  /* TAB CONTENT */
   .tab-pane { padding: 16px 20px; }
   .tab-pane h3 { font-size: 15px; color: #0d1b2a; margin-bottom: 12px; font-weight: 800; }
 
-  /* NEEDS */
   .need-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
   .need-row .emoji-bubble { width: 40px; height: 40px; border-radius: 50%; background: #f4f6f8; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
   .need-row .info { flex: 1; }
@@ -121,7 +89,6 @@
   .feeling-card .desc { font-size: 11px; color: #888; margin-top: 2px; }
   .feeling-card .pts { font-size: 14px; font-weight: 900; color: #22c55e; }
 
-  /* GOALS */
   .dream-card { background: linear-gradient(135deg, #4c1d95, #7c3aed); padding: 20px; border-radius: 20px; color: #fff; margin-bottom: 14px; }
   .dream-card .label { font-size: 10px; letter-spacing: 1.5px; opacity: 0.8; font-weight: 700; }
   .dream-card .title { font-size: 20px; font-weight: 900; margin: 6px 0 4px; }
@@ -141,15 +108,15 @@
   .wish-row .txt { flex: 1; font-size: 13px; color: #1a1a1a; font-weight: 600; }
   .wish-row .pts { font-size: 12px; color: #f4a300; font-weight: 800; }
 
-  /* SKILLS */
+  /* SKILLS with progress bar */
   .skill-row { background: #f9fafb; padding: 14px 16px; border-radius: 14px; margin-bottom: 8px; }
   .skill-row .top { display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px; }
-  .skill-row .dots { display: flex; gap: 3px; }
+  .skill-row .dots { display: flex; gap: 3px; margin-bottom: 6px; }
   .skill-row .dot { height: 8px; flex: 1; background: #e5e7eb; border-radius: 4px; }
   .skill-row .dot.on { background: #4c7ce8; }
   .skill-row .lvl { color: #4c7ce8; font-weight: 800; }
+  .skill-row .xp { font-size: 11px; color: #888; margin-top: 4px; }
 
-  /* CAREER */
   .job-hero { background: #f4f6f8; padding: 18px; border-radius: 18px; margin-bottom: 16px; display: flex; gap: 14px; align-items: center; }
   .job-hero .icon { font-size: 34px; width: 56px; height: 56px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
   .job-hero .body { flex: 1; }
@@ -172,7 +139,6 @@
   .work-btn { width: 100%; padding: 16px; border-radius: 30px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; background: #f4a300; color: #0d1b2a; margin-bottom: 10px; }
   .work-btn:disabled { background: #e5e7eb; color: #999; cursor: not-allowed; }
   .ghost-btn { background: #f4f6f8; color: #0d1b2a; }
-  .danger-btn { background: #fee2e2; color: #991b1b; }
 
   .action-btn { width: 100%; padding: 14px; border-radius: 30px; border: none; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; background: #f4f6f8; color: #0d1b2a; margin-bottom: 8px; }
   .action-btn.primary { background: #f4a300; color: #0d1b2a; }
@@ -186,9 +152,7 @@
   .list-card button { background: #f4a300; color: #0d1b2a; border: none; padding: 9px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; }
   .list-card button:disabled { background: #e5e7eb; color: #999; cursor: not-allowed; }
   .list-card.current { background: #ecfdf5; box-shadow: inset 0 0 0 2px #22c55e; }
-  .list-card .badge-green { background: #22c55e; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 8px; font-weight: 800; }
 
-  /* PROFILE TAB */
   .avatar-box { background: linear-gradient(180deg, #e0f0ff, #f0f8ff); border-radius: 24px; padding: 20px; text-align: center; margin-bottom: 16px; }
   .avatar-box .hint { font-size: 11px; color: #888; margin-top: 8px; }
 
@@ -204,7 +168,6 @@
   .save-btn { width: 100%; padding: 16px; border-radius: 30px; border: none; font-size: 15px; font-weight: 800; font-family: inherit; cursor: pointer; background: #d1fae5; color: #065f46; }
   .save-btn.dirty { background: #22c55e; color: #fff; }
 
-  /* SETTINGS */
   .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
   .toggle-row .label { font-size: 14px; font-weight: 700; color: #1a1a1a; }
   .toggle-row .sub { font-size: 11px; color: #888; margin-top: 2px; max-width: 240px; }
@@ -216,23 +179,19 @@
   .link-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
   .link-row .label { font-size: 14px; font-weight: 700; color: #1a1a1a; }
 
-  /* PEOPLE */
   .empty-state { text-align: center; padding: 40px 20px; }
   .empty-state .emoji { font-size: 48px; }
   .empty-state .msg { font-size: 14px; color: #666; margin-top: 10px; line-height: 1.6; }
 
-  /* TOAST */
   .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: #0d1b2a; color: #fff; padding: 14px 22px; border-radius: 14px; font-size: 13px; font-weight: 700; box-shadow: 0 6px 24px rgba(0,0,0,0.3); z-index: 200; max-width: 90%; text-align: center; animation: toastIn 0.25s ease; }
   .toast.err { background: #d64545; }
   .toast.ok { background: #22c55e; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-  /* LOADING */
   .center-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; flex-direction: column; gap: 16px; background: #0d1b2a; color: #fff; }
   .loading { color: #bbb; font-size: 14px; }
   .big-btn { background: #f4a300; color: #0d1b2a; font-weight: 800; padding: 16px 32px; border-radius: 30px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
 
-  /* MODAL */
   .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
   .modal-wrap.active { display: flex; }
   .modal { background: #fff; border-radius: 20px; padding: 24px; max-width: 340px; width: 100%; text-align: center; animation: sheetUp 0.2s ease; }
@@ -249,7 +208,7 @@
 <body>
 
 <div id="landing" class="page active">
-  <div class="top">v0.3 — Alpha</div>
+  <div class="top">v0.4 — Alpha</div>
   <div class="mid">
     <h1>KOGI<br>LIFESTYLE</h1>
     <div class="tag">Which Kogi you go live today?</div>
@@ -300,6 +259,85 @@
 <script>
   const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
 
+  // ============================================================
+  // AUDIO ENGINE — Web Audio API (generated sounds, no files)
+  // ============================================================
+  let audioCtx = null;
+  let bgMusicEl = null;
+  let soundEnabled = true;
+  let musicEnabled = true;
+
+  function initAudio() {
+    if (audioCtx) return;
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    } catch (e) { /* silent */ }
+  }
+
+  function playTone(freq, duration = 0.1, type = "sine", volume = 0.15) {
+    if (!soundEnabled) return;
+    initAudio();
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.value = volume;
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  }
+
+  const Sounds = {
+    click:    () => playTone(800, 0.06, "sine", 0.08),
+    success:  () => { playTone(660, 0.08, "sine", 0.12); setTimeout(() => playTone(880, 0.12, "sine", 0.12), 80); },
+    error:    () => playTone(200, 0.15, "sawtooth", 0.10),
+    cash:     () => { playTone(1200, 0.08, "triangle", 0.12); setTimeout(() => playTone(1600, 0.10, "triangle", 0.12), 70); },
+    levelup:  () => { [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.15, "sine", 0.14), i * 90)); },
+    notify:   () => { playTone(880, 0.08, "sine", 0.10); setTimeout(() => playTone(1100, 0.10, "sine", 0.10), 100); },
+    open:     () => playTone(440, 0.08, "sine", 0.07),
+    close:    () => playTone(330, 0.08, "sine", 0.07),
+    eat:      () => { playTone(180, 0.05, "square", 0.08); setTimeout(() => playTone(200, 0.05, "square", 0.08), 120); },
+    work:     () => { for (let i = 0; i < 4; i++) setTimeout(() => playTone(500 + i * 40, 0.05, "square", 0.06), i * 80); },
+    travel:   () => { playTone(300, 0.15, "sawtooth", 0.09); setTimeout(() => playTone(400, 0.15, "sawtooth", 0.09), 150); },
+    sleep:    () => playTone(250, 0.3, "sine", 0.07),
+    heart:    () => { playTone(700, 0.08, "sine", 0.1); setTimeout(() => playTone(700, 0.08, "sine", 0.1), 150); }
+  };
+
+  function playBgMusic() {
+    if (!musicEnabled) return;
+    if (bgMusicEl) {
+      bgMusicEl.volume = 0.15;
+      bgMusicEl.play().catch(() => {});
+      return;
+    }
+    // Calm ambient loop — Pixabay royalty-free
+    bgMusicEl = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_8cbd9c8d9c.mp3?filename=calm-ambient-114922.mp3");
+    bgMusicEl.loop = true;
+    bgMusicEl.volume = 0.15;
+    bgMusicEl.play().catch(() => {});
+  }
+
+  function toggleBgMusic() {
+    musicEnabled = !musicEnabled;
+    if (musicEnabled) playBgMusic();
+    else if (bgMusicEl) bgMusicEl.pause();
+    state.music = musicEnabled;
+    state.sound = soundEnabled;
+    if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
+  }
+
+  function toggleSound() {
+    soundEnabled = !soundEnabled;
+    state.sound = soundEnabled;
+    if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
+  }
+
+  // ============================================================
+  // STATE
+  // ============================================================
   const state = {
     player: null,
     cities: null,
@@ -308,6 +346,8 @@
     tab: "profile",
     username: null,
     dirty: false,
+    sound: true,
+    music: true,
     avatar: {
       gender: "woman",
       skin: "#8B5A3C",
@@ -338,6 +378,8 @@
   }
 
   function toast(msg, kind = "ok") {
+    if (kind === "err") Sounds.error();
+    else Sounds.notify();
     const t = document.createElement("div");
     t.className = "toast " + kind;
     t.textContent = msg;
@@ -346,10 +388,12 @@
   }
 
   function showModal(html) {
+    Sounds.open();
     document.getElementById("modal").innerHTML = html;
     document.getElementById("modal-wrap").classList.add("active");
   }
   function closeModal() {
+    Sounds.close();
     document.getElementById("modal-wrap").classList.remove("active");
   }
 
@@ -360,13 +404,11 @@
     const btn = document.getElementById("signup-btn");
     err.textContent = ""; btn.disabled = true; btn.textContent = "Creating...";
     try {
-      const { token, username: uname } = await api("/api/auth/signup", {
-        method: "POST", body: JSON.stringify({ username, password })
-      });
+      const { token, username: uname } = await api("/api/auth/signup", { method: "POST", body: JSON.stringify({ username, password }) });
       setToken(token);
       state.username = uname;
       await showGame();
-    } catch (e) { err.textContent = e.message; }
+    } catch (e) { err.textContent = e.message; Sounds.error(); }
     finally { btn.disabled = false; btn.textContent = "SIGN UP"; }
   }
 
@@ -377,13 +419,11 @@
     const btn = document.getElementById("login-btn");
     err.textContent = ""; btn.disabled = true; btn.textContent = "Logging in...";
     try {
-      const { token, username: uname } = await api("/api/auth/login", {
-        method: "POST", body: JSON.stringify({ username, password })
-      });
+      const { token, username: uname } = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
       setToken(token);
       state.username = uname;
       await showGame();
-    } catch (e) { err.textContent = e.message; }
+    } catch (e) { err.textContent = e.message; Sounds.error(); }
     finally { btn.disabled = false; btn.textContent = "LOGIN"; }
   }
 
@@ -395,6 +435,7 @@
       await refreshState();
       loadAvatarFromPlayer();
       renderGame();
+      playBgMusic();
     } catch (e) {
       setToken(null);
       go("login");
@@ -426,11 +467,14 @@
   }
 
   async function createLife() {
+    Sounds.click();
     try {
       await api("/api/player/create", { method: "POST" });
       await refreshState();
       loadAvatarFromPlayer();
+      Sounds.levelup();
       renderGame();
+      playBgMusic();
     } catch (e) { toast(e.message, "err"); }
   }
 
@@ -451,25 +495,15 @@
     const h = size * 1.57;
     const cx = size / 2;
     let hairPath = "";
-    if (a.hairstyle === "afro") {
-      hairPath = `<circle cx="${cx}" cy="${size * 0.32}" r="${size * 0.24}" fill="${a.hair}"/>`;
-    } else if (a.hairstyle === "lowcut") {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.20}" ry="${size * 0.10}" fill="${a.hair}"/>`;
-    } else if (a.hairstyle === "braids") {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.13}" fill="${a.hair}"/><rect x="${cx - size * 0.24}" y="${size * 0.32}" width="${size * 0.06}" height="${size * 0.55}" rx="3" fill="${a.hair}"/><rect x="${cx + size * 0.18}" y="${size * 0.32}" width="${size * 0.06}" height="${size * 0.55}" rx="3" fill="${a.hair}"/>`;
-    } else if (a.hairstyle === "bun") {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/><circle cx="${cx}" cy="${size * 0.14}" r="${size * 0.10}" fill="${a.hair}"/>`;
-    } else if (a.hairstyle === "ponytail") {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/><path d="M ${cx} ${size * 0.18} Q ${cx + size * 0.20} ${size * 0.42} ${cx + size * 0.22} ${size * 0.72} L ${cx + size * 0.18} ${size * 0.72} Q ${cx + size * 0.14} ${size * 0.42} ${cx} ${size * 0.22} Z" fill="${a.hair}"/>`;
-    } else if (a.hairstyle === "locs") {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.13}" fill="${a.hair}"/>${Array.from({length: 6}).map((_, i) => { const x = cx - size * 0.20 + i * size * 0.08; return `<rect x="${x}" y="${size * 0.32}" width="${size * 0.045}" height="${size * 0.50}" rx="4" fill="${a.hair}"/>`; }).join("")}`;
-    } else if (a.hairstyle === "gele") {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.22}" rx="${size * 0.30}" ry="${size * 0.18}" fill="#d64545"/>`;
-    } else if (a.hairstyle === "long") {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.24}" ry="${size * 0.14}" fill="${a.hair}"/><rect x="${cx - size * 0.24}" y="${size * 0.30}" width="${size * 0.48}" height="${size * 0.50}" rx="14" fill="${a.hair}"/>`;
-    } else {
-      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/>`;
-    }
+    if (a.hairstyle === "afro") hairPath = `<circle cx="${cx}" cy="${size * 0.32}" r="${size * 0.24}" fill="${a.hair}"/>`;
+    else if (a.hairstyle === "lowcut") hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.20}" ry="${size * 0.10}" fill="${a.hair}"/>`;
+    else if (a.hairstyle === "braids") hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.13}" fill="${a.hair}"/><rect x="${cx - size * 0.24}" y="${size * 0.32}" width="${size * 0.06}" height="${size * 0.55}" rx="3" fill="${a.hair}"/><rect x="${cx + size * 0.18}" y="${size * 0.32}" width="${size * 0.06}" height="${size * 0.55}" rx="3" fill="${a.hair}"/>`;
+    else if (a.hairstyle === "bun") hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/><circle cx="${cx}" cy="${size * 0.14}" r="${size * 0.10}" fill="${a.hair}"/>`;
+    else if (a.hairstyle === "ponytail") hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/><path d="M ${cx} ${size * 0.18} Q ${cx + size * 0.20} ${size * 0.42} ${cx + size * 0.22} ${size * 0.72} L ${cx + size * 0.18} ${size * 0.72} Q ${cx + size * 0.14} ${size * 0.42} ${cx} ${size * 0.22} Z" fill="${a.hair}"/>`;
+    else if (a.hairstyle === "locs") hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.13}" fill="${a.hair}"/>${Array.from({length: 6}).map((_, i) => { const x = cx - size * 0.20 + i * size * 0.08; return `<rect x="${x}" y="${size * 0.32}" width="${size * 0.045}" height="${size * 0.50}" rx="4" fill="${a.hair}"/>`; }).join("")}`;
+    else if (a.hairstyle === "gele") hairPath = `<ellipse cx="${cx}" cy="${size * 0.22}" rx="${size * 0.30}" ry="${size * 0.18}" fill="#d64545"/>`;
+    else if (a.hairstyle === "long") hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.24}" ry="${size * 0.14}" fill="${a.hair}"/><rect x="${cx - size * 0.24}" y="${size * 0.30}" width="${size * 0.48}" height="${size * 0.50}" rx="14" fill="${a.hair}"/>`;
+    else hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/>`;
     const isMale = a.gender === "man";
     const bodyWidth = isMale ? size * 0.36 : size * 0.30;
     return `
@@ -506,7 +540,7 @@
       <div class="topbar">
         <span class="time">${clockEmoji()} <span id="live-clock">${liveClock()}</span></span>
         <span class="weather">☀️ Ver...</span>
-        <span class="sound" onclick="toast('🔊 Sound toggled')">🔊</span>
+        <span class="sound" onclick="toggleBgMusic()">${musicEnabled ? "🔊" : "🔇"}</span>
         <span class="money-chip">₦${formatMoney(p.money)} <button class="plus" onclick="toast('💳 Coming soon: top up')">+</button></span>
       </div>
       <div class="topbar stats-row">
@@ -581,11 +615,13 @@
   }
 
   function openSheet(tab) {
+    Sounds.open();
     state.tab = tab || "profile";
     renderSheet();
     document.getElementById("sheet-wrap").classList.add("active");
   }
   function closeSheet() {
+    Sounds.close();
     document.getElementById("sheet-wrap").classList.remove("active");
   }
 
@@ -622,6 +658,7 @@
   }
 
   function switchTab(id) {
+    Sounds.click();
     state.tab = id;
     state.dirty = false;
     renderSheet();
@@ -649,73 +686,36 @@
       </div>
 
       <div class="field-label">Body</div>
-      <div class="pill-row">
-        ${genderPill("woman", "Woman")}
-        ${genderPill("man", "Man")}
-      </div>
+      <div class="pill-row">${genderPill("woman", "Woman")}${genderPill("man", "Man")}</div>
 
       <div class="field-label">Hairstyle</div>
       <div class="pill-row">
-        ${hairstylePill("afro", "Afro")}
-        ${hairstylePill("braids", "Braids")}
-        ${hairstylePill("bun", "Bun")}
-        ${hairstylePill("ponytail", "Ponytail")}
-        ${hairstylePill("long", "Long")}
-        ${hairstylePill("locs", "Locs")}
-        ${hairstylePill("lowcut", "Low cut")}
-        ${hairstylePill("gele", "Gele")}
+        ${hairstylePill("afro", "Afro")}${hairstylePill("braids", "Braids")}${hairstylePill("bun", "Bun")}${hairstylePill("ponytail", "Ponytail")}${hairstylePill("long", "Long")}${hairstylePill("locs", "Locs")}${hairstylePill("lowcut", "Low cut")}${hairstylePill("gele", "Gele")}
       </div>
 
       <div class="field-label">Outfit</div>
       <div class="pill-row">
-        ${outfitPill("casual", "Casual")}
-        ${outfitPill("office", "Office")}
-        ${outfitPill("owambe", "Owambe")}
-        ${outfitPill("sitework", "Site work")}
+        ${outfitPill("casual", "Casual")}${outfitPill("office", "Office")}${outfitPill("owambe", "Owambe")}${outfitPill("sitework", "Site work")}
       </div>
 
       <div class="field-label">Skin tone</div>
       <div class="color-row">
-        ${skinDot("#F1C27D")}
-        ${skinDot("#E0AC69")}
-        ${skinDot("#C68642")}
-        ${skinDot("#8B5A3C")}
-        ${skinDot("#6B4423")}
-        ${skinDot("#4A2E19")}
-        ${skinDot("#2C1810")}
+        ${skinDot("#F1C27D")}${skinDot("#E0AC69")}${skinDot("#C68642")}${skinDot("#8B5A3C")}${skinDot("#6B4423")}${skinDot("#4A2E19")}${skinDot("#2C1810")}
       </div>
 
       <div class="field-label">Hair colour</div>
       <div class="color-row">
-        ${hairDot("#1a1a1a")}
-        ${hairDot("#3a2418")}
-        ${hairDot("#5a3a22")}
-        ${hairDot("#8b5a2b")}
-        ${hairDot("#b8860b")}
-        ${hairDot("#d4a017")}
-        ${hairDot("#6b21a8")}
+        ${hairDot("#1a1a1a")}${hairDot("#3a2418")}${hairDot("#5a3a22")}${hairDot("#8b5a2b")}${hairDot("#b8860b")}${hairDot("#d4a017")}${hairDot("#6b21a8")}
       </div>
 
       <div class="field-label">Top colour</div>
       <div class="color-row">
-        ${topDot("#f4a300")}
-        ${topDot("#d64545")}
-        ${topDot("#1f9d8c")}
-        ${topDot("#4c7ce8")}
-        ${topDot("#ec4899")}
-        ${topDot("#0d1b2a")}
-        ${topDot("#e5e7eb")}
+        ${topDot("#f4a300")}${topDot("#d64545")}${topDot("#1f9d8c")}${topDot("#4c7ce8")}${topDot("#ec4899")}${topDot("#0d1b2a")}${topDot("#e5e7eb")}
       </div>
 
       <div class="field-label">Bottom colour</div>
       <div class="color-row">
-        ${botDot("#0d1b2a")}
-        ${botDot("#1f9d8c")}
-        ${botDot("#d64545")}
-        ${botDot("#4c7ce8")}
-        ${botDot("#f4a300")}
-        ${botDot("#e5e7eb")}
-        ${botDot("#6b4423")}
+        ${botDot("#0d1b2a")}${botDot("#1f9d8c")}${botDot("#d64545")}${botDot("#4c7ce8")}${botDot("#f4a300")}${botDot("#e5e7eb")}${botDot("#6b4423")}
       </div>
 
       <div class="save-bar">
@@ -735,6 +735,7 @@
   function botDot(c) { return `<div class="color-dot ${state.avatar.bottomColor === c ? "active" : ""}" style="background:${c}" onclick="setAvatar('bottomColor','${c}')"></div>`; }
 
   function setAvatar(field, value) {
+    Sounds.click();
     state.avatar[field] = value;
     state.dirty = true;
     renderSheet();
@@ -742,10 +743,7 @@
 
   async function saveAvatar() {
     try {
-      await api("/api/game/avatar", {
-        method: "POST",
-        body: JSON.stringify(state.avatar)
-      });
+      await api("/api/game/avatar", { method: "POST", body: JSON.stringify(state.avatar) });
       state.dirty = false;
       toast("Saved ✅");
       renderSheet();
@@ -783,16 +781,7 @@
   }
 
   function feelingCard(icon, title, desc, pts) {
-    return `
-      <div class="feeling-card">
-        <div class="icon">${icon}</div>
-        <div class="body">
-          <div class="title">${title}</div>
-          <div class="desc">${desc}</div>
-        </div>
-        <div class="pts">${pts}</div>
-      </div>
-    `;
+    return `<div class="feeling-card"><div class="icon">${icon}</div><div class="body"><div class="title">${title}</div><div class="desc">${desc}</div></div><div class="pts">${pts}</div></div>`;
   }
 
   function paneGoals() {
@@ -805,7 +794,6 @@
         <div class="bar"><div class="fill"></div></div>
         <div class="pct">25%</div>
       </div>
-
       <div class="badge-card">
         <div class="icon">🏛️</div>
         <div>
@@ -814,7 +802,6 @@
           <div class="tag">Loan paid off. Self-made 💪</div>
         </div>
       </div>
-
       <div class="feelings-title">WISHES <span style="float:right;color:#f4a300;">✨ 87</span></div>
       ${wishRow("🎭", "See art at Freedom Park", "+3✨")}
       ${wishRow("⚽", "Watch a match at the viewing centre", "+3✨")}
@@ -825,34 +812,36 @@
   }
 
   function wishRow(icon, text, pts) {
-    return `
-      <div class="wish-row">
-        <span class="icon">${icon}</span>
-        <span class="txt">${text}</span>
-        <span class="pts">${pts}</span>
-      </div>
-    `;
+    return `<div class="wish-row"><span class="icon">${icon}</span><span class="txt">${text}</span><span class="pts">${pts}</span></div>`;
   }
 
+  // SKILLS — Level 0, XP based
   function paneSkills() {
+    const p = state.player;
     const skills = [
-      { icon: "🍳", name: "Cooking", lvl: 3 },
-      { icon: "😎", name: "Charisma", lvl: 5 },
-      { icon: "💪", name: "Fitness", lvl: 4 },
-      { icon: "💻", name: "Coding", lvl: 2 },
-      { icon: "🎸", name: "Music", lvl: 1 },
-      { icon: "💼", name: "Hustle", lvl: 7 },
-      { icon: "💃", name: "Dance", lvl: 2 },
-      { icon: "🎤", name: "Comedy", lvl: 1 },
-      { icon: "📷", name: "Photography", lvl: 2 }
+      { key: "xp_cooking",     icon: "🍳", name: "Cooking" },
+      { key: "xp_charisma",    icon: "😎", name: "Charisma" },
+      { key: "xp_fitness",     icon: "💪", name: "Fitness" },
+      { key: "xp_coding",      icon: "💻", name: "Coding" },
+      { key: "xp_music",       icon: "🎸", name: "Music" },
+      { key: "xp_hustle",      icon: "💼", name: "Hustle" },
+      { key: "xp_dance",       icon: "💃", name: "Dance" },
+      { key: "xp_comedy",      icon: "🎤", name: "Comedy" },
+      { key: "xp_photography", icon: "📷", name: "Photography" }
     ];
     return `
       <h3>Skills</h3>
-      ${skills.map(s => skillRow(s.icon, s.name, s.lvl)).join("")}
+      <p style="font-size:12px;color:#666;margin-bottom:14px;">Do actions in the game to earn XP. Every 100 XP = 1 level.</p>
+      ${skills.map(s => {
+        const xp = p[s.key] || 0;
+        const lvl = Math.floor(xp / 100);
+        const progress = xp % 100;
+        return skillRow(s.icon, s.name, lvl, progress, xp);
+      }).join("")}
     `;
   }
 
-  function skillRow(icon, name, lvl) {
+  function skillRow(icon, name, lvl, progress, xp) {
     const dots = Array.from({ length: 10 }).map((_, i) =>
       `<div class="dot ${i < lvl ? "on" : ""}"></div>`
     ).join("");
@@ -860,6 +849,7 @@
       <div class="skill-row">
         <div class="top"><span>${icon} ${name}</span><span class="lvl">Level ${lvl}</span></div>
         <div class="dots">${dots}</div>
+        <div class="xp">${progress}/100 XP to next level · Total: ${xp} XP</div>
       </div>
     `;
   }
@@ -897,11 +887,9 @@
           <div class="pay">₦${job.pay.toLocaleString()} per shift · 5 days/week</div>
         </div>
       </div>
-
       <div class="perf-row"><span>Performance</span><span>45%</span></div>
       <div class="perf-bar"><div class="fill" style="width:45%;"></div></div>
       <div class="next-promo">Next: <b>Senior ${job.name}</b> — reach 100% performance.</div>
-
       <div class="week-row">
         ${["S","M","T","W","T","F","S"].map((d, i) => {
           const isWorked = [1,2,3,4,5].includes(i);
@@ -909,11 +897,9 @@
           return `<div class="day-pill ${isWorked ? "worked" : ""} ${isToday ? "today" : ""}">${d}</div>`;
         }).join("")}
       </div>
-
       ${workedToday
         ? `<div class="worked-note">✅ You don work today. Come back tomorrow.</div>`
         : `<button class="work-btn" onclick="doWork()">💼 Go to Work (+₦${job.pay.toLocaleString()})</button>`}
-
       <button class="action-btn danger" onclick="confirmQuit()">🚪 Quit this job</button>
     `;
   }
@@ -959,11 +945,11 @@
 
       <div class="toggle-row">
         <div><div class="label">Sound effects</div></div>
-        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        <div class="toggle ${soundEnabled ? "on" : ""}" onclick="toggleSound()"></div>
       </div>
       <div class="toggle-row">
         <div><div class="label">Music</div></div>
-        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+        <div class="toggle ${musicEnabled ? "on" : ""}" onclick="toggleBgMusic()"></div>
       </div>
       <div class="toggle-row">
         <div><div class="label">Free will</div></div>
@@ -999,6 +985,7 @@
     try {
       const r = await api("/api/game/work", { method: "POST" });
       await refreshState();
+      Sounds.cash();
       if (r.mishap) toast("😬 " + r.mishap + " (+₦" + r.earned.toLocaleString() + ")", "err");
       else toast("💼 Worked! +₦" + r.earned.toLocaleString() + " 🎉", "ok");
       renderGame();
@@ -1010,6 +997,7 @@
     try {
       await api("/api/game/apply", { method: "POST", body: JSON.stringify({ jobId }) });
       await refreshState();
+      Sounds.success();
       toast("🎉 Hired!", "ok");
       renderSheet();
     } catch (e) { toast(e.message, "err"); }
@@ -1062,11 +1050,16 @@
     setToken(null);
     Object.assign(state, { player: null, cities: null, jobs: null, foods: null, username: null });
     if (clockTimer) clearInterval(clockTimer);
+    if (bgMusicEl) { bgMusicEl.pause(); bgMusicEl = null; }
     go("landing");
   }
+
+  // Unlock audio on first tap anywhere
+  document.addEventListener("touchstart", () => initAudio(), { once: true });
+  document.addEventListener("click", () => initAudio(), { once: true });
 
   if (getToken()) showGame();
   else go("landing");
 </script>
 </body>
- </html>
+</html>
