@@ -50,9 +50,6 @@
   .sheet { background: #fff; width: 100%; height: 92vh; border-radius: 24px 24px 0 0; overflow-y: auto; padding-bottom: 120px; animation: sheetUp 0.25s ease; }
   @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  /* ============================================================
-     NEW BOTTOM NAV — Lagos Life style (rounded pill, 4 icons)
-     ============================================================ */
   .bottom-nav {
     position: fixed;
     bottom: 14px;
@@ -74,49 +71,123 @@
   }
   .bottom-nav.hidden { display: none; }
   .nav-item {
-    background: none;
-    border: none;
-    padding: 10px 4px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    cursor: pointer;
+    background: none; border: none; padding: 10px 4px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    cursor: pointer; font-family: inherit; border-radius: 30px;
+    transition: background 0.2s, color 0.2s; color: #8b8f96;
+  }
+  .nav-item .nav-icon { font-size: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; height: 26px; }
+  .nav-item .nav-icon svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-item .nav-label { font-size: 11px; font-weight: 700; letter-spacing: 0.2px; }
+  .nav-item.active { background: #1a2436; color: #ffffff; }
+  .nav-item.active .nav-icon svg { stroke: #ffffff; }
+
+  /* ============================================================
+     MAP SCREEN
+     ============================================================ */
+  #map-screen {
+    position: fixed; inset: 0; z-index: 45;
+    background: linear-gradient(160deg, #a8d5e2 0%, #d4e8dc 55%, #f0e6d2 100%);
+    display: none; flex-direction: column;
+    padding-bottom: 110px;
+  }
+  #map-screen.active { display: flex; }
+
+  .map-header {
+    padding: 14px 18px 10px;
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.4);
+  }
+  .map-header .back-btn {
+    background: #fff; border: none; width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     font-family: inherit;
-    border-radius: 30px;
-    transition: background 0.2s, color 0.2s;
-    color: #8b8f96;
   }
-  .nav-item .nav-icon {
-    font-size: 22px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 26px;
+  .map-header .title { flex: 1; }
+  .map-header .title h2 { font-size: 16px; color: #0d1b2a; font-weight: 900; }
+  .map-header .title p { font-size: 11px; color: #555; margin-top: 2px; }
+
+  .map-body {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center;
+    padding: 12px;
+    overflow: hidden;
   }
-  .nav-item .nav-icon svg {
-    width: 24px;
-    height: 24px;
-    stroke: currentColor;
-    fill: none;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+
+  .map-svg-wrap {
+    position: relative;
+    width: 100%; max-width: 500px; height: 100%; max-height: 100%;
+    display: flex; align-items: center; justify-content: center;
   }
-  .nav-item .nav-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.2px;
+  .map-svg-wrap svg {
+    width: 100%; height: 100%; max-height: 78vh;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.15));
   }
-  .nav-item.active {
-    background: #1a2436;
-    color: #ffffff;
+
+  .map-pin {
+    position: absolute;
+    transform: translate(-50%, -100%);
+    cursor: pointer;
+    transition: transform 0.15s;
+    z-index: 2;
   }
-  .nav-item.active .nav-icon svg {
-    stroke: #ffffff;
+  .map-pin:active { transform: translate(-50%, -100%) scale(0.9); }
+
+  .map-pin .pin-dot {
+    width: 32px; height: 32px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    background: #d64545;
+    border: 3px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    display: flex; align-items: center; justify-content: center;
   }
+  .map-pin .pin-dot span {
+    transform: rotate(45deg);
+    font-size: 14px; line-height: 1;
+  }
+  .map-pin.current .pin-dot {
+    background: #22c55e;
+    animation: pinPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pinPulse {
+    0%, 100% { box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 0 0 rgba(34,197,94,0.6); }
+    50% { box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 0 12px rgba(34,197,94,0); }
+  }
+  .map-pin .pin-label {
+    position: absolute;
+    top: 100%; left: 50%; transform: translateX(-50%);
+    margin-top: 4px;
+    background: rgba(13,27,42,0.92);
+    color: #fff;
+    font-size: 10px; font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 8px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+  }
+  .map-pin.current .pin-label {
+    background: #22c55e;
+  }
+
+  /* Legend */
+  .map-legend {
+    position: absolute;
+    bottom: 12px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 12px;
+    background: rgba(255,255,255,0.9);
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 11px; font-weight: 700; color: #333;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    z-index: 3;
+  }
+  .map-legend .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+  .map-legend .dot.green { background: #22c55e; }
+  .map-legend .dot.red { background: #d64545; }
 
   .sheet-handle { width: 40px; height: 4px; background: #d1d5db; border-radius: 4px; margin: 10px auto 4px; }
 
@@ -197,20 +268,15 @@
 
   .work-btn { width: 100%; padding: 16px; border-radius: 30px; border: none; font-size: 15px; font-weight: 800; cursor: pointer; font-family: inherit; background: #f4a300; color: #0d1b2a; margin-bottom: 10px; }
   .work-btn:disabled { background: #e5e7eb; color: #999; cursor: not-allowed; }
-  .ghost-btn { background: #f4f6f8; color: #0d1b2a; }
 
   .action-btn { width: 100%; padding: 14px; border-radius: 30px; border: none; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; background: #f4f6f8; color: #0d1b2a; margin-bottom: 8px; }
-  .action-btn.primary { background: #f4a300; color: #0d1b2a; }
   .action-btn.danger { background: #fee2e2; color: #991b1b; }
-  .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .list-card { background: #f9fafb; border-radius: 14px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
   .list-card .info { flex: 1; }
   .list-card .name { font-size: 14px; font-weight: 800; color: #1a1a1a; }
   .list-card .meta { font-size: 11px; color: #888; margin-top: 3px; }
   .list-card button { background: #f4a300; color: #0d1b2a; border: none; padding: 9px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; }
-  .list-card button:disabled { background: #e5e7eb; color: #999; cursor: not-allowed; }
-  .list-card.current { background: #ecfdf5; box-shadow: inset 0 0 0 2px #22c55e; }
 
   .avatar-box { background: linear-gradient(180deg, #e0f0ff, #f0f8ff); border-radius: 24px; padding: 20px; text-align: center; margin-bottom: 16px; }
   .avatar-box .hint { font-size: 11px; color: #888; margin-top: 8px; }
@@ -240,7 +306,6 @@
   .slider-row .label span { color: #f4a300; font-weight: 800; }
   input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: #e5e7eb; border-radius: 4px; outline: none; }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: #f4a300; border-radius: 50%; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
-  input[type=range]::-moz-range-thumb { width: 24px; height: 24px; background: #f4a300; border-radius: 50%; cursor: pointer; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
 
   .link-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
   .link-row .label { font-size: 14px; font-weight: 700; color: #1a1a1a; }
@@ -274,7 +339,7 @@
 <body>
 
 <div id="landing" class="page active">
-  <div class="top">v0.4 — Alpha</div>
+  <div class="top">v0.5 — Alpha</div>
   <div class="mid">
     <h1>KOGI<br>LIFESTYLE</h1>
     <div class="tag">Which Kogi you go live today?</div>
@@ -314,6 +379,22 @@
 
 <div id="game" class="page"></div>
 
+<!-- MAP SCREEN -->
+<div id="map-screen">
+  <div class="map-header">
+    <button class="back-btn" onclick="closeMap()">←</button>
+    <div class="title">
+      <h2>Kogi State Map</h2>
+      <p id="map-subtitle">You dey: —</p>
+    </div>
+  </div>
+  <div class="map-body">
+    <div class="map-svg-wrap" id="map-svg-wrap">
+      <!-- SVG map + pins injected by JS -->
+    </div>
+  </div>
+</div>
+
 <div id="sheet-wrap" class="sheet-wrap" onclick="if(event.target===this)closeSheet()">
   <div class="sheet" id="sheet"></div>
 </div>
@@ -326,19 +407,16 @@
   const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
 
   // ============================================================
-  // AUDIO ENGINE
+  // AUDIO
   // ============================================================
   let audioCtx = null;
   let soundEnabled = true;
   let musicEnabled = true;
-  let musicVolume = 0.5;
   let soundVolume = 0.5;
 
   function initAudio() {
     if (audioCtx) return;
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {}
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
     if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
   }
 
@@ -349,14 +427,10 @@
     const v = volume * soundVolume;
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.value = freq;
-    gain.gain.value = v;
+    osc.type = type; osc.frequency.value = freq; gain.gain.value = v;
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + duration);
   }
 
   const Sounds = {
@@ -370,47 +444,39 @@
     close: () => { playTone(523.25, 0.06, "sine", 0.08); setTimeout(() => playTone(392, 0.08, "sine", 0.08), 60); }
   };
 
-  // Music disabled for now (parked)
-  function playBgMusic() {}
-  function stopBgMusic() {}
-  function toggleBgMusic() {
-    musicEnabled = !musicEnabled;
-    if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
-  }
-  function toggleSound() {
-    soundEnabled = !soundEnabled;
-    if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
-  }
-  function setMusicVolume(v) { musicVolume = v; }
+  function toggleBgMusic() { musicEnabled = !musicEnabled; if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet(); }
+  function toggleSound() { soundEnabled = !soundEnabled; if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet(); }
   function setSoundVolume(v) { soundVolume = v; }
 
   // ============================================================
   // STATE
   // ============================================================
   const state = {
-    player: null,
-    cities: null,
-    jobs: null,
-    foods: null,
-    tab: "profile",
-    username: null,
-    dirty: false,
-    navVisible: false,      // <-- new: nav only shown after tapping profile
-    activeNav: "home",      // <-- new: which bottom nav item is active
-    avatar: {
-      gender: "woman",
-      skin: "#8B5A3C",
-      hair: "#1a1a1a",
-      hairstyle: "afro",
-      topColor: "#f4a300",
-      bottomColor: "#0d1b2a",
-      outfit: "casual"
-    }
+    player: null, cities: null, jobs: null, foods: null,
+    tab: "profile", username: null, dirty: false,
+    navVisible: false, activeNav: "home",
+    avatar: { gender: "woman", skin: "#8B5A3C", hair: "#1a1a1a", hairstyle: "afro", topColor: "#f4a300", bottomColor: "#0d1b2a", outfit: "casual" }
   };
+
+  // ============================================================
+  // PIN POSITIONS (% within the map wrap, tuned for mobile aspect)
+  // ============================================================
+  const MAP_PINS = [
+    { id: "Kabba",    x: 15, y: 48, emoji: "🌾" },
+    { id: "Lokoja",   x: 38, y: 68, emoji: "🌊" },
+    { id: "Okene",    x: 52, y: 52, emoji: "⛏️" },
+    { id: "Ajaokuta", x: 52, y: 78, emoji: "🏭" },
+    { id: "Idah",     x: 78, y: 62, emoji: "🐟" },
+    { id: "Anyigba",  x: 72, y: 32, emoji: "🎓" }
+  ];
+
+  // Rough stylized outline of Kogi State (viewBox 0 0 100 100)
+  const KOGI_PATH = "M 8 42 L 18 30 L 34 26 L 44 32 L 58 24 L 72 20 L 84 26 L 92 40 L 92 58 L 84 72 L 74 82 L 58 88 L 40 86 L 22 76 L 10 60 Z";
 
   function go(pageId) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     document.getElementById(pageId).classList.add("active");
+    renderBottomNav();
   }
 
   function getToken() { return localStorage.getItem("kogi_token"); }
@@ -427,8 +493,7 @@
   }
 
   function toast(msg, kind = "ok") {
-    if (kind === "err") Sounds.error();
-    else Sounds.notify();
+    if (kind === "err") Sounds.error(); else Sounds.notify();
     const t = document.createElement("div");
     t.className = "toast " + kind;
     t.textContent = msg;
@@ -436,15 +501,8 @@
     setTimeout(() => t.remove(), 2600);
   }
 
-  function showModal(html) {
-    Sounds.open();
-    document.getElementById("modal").innerHTML = html;
-    document.getElementById("modal-wrap").classList.add("active");
-  }
-  function closeModal() {
-    Sounds.close();
-    document.getElementById("modal-wrap").classList.remove("active");
-  }
+  function showModal(html) { Sounds.open(); document.getElementById("modal").innerHTML = html; document.getElementById("modal-wrap").classList.add("active"); }
+  function closeModal() { Sounds.close(); document.getElementById("modal-wrap").classList.remove("active"); }
 
   async function handleSignup() {
     const username = document.getElementById("signup-username").value.trim();
@@ -454,9 +512,7 @@
     err.textContent = ""; btn.disabled = true; btn.textContent = "Creating...";
     try {
       const { token, username: uname } = await api("/api/auth/signup", { method: "POST", body: JSON.stringify({ username, password }) });
-      setToken(token);
-      state.username = uname;
-      await showGame();
+      setToken(token); state.username = uname; await showGame();
     } catch (e) { err.textContent = e.message; Sounds.error(); }
     finally { btn.disabled = false; btn.textContent = "SIGN UP"; }
   }
@@ -469,9 +525,7 @@
     err.textContent = ""; btn.disabled = true; btn.textContent = "Logging in...";
     try {
       const { token, username: uname } = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
-      setToken(token);
-      state.username = uname;
-      await showGame();
+      setToken(token); state.username = uname; await showGame();
     } catch (e) { err.textContent = e.message; Sounds.error(); }
     finally { btn.disabled = false; btn.textContent = "LOGIN"; }
   }
@@ -484,18 +538,13 @@
       await refreshState();
       loadAvatarFromPlayer();
       renderGame();
-    } catch (e) {
-      setToken(null);
-      go("login");
-    }
+    } catch (e) { setToken(null); go("login"); }
   }
 
   async function refreshState() {
     const data = await api("/api/game/state");
-    state.player = data.player;
-    state.cities = data.cities;
-    state.jobs = data.jobs;
-    state.foods = data.foods;
+    state.player = data.player; state.cities = data.cities;
+    state.jobs = data.jobs; state.foods = data.foods;
   }
 
   function renderNoLife() {
@@ -509,8 +558,7 @@
         </div>
         <button class="big-btn" onclick="createLife()">START NEW LIFE</button>
         <button style="background:none;border:none;color:#888;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;" onclick="logout()">Logout</button>
-      </div>
-    `;
+      </div>`;
     go("game");
   }
 
@@ -518,16 +566,13 @@
     Sounds.click();
     try {
       await api("/api/player/create", { method: "POST" });
-      await refreshState();
-      loadAvatarFromPlayer();
-      Sounds.levelup();
-      renderGame();
+      await refreshState(); loadAvatarFromPlayer();
+      Sounds.levelup(); renderGame();
     } catch (e) { toast(e.message, "err"); }
   }
 
   function loadAvatarFromPlayer() {
-    const p = state.player;
-    if (!p) return;
+    const p = state.player; if (!p) return;
     if (p.avatar_gender) state.avatar.gender = p.avatar_gender;
     if (p.avatar_skin) state.avatar.skin = p.avatar_skin;
     if (p.avatar_hair_color) state.avatar.hair = p.avatar_hair_color;
@@ -553,32 +598,29 @@
     else hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/>`;
     const isMale = a.gender === "man";
     const bodyWidth = isMale ? size * 0.36 : size * 0.30;
-    return `
-      <svg viewBox="0 0 ${size} ${h}" width="${size}" height="${h}" xmlns="http://www.w3.org/2000/svg">
-        <ellipse cx="${cx}" cy="${h - 6}" rx="${size * 0.32}" ry="6" fill="rgba(0,0,0,0.15)"/>
-        <rect x="${cx - bodyWidth * 0.55}" y="${size * 1.05}" width="${bodyWidth * 0.42}" height="${size * 0.42}" rx="6" fill="${a.skin}"/>
-        <rect x="${cx + bodyWidth * 0.13}" y="${size * 1.05}" width="${bodyWidth * 0.42}" height="${size * 0.42}" rx="6" fill="${a.skin}"/>
-        <rect x="${cx - bodyWidth * 0.62}" y="${size * 0.90}" width="${bodyWidth * 1.24}" height="${size * 0.22}" rx="6" fill="${a.bottomColor}"/>
-        <rect x="${cx - bodyWidth * 0.55}" y="${size * 0.60}" width="${bodyWidth * 1.10}" height="${size * 0.35}" rx="10" fill="${a.topColor}"/>
-        <rect x="${cx - bodyWidth * 0.90}" y="${size * 0.62}" width="${bodyWidth * 0.36}" height="${size * 0.36}" rx="8" fill="${a.topColor}"/>
-        <rect x="${cx + bodyWidth * 0.54}" y="${size * 0.62}" width="${bodyWidth * 0.36}" height="${size * 0.36}" rx="8" fill="${a.topColor}"/>
-        <circle cx="${cx - bodyWidth * 0.72}" cy="${size * 1.00}" r="${bodyWidth * 0.18}" fill="${a.skin}"/>
-        <circle cx="${cx + bodyWidth * 0.72}" cy="${size * 1.00}" r="${bodyWidth * 0.18}" fill="${a.skin}"/>
-        <rect x="${cx - size * 0.05}" y="${size * 0.54}" width="${size * 0.10}" height="${size * 0.10}" fill="${a.skin}"/>
-        <ellipse cx="${cx}" cy="${size * 0.38}" rx="${size * 0.17}" ry="${size * 0.19}" fill="${a.skin}"/>
-        <circle cx="${cx - size * 0.17}" cy="${size * 0.38}" r="${size * 0.03}" fill="${a.skin}"/>
-        <circle cx="${cx + size * 0.17}" cy="${size * 0.38}" r="${size * 0.03}" fill="${a.skin}"/>
-        ${hairPath}
-        <circle cx="${cx - size * 0.06}" cy="${size * 0.38}" r="${size * 0.015}" fill="#1a1a1a"/>
-        <circle cx="${cx + size * 0.06}" cy="${size * 0.38}" r="${size * 0.015}" fill="#1a1a1a"/>
-        <path d="M ${cx - size * 0.04} ${size * 0.44} Q ${cx} ${size * 0.47} ${cx + size * 0.04} ${size * 0.44}" stroke="#7a2c1c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-      </svg>
-    `;
+    return `<svg viewBox="0 0 ${size} ${h}" width="${size}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="${cx}" cy="${h - 6}" rx="${size * 0.32}" ry="6" fill="rgba(0,0,0,0.15)"/>
+      <rect x="${cx - bodyWidth * 0.55}" y="${size * 1.05}" width="${bodyWidth * 0.42}" height="${size * 0.42}" rx="6" fill="${a.skin}"/>
+      <rect x="${cx + bodyWidth * 0.13}" y="${size * 1.05}" width="${bodyWidth * 0.42}" height="${size * 0.42}" rx="6" fill="${a.skin}"/>
+      <rect x="${cx - bodyWidth * 0.62}" y="${size * 0.90}" width="${bodyWidth * 1.24}" height="${size * 0.22}" rx="6" fill="${a.bottomColor}"/>
+      <rect x="${cx - bodyWidth * 0.55}" y="${size * 0.60}" width="${bodyWidth * 1.10}" height="${size * 0.35}" rx="10" fill="${a.topColor}"/>
+      <rect x="${cx - bodyWidth * 0.90}" y="${size * 0.62}" width="${bodyWidth * 0.36}" height="${size * 0.36}" rx="8" fill="${a.topColor}"/>
+      <rect x="${cx + bodyWidth * 0.54}" y="${size * 0.62}" width="${bodyWidth * 0.36}" height="${size * 0.36}" rx="8" fill="${a.topColor}"/>
+      <circle cx="${cx - bodyWidth * 0.72}" cy="${size * 1.00}" r="${bodyWidth * 0.18}" fill="${a.skin}"/>
+      <circle cx="${cx + bodyWidth * 0.72}" cy="${size * 1.00}" r="${bodyWidth * 0.18}" fill="${a.skin}"/>
+      <rect x="${cx - size * 0.05}" y="${size * 0.54}" width="${size * 0.10}" height="${size * 0.10}" fill="${a.skin}"/>
+      <ellipse cx="${cx}" cy="${size * 0.38}" rx="${size * 0.17}" ry="${size * 0.19}" fill="${a.skin}"/>
+      <circle cx="${cx - size * 0.17}" cy="${size * 0.38}" r="${size * 0.03}" fill="${a.skin}"/>
+      <circle cx="${cx + size * 0.17}" cy="${size * 0.38}" r="${size * 0.03}" fill="${a.skin}"/>
+      ${hairPath}
+      <circle cx="${cx - size * 0.06}" cy="${size * 0.38}" r="${size * 0.015}" fill="#1a1a1a"/>
+      <circle cx="${cx + size * 0.06}" cy="${size * 0.38}" r="${size * 0.015}" fill="#1a1a1a"/>
+      <path d="M ${cx - size * 0.04} ${size * 0.44} Q ${cx} ${size * 0.47} ${cx + size * 0.04} ${size * 0.44}" stroke="#7a2c1c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </svg>`;
   }
 
   function renderGame() {
-    const p = state.player;
-    if (!p) return;
+    const p = state.player; if (!p) return;
     const g = document.getElementById("game");
     const onlineCount = 1000 + Math.floor(Math.random() * 500);
     const visits = (15.9 + Math.random() * 0.5).toFixed(1);
@@ -606,10 +648,7 @@
         </div>
       </div>
 
-      <div style="flex:1;"></div>
-    `;
-
-    // Bottom nav renders separately (fixed position outside game div)
+      <div style="flex:1;"></div>`;
     renderBottomNav();
     go("game");
     startClock();
@@ -623,27 +662,19 @@
       nav.className = "bottom-nav";
       document.body.appendChild(nav);
     }
-    // Hide on landing, signup, login, loading pages
     const activePage = document.querySelector(".page.active");
-    if (!activePage || activePage.id !== "game" || !state.player) {
+    const mapActive = document.getElementById("map-screen").classList.contains("active");
+    if ((!activePage || activePage.id !== "game" || !state.player) && !mapActive) {
       nav.classList.add("hidden");
       return;
     }
     nav.classList.remove("hidden");
     const active = state.activeNav;
     nav.innerHTML = `
-      ${navItem("home", "Home", `
-        <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/></svg>
-      `, active)}
-      ${navItem("buy", "Buy", `
-        <svg viewBox="0 0 24 24"><path d="M4 10h16v10H4z"/><path d="M6 10V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v3"/></svg>
-      `, active)}
-      ${navItem("map", "Map", `
-        <svg viewBox="0 0 24 24"><path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2z"/><path d="M9 3v16"/><path d="M15 5v16"/></svg>
-      `, active)}
-      ${navItem("phone", "Phone", `
-        <svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
-      `, active)}
+      ${navItem("home", "Home", `<svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 10v10h14V10"/></svg>`, active)}
+      ${navItem("buy", "Buy", `<svg viewBox="0 0 24 24"><path d="M4 10h16v10H4z"/><path d="M6 10V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3v3"/></svg>`, active)}
+      ${navItem("map", "Map", `<svg viewBox="0 0 24 24"><path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2z"/><path d="M9 3v16"/><path d="M15 5v16"/></svg>`, active)}
+      ${navItem("phone", "Phone", `<svg viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/></svg>`, active)}
     `;
   }
 
@@ -657,17 +688,108 @@
   function handleNav(id) {
     Sounds.click();
     state.activeNav = id;
-    if (id === "home") {
-      // Home = main screen, nothing to change
+    if (id === "map") {
+      openMap();
+    } else if (id === "home") {
+      closeMap();
       renderBottomNav();
     } else if (id === "buy") {
-      openSheet("career");       // placeholder — Buy will become its own screen later
-    } else if (id === "map") {
-      toast("🗺️ Map coming in Batch B", "ok");
-      renderBottomNav();
+      closeMap();
+      openSheet("career");
     } else if (id === "phone") {
-      openSheet("settings");     // placeholder — Phone will become its own screen later
+      closeMap();
+      openSheet("settings");
     }
+  }
+
+  // ============================================================
+  // MAP SCREEN
+  // ============================================================
+  function openMap() {
+    Sounds.open();
+    state.activeNav = "map";
+    const map = document.getElementById("map-screen");
+    map.classList.add("active");
+    document.getElementById("map-subtitle").textContent = `You dey: ${state.player.city}`;
+    renderMap();
+    renderBottomNav();
+  }
+
+  function closeMap() {
+    Sounds.close();
+    document.getElementById("map-screen").classList.remove("active");
+    state.activeNav = "home";
+    renderBottomNav();
+  }
+
+  function renderMap() {
+    const wrap = document.getElementById("map-svg-wrap");
+    const currentCity = state.player.city;
+
+    wrap.innerHTML = `
+      <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="kogiGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#7fb069" />
+            <stop offset="100%" stop-color="#4a7c3d" />
+          </linearGradient>
+        </defs>
+        <path d="${KOGI_PATH}" fill="url(#kogiGrad)" stroke="#2f4f2f" stroke-width="1.2" stroke-linejoin="round"/>
+        <!-- Rivers Niger & Benue -->
+        <path d="M 30 92 Q 38 78 40 68 Q 42 60 55 55 Q 68 50 82 55" stroke="#3b82f6" stroke-width="1.6" fill="none" opacity="0.85" stroke-linecap="round"/>
+        <path d="M 5 50 Q 20 52 38 68" stroke="#3b82f6" stroke-width="1.4" fill="none" opacity="0.75" stroke-linecap="round"/>
+        <!-- Text label -->
+        <text x="50" y="46" text-anchor="middle" font-size="6" font-weight="900" fill="rgba(255,255,255,0.85)" letter-spacing="1">KOGI STATE</text>
+      </svg>
+      ${MAP_PINS.map(pin => {
+        const isCurrent = pin.id === currentCity;
+        return `
+          <div class="map-pin ${isCurrent ? "current" : ""}" style="left:${pin.x}%; top:${pin.y}%;" onclick="tapPin('${pin.id}')">
+            <div class="pin-dot"><span>${pin.emoji}</span></div>
+            <div class="pin-label">${pin.id}${isCurrent ? " ⦿" : ""}</div>
+          </div>
+        `;
+      }).join("")}
+      <div class="map-legend">
+        <span><span class="dot green"></span>You dey here</span>
+        <span><span class="dot red"></span>Travel</span>
+      </div>
+    `;
+  }
+
+  function tapPin(city) {
+    Sounds.click();
+    const current = state.player.city;
+    if (city === current) {
+      toast("📍 You already dey " + city, "ok");
+      return;
+    }
+    showModal(`
+      <div class="emoji">🚌</div>
+      <h3>Travel to ${city}?</h3>
+      <p>Transport: <b>₦3,000</b> + ⚡15 energy<br>Your zone go change based on your class.</p>
+      <div class="btn-row">
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+        <button class="confirm" onclick="doTravelFromMap('${city}')">Travel</button>
+      </div>
+    `);
+  }
+
+  async function doTravelFromMap(city) {
+    closeModal();
+    try {
+      const r = await api("/api/game/travel", { method: "POST", body: JSON.stringify({ city }) });
+      state.player = r.player;
+      Sounds.travel();
+      toast("🚌 You don reach " + city, "ok");
+      document.getElementById("map-subtitle").textContent = `You dey: ${state.player.city}`;
+      renderMap();
+      renderGame();
+      // Re-open map
+      document.getElementById("map-screen").classList.add("active");
+      state.activeNav = "map";
+      renderBottomNav();
+    } catch (e) { toast(e.message, "err"); }
   }
 
   function statusText(p) {
@@ -689,10 +811,7 @@
     if (h < 17) return "☀️";
     return "🌆";
   }
-  function liveClock() {
-    const d = new Date();
-    return d.toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' });
-  }
+  function liveClock() { return new Date().toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' }); }
   let clockTimer = null;
   function startClock() {
     if (clockTimer) clearInterval(clockTimer);
@@ -705,15 +824,12 @@
   function openSheet(tab) {
     Sounds.open();
     state.tab = tab || "profile";
-    state.navVisible = true;   // <-- reveal nav when user opens sheet
+    state.navVisible = true;
     renderSheet();
     document.getElementById("sheet-wrap").classList.add("active");
     renderBottomNav();
   }
-  function closeSheet() {
-    Sounds.close();
-    document.getElementById("sheet-wrap").classList.remove("active");
-  }
+  function closeSheet() { Sounds.close(); document.getElementById("sheet-wrap").classList.remove("active"); }
 
   function renderSheet() {
     const p = state.player;
@@ -737,9 +853,7 @@
         ${tabPill("people", "👥", "People")}
         ${tabPill("settings", "⚙️", "Settings")}
       </div>
-      <div class="tab-pane" id="tab-pane">
-        ${renderPane()}
-      </div>
+      <div class="tab-pane" id="tab-pane">${renderPane()}</div>
     `;
   }
 
@@ -747,12 +861,7 @@
     return `<button class="tab-pill ${state.tab === id ? "active" : ""}" onclick="switchTab('${id}')"><span class="emoji">${emoji}</span>${label}</button>`;
   }
 
-  function switchTab(id) {
-    Sounds.click();
-    state.tab = id;
-    state.dirty = false;
-    renderSheet();
-  }
+  function switchTab(id) { Sounds.click(); state.tab = id; state.dirty = false; renderSheet(); }
 
   function renderPane() {
     switch (state.tab) {
@@ -768,52 +877,42 @@
   }
 
   function paneProfile() {
-    const a = state.avatar;
     return `
       <div class="avatar-box">
         <div style="margin:0 auto;">${avatarSVG(140)}</div>
         <div class="hint">Your Kogi character</div>
       </div>
-
       <div class="field-label">Body</div>
       <div class="pill-row">${genderPill("woman", "Woman")}${genderPill("man", "Man")}</div>
-
       <div class="field-label">Hairstyle</div>
       <div class="pill-row">
         ${hairstylePill("afro", "Afro")}${hairstylePill("braids", "Braids")}${hairstylePill("bun", "Bun")}${hairstylePill("ponytail", "Ponytail")}${hairstylePill("long", "Long")}${hairstylePill("locs", "Locs")}${hairstylePill("lowcut", "Low cut")}${hairstylePill("gele", "Gele")}
       </div>
-
       <div class="field-label">Outfit</div>
       <div class="pill-row">
         ${outfitPill("casual", "Casual")}${outfitPill("office", "Office")}${outfitPill("owambe", "Owambe")}${outfitPill("sitework", "Site work")}
       </div>
-
       <div class="field-label">Skin tone</div>
       <div class="color-row">
         ${skinDot("#F1C27D")}${skinDot("#E0AC69")}${skinDot("#C68642")}${skinDot("#8B5A3C")}${skinDot("#6B4423")}${skinDot("#4A2E19")}${skinDot("#2C1810")}
       </div>
-
       <div class="field-label">Hair colour</div>
       <div class="color-row">
         ${hairDot("#1a1a1a")}${hairDot("#3a2418")}${hairDot("#5a3a22")}${hairDot("#8b5a2b")}${hairDot("#b8860b")}${hairDot("#d4a017")}${hairDot("#6b21a8")}
       </div>
-
       <div class="field-label">Top colour</div>
       <div class="color-row">
         ${topDot("#f4a300")}${topDot("#d64545")}${topDot("#1f9d8c")}${topDot("#4c7ce8")}${topDot("#ec4899")}${topDot("#0d1b2a")}${topDot("#e5e7eb")}
       </div>
-
       <div class="field-label">Bottom colour</div>
       <div class="color-row">
         ${botDot("#0d1b2a")}${botDot("#1f9d8c")}${botDot("#d64545")}${botDot("#4c7ce8")}${botDot("#f4a300")}${botDot("#e5e7eb")}${botDot("#6b4423")}
       </div>
-
       <div class="save-bar">
         <button class="save-btn ${state.dirty ? "dirty" : ""}" onclick="saveAvatar()">
           ${state.dirty ? "Save changes" : "No changes yet"}
         </button>
-      </div>
-    `;
+      </div>`;
   }
 
   function genderPill(v, label) { return `<button class="choice-pill ${state.avatar.gender === v ? "active" : ""}" onclick="setAvatar('gender','${v}')">${label}</button>`; }
@@ -824,19 +923,12 @@
   function topDot(c) { return `<div class="color-dot ${state.avatar.topColor === c ? "active" : ""}" style="background:${c}" onclick="setAvatar('topColor','${c}')"></div>`; }
   function botDot(c) { return `<div class="color-dot ${state.avatar.bottomColor === c ? "active" : ""}" style="background:${c}" onclick="setAvatar('bottomColor','${c}')"></div>`; }
 
-  function setAvatar(field, value) {
-    Sounds.click();
-    state.avatar[field] = value;
-    state.dirty = true;
-    renderSheet();
-  }
+  function setAvatar(field, value) { Sounds.click(); state.avatar[field] = value; state.dirty = true; renderSheet(); }
 
   async function saveAvatar() {
     try {
       await api("/api/game/avatar", { method: "POST", body: JSON.stringify(state.avatar) });
-      state.dirty = false;
-      toast("Saved ✅");
-      renderSheet();
+      state.dirty = false; toast("Saved ✅"); renderSheet();
     } catch (e) { toast(e.message, "err"); }
   }
 
@@ -859,15 +951,13 @@
 
   function needRow(emoji, label, value, color) {
     value = Math.round(value ?? 100);
-    return `
-      <div class="need-row">
-        <div class="emoji-bubble">${emoji}</div>
-        <div class="info">
-          <div class="name-row"><span>${label}</span><span>${value}%</span></div>
-          <div class="bar"><div class="fill" style="width:${value}%; background:${color};"></div></div>
-        </div>
+    return `<div class="need-row">
+      <div class="emoji-bubble">${emoji}</div>
+      <div class="info">
+        <div class="name-row"><span>${label}</span><span>${value}%</span></div>
+        <div class="bar"><div class="fill" style="width:${value}%; background:${color};"></div></div>
       </div>
-    `;
+    </div>`;
   }
 
   function feelingCard(icon, title, desc, pts) {
@@ -901,21 +991,19 @@
     `;
   }
 
-  function wishRow(icon, text, pts) {
-    return `<div class="wish-row"><span class="icon">${icon}</span><span class="txt">${text}</span><span class="pts">${pts}</span></div>`;
-  }
+  function wishRow(icon, text, pts) { return `<div class="wish-row"><span class="icon">${icon}</span><span class="txt">${text}</span><span class="pts">${pts}</span></div>`; }
 
   function paneSkills() {
     const p = state.player;
     const skills = [
-      { key: "xp_cooking",     icon: "🍳", name: "Cooking" },
-      { key: "xp_charisma",    icon: "😎", name: "Charisma" },
-      { key: "xp_fitness",     icon: "💪", name: "Fitness" },
-      { key: "xp_coding",      icon: "💻", name: "Coding" },
-      { key: "xp_music",       icon: "🎸", name: "Music" },
-      { key: "xp_hustle",      icon: "💼", name: "Hustle" },
-      { key: "xp_dance",       icon: "💃", name: "Dance" },
-      { key: "xp_comedy",      icon: "🎤", name: "Comedy" },
+      { key: "xp_cooking", icon: "🍳", name: "Cooking" },
+      { key: "xp_charisma", icon: "😎", name: "Charisma" },
+      { key: "xp_fitness", icon: "💪", name: "Fitness" },
+      { key: "xp_coding", icon: "💻", name: "Coding" },
+      { key: "xp_music", icon: "🎸", name: "Music" },
+      { key: "xp_hustle", icon: "💼", name: "Hustle" },
+      { key: "xp_dance", icon: "💃", name: "Dance" },
+      { key: "xp_comedy", icon: "🎤", name: "Comedy" },
       { key: "xp_photography", icon: "📷", name: "Photography" }
     ];
     return `
@@ -926,28 +1014,22 @@
         const lvl = Math.floor(xp / 100);
         const progress = xp % 100;
         return skillRow(s.icon, s.name, lvl, progress, xp);
-      }).join("")}
-    `;
+      }).join("")}`;
   }
 
   function skillRow(icon, name, lvl, progress, xp) {
-    const dots = Array.from({ length: 10 }).map((_, i) =>
-      `<div class="dot ${i < lvl ? "on" : ""}"></div>`
-    ).join("");
-    return `
-      <div class="skill-row">
-        <div class="top"><span>${icon} ${name}</span><span class="lvl">Level ${lvl}</span></div>
-        <div class="dots">${dots}</div>
-        <div class="xp">${progress}/100 XP to next level · Total: ${xp} XP</div>
-      </div>
-    `;
+    const dots = Array.from({ length: 10 }).map((_, i) => `<div class="dot ${i < lvl ? "on" : ""}"></div>`).join("");
+    return `<div class="skill-row">
+      <div class="top"><span>${icon} ${name}</span><span class="lvl">Level ${lvl}</span></div>
+      <div class="dots">${dots}</div>
+      <div class="xp">${progress}/100 XP to next level · Total: ${xp} XP</div>
+    </div>`;
   }
 
   function paneCareer() {
     const p = state.player;
     const city = state.cities[p.city];
     const workedToday = didWorkToday();
-
     if (!p.job_id) {
       const jobsHere = city.jobs.map(id => ({ id, ...state.jobs[id] }));
       return `
@@ -960,11 +1042,8 @@
               <div class="meta">₦${j.pay.toLocaleString()} / shift · ⚡${j.energyCost} · +${j.cred} cred</div>
             </div>
             <button onclick="doApply('${j.id}')">Apply</button>
-          </div>
-        `).join("")}
-      `;
+          </div>`).join("")}`;
     }
-
     const job = state.jobs[p.job_id];
     return `
       <h3>Career</h3>
@@ -989,16 +1068,13 @@
       ${workedToday
         ? `<div class="worked-note">✅ You don work today. Come back tomorrow.</div>`
         : `<button class="work-btn" onclick="doWork()">💼 Go to Work (+₦${job.pay.toLocaleString()})</button>`}
-      <button class="action-btn danger" onclick="confirmQuit()">🚪 Quit this job</button>
-    `;
+      <button class="action-btn danger" onclick="confirmQuit()">🚪 Quit this job</button>`;
   }
 
   function didWorkToday() {
     const p = state.player;
     if (!p.last_work_at) return false;
-    const last = new Date(p.last_work_at);
-    const today = new Date();
-    return last.toDateString() === today.toDateString();
+    return new Date(p.last_work_at).toDateString() === new Date().toDateString();
   }
 
   function panePeople() {
@@ -1006,22 +1082,14 @@
       <h3>People</h3>
       <div class="empty-state">
         <div class="emoji">👥</div>
-        <div class="msg">
-          <b>Friends, babes & sneaky links dey come.</b><br><br>
-          In Phase 3, you go fit:<br>
-          • Chat with other players<br>
-          • Become babes (max 5)<br>
-          • Get sneaky links (max 2, risky)<br>
-          • Transfer money to friends
-        </div>
-      </div>
-    `;
+        <div class="msg"><b>Friends, babes & sneaky links dey come.</b><br><br>
+        In Phase 3, you go fit:<br>• Chat with other players<br>• Become babes (max 5)<br>• Get sneaky links (max 2, risky)<br>• Transfer money to friends</div>
+      </div>`;
   }
 
   function paneSettings() {
     return `
       <h3>Settings</h3>
-
       <div style="background:#f4f6f8;border-radius:14px;padding:12px;margin-bottom:16px;">
         <div style="font-size:13px;font-weight:800;color:#0d1b2a;margin-bottom:6px;">Data &amp; battery saver</div>
         <div style="font-size:11px;color:#888;margin-bottom:10px;">Uses less data. Kogi still looks like Kogi.</div>
@@ -1031,27 +1099,22 @@
           <button class="choice-pill">Off</button>
         </div>
       </div>
-
       <div class="toggle-row">
         <div><div class="label">Sound effects</div></div>
         <div class="toggle ${soundEnabled ? "on" : ""}" onclick="toggleSound()"></div>
       </div>
-
       <div class="slider-row">
         <div class="label">Sound volume <span id="sound-vol-label">${Math.round(soundVolume * 100)}%</span></div>
         <input type="range" min="0" max="100" value="${Math.round(soundVolume * 100)}" id="sound-vol-slider" oninput="onSoundVolumeChange(this.value)" />
       </div>
-
       <div class="toggle-row">
         <div><div class="label">Music (parked)</div></div>
         <div class="toggle ${musicEnabled ? "on" : ""}" onclick="toggleBgMusic()"></div>
       </div>
-
       <div class="toggle-row">
         <div><div class="label">Free will</div></div>
         <div class="toggle on" onclick="this.classList.toggle('on')"></div>
       </div>
-
       <div class="toggle-row" style="border-bottom:none;margin-top:20px;">
         <div>
           <div class="label">Notifications</div>
@@ -1059,22 +1122,16 @@
         </div>
         <div class="toggle" onclick="this.classList.toggle('on')"></div>
       </div>
-
       <div style="margin-top:24px;">
         <div class="link-row"><span class="label">💡 Help &amp; guide</span><span>›</span></div>
         <div class="link-row"><span class="label">🎯 Replay walkthrough</span><span>›</span></div>
       </div>
-
       <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;">
         <button class="action-btn" onclick="logout()">Log out</button>
         <button class="action-btn" onclick="closeSheet();toast('Main menu coming soon')">Main menu</button>
         <button class="action-btn danger" onclick="confirmNewLife()">New life</button>
       </div>
-
-      <div style="margin-top:24px;font-size:10px;color:#999;text-align:center;">
-        Terms · Privacy · Disclaimer · 18+
-      </div>
-    `;
+      <div style="margin-top:24px;font-size:10px;color:#999;text-align:center;">Terms · Privacy · Disclaimer · 18+</div>`;
   }
 
   function onSoundVolumeChange(val) {
@@ -1088,22 +1145,18 @@
   async function doWork() {
     try {
       const r = await api("/api/game/work", { method: "POST" });
-      await refreshState();
-      Sounds.cash();
+      await refreshState(); Sounds.cash();
       if (r.mishap) toast("😬 " + r.mishap + " (+₦" + r.earned.toLocaleString() + ")", "err");
       else toast("💼 Worked! +₦" + r.earned.toLocaleString() + " 🎉", "ok");
-      renderGame();
-      renderSheet();
+      renderGame(); renderSheet();
     } catch (e) { toast(e.message, "err"); }
   }
 
   async function doApply(jobId) {
     try {
       await api("/api/game/apply", { method: "POST", body: JSON.stringify({ jobId }) });
-      await refreshState();
-      Sounds.success();
-      toast("🎉 Hired!", "ok");
-      renderSheet();
+      await refreshState(); Sounds.success();
+      toast("🎉 Hired!", "ok"); renderSheet();
     } catch (e) { toast(e.message, "err"); }
   }
 
@@ -1115,17 +1168,14 @@
       <div class="btn-row">
         <button class="cancel" onclick="closeModal()">Cancel</button>
         <button class="confirm danger" onclick="doQuit()">Quit</button>
-      </div>
-    `);
+      </div>`);
   }
 
   async function doQuit() {
     try {
       await api("/api/game/quit", { method: "POST" });
-      await refreshState();
-      closeModal();
-      toast("Job quit. Find new work.", "ok");
-      renderSheet();
+      await refreshState(); closeModal();
+      toast("Job quit. Find new work.", "ok"); renderSheet();
     } catch (e) { toast(e.message, "err"); }
   }
 
@@ -1137,17 +1187,13 @@
       <div class="btn-row">
         <button class="cancel" onclick="closeModal()">Cancel</button>
         <button class="confirm danger" onclick="doNewLife()">Yes, new life</button>
-      </div>
-    `);
+      </div>`);
   }
 
   async function doNewLife() {
     try {
       await api("/api/player/me", { method: "DELETE" });
-      closeModal();
-      closeSheet();
-      renderNoLife();
-      renderBottomNav();
+      closeModal(); closeSheet(); renderNoLife(); renderBottomNav();
     } catch (e) { toast(e.message, "err"); }
   }
 
@@ -1155,9 +1201,9 @@
     setToken(null);
     Object.assign(state, { player: null, cities: null, jobs: null, foods: null, username: null, navVisible: false });
     if (clockTimer) clearInterval(clockTimer);
-    stopBgMusic();
     const nav = document.getElementById("bottom-nav");
     if (nav) nav.classList.add("hidden");
+    document.getElementById("map-screen").classList.remove("active");
     go("landing");
   }
 
