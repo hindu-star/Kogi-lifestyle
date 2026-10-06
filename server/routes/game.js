@@ -1,14 +1,11 @@
 import express from "express";
 import pg from "pg";
 import jwt from "jsonwebtoken";
-import { CITIES, JOBS, FOODS, NEED_DRAIN, WORK_COOLDOWN_MIN, TRAVEL_COST } from "../gameData.js";
+import { CITIES, JOBS, FOODS, NEED_DRAIN, TRAVEL_COST } from "../gameData.js";
 
 const { Pool } = pg;
 const router = express.Router();
 
-// ============================================================
-// Self-contained DB pool (mirrors index.js)
-// ============================================================
 const DATABASE_URL = process.env.DATABASE_URL;
 const pool = new Pool({
   connectionString: DATABASE_URL,
@@ -17,9 +14,6 @@ const pool = new Pool({
     : false
 });
 
-// ============================================================
-// Self-contained auth middleware (mirrors index.js)
-// ============================================================
 const JWT_SECRET = process.env.JWT_SECRET || "kogi_lifestyle_secret_2026";
 
 function authMiddleware(req, res, next) {
@@ -34,9 +28,17 @@ function authMiddleware(req, res, next) {
   }
 }
 
-// ============================================================
+// ==========================================================
 // HELPERS
-// ============================================================
+// ==========================================================
+function sameDay(d1, d2) {
+  if (!d1 || !d2) return false;
+  const a = new Date(d1), b = new Date(d2);
+  return a.getFullYear() === b.getFullYear()
+      && a.getMonth() === b.getMonth()
+      && a.getDate() === b.getDate();
+}
+
 function computeDrain(player) {
   const now = Date.now();
   const last = new Date(player.last_tick || new Date()).getTime();
@@ -69,9 +71,9 @@ async function persistStats(player) {
   );
 }
 
-// ============================================================
+// ==========================================================
 // ROUTES
-// ============================================================
+// ==========================================================
 
 // GET /state
 router.get("/state", authMiddleware, async (req, res) => {
@@ -93,7 +95,7 @@ router.get("/state", authMiddleware, async (req, res) => {
   }
 });
 
-// POST /work
+// POST /work — one per real day
 router.post("/work", authMiddleware, async (req, res) => {
   try {
     const r = await pool.query("SELECT * FROM players WHERE user_id = $1", [req.userId]);
@@ -101,15 +103,13 @@ router.post("/work", authMiddleware, async (req, res) => {
     let player = computeDrain(r.rows[0]);
 
     if (!player.job_id) return res.status(400).json({ error: "You never get job. Find work first." });
-    if (player.energy < 15) return res.status(400).json({ error: "You too tired. Rest or chop something." });
 
-    if (player.last_work_at) {
-      const minsSince = (Date.now() - new Date(player.last_work_at).getTime()) / 60000;
-      if (minsSince < WORK_COOLDOWN_MIN) {
-        const wait = Math.ceil(WORK_COOLDOWN_MIN - minsSince);
-        return res.status(400).json({ error: `Calm down. Next work dey ${wait} mins time.` });
-      }
+    // Worked today already?
+    if (player.last_work_at && sameDay(player.last_work_at, new Date())) {
+      return res.status(400).json({ error: "You don work today. Come back tomorrow." });
     }
+
+    if (player.energy < 15) return res.status(400).json({ error: "You too tired. Rest or chop something." });
 
     const job = JOBS[player.job_id];
     if (!job) return res.status(400).json({ error: "Job no dey exist" });
@@ -165,6 +165,16 @@ router.post("/apply", authMiddleware, async (req, res) => {
 
     await pool.query("UPDATE players SET job_id=$1 WHERE id=$2", [jobId, player.id]);
     res.json({ ok: true, jobId });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /quit
+router.post("/quit", authMiddleware, async (req, res) => {
+  try {
+    await pool.query("UPDATE players SET job_id=NULL WHERE user_id=$1", [req.userId]);
+    res.json({ ok: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
@@ -252,6 +262,23 @@ router.post("/sleep", authMiddleware, async (req, res) => {
     );
 
     res.json({ ok: true, player });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// POST /avatar — save avatar customization
+router.post("/avatar", authMiddleware, async (req, res) => {
+  try {
+    const { gender, skin, hair, hairstyle, topColor, bottomColor, outfit } = req.body;
+    await pool.query(
+      `UPDATE players SET
+        avatar_gender=$1, avatar_skin=$2, avatar_hair_color=$3, avatar_hairstyle=$4,
+        avatar_top_color=$5, avatar_bottom_color=$6, avatar_outfit=$7
+       WHERE user_id=$8`,
+      [gender, skin, hair, hairstyle, topColor, bottomColor, outfit, req.userId]
+    );
+    res.json({ ok: true });
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
