@@ -268,8 +268,8 @@
   let audioCtx = null;
   let soundEnabled = true;
   let musicEnabled = true;
-  let musicVolume = 0.5;     // 0.0 - 1.0
-  let soundVolume = 0.5;     // 0.0 - 1.0
+  let musicVolume = 0.5;
+  let soundVolume = 0.5;
 
   function initAudio() {
     if (audioCtx) return;
@@ -316,11 +316,8 @@
   // AMBIENT MUSIC — external royalty-free MP3 with fallbacks
   // ============================================================
   const MUSIC_SOURCES = [
-    // Pixabay calm ambient loop
     "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3",
-    // Bensound calm (direct CDN)
     "https://www.bensound.com/bensound-music/bensound-slowmotion.mp3",
-    // GitHub-hosted fallback
     "https://raw.githubusercontent.com/anars/blank-audio/master/1-hour-of-silence.mp3"
   ];
   let bgAudio = null;
@@ -329,6 +326,7 @@
 
   function playBgMusic() {
     if (!musicEnabled) return;
+    if (document.hidden) return;             // <-- Do not play when tab hidden
     if (bgAudio && !bgAudio.paused) return;
 
     if (!bgAudio) {
@@ -343,20 +341,14 @@
     bgAudio.volume = musicVolume;
     const p = bgAudio.play();
     if (p && p.catch) {
-      p.catch(() => {
-        // Autoplay blocked or failed — try next source
-        tryNextMusicSource();
-      });
+      p.catch(() => { tryNextMusicSource(); });
     }
     musicStarted = true;
   }
 
   function tryNextMusicSource() {
     musicSourceIdx++;
-    if (musicSourceIdx >= MUSIC_SOURCES.length) {
-      // All failed — no music, but don't crash
-      return;
-    }
+    if (musicSourceIdx >= MUSIC_SOURCES.length) return;
     if (bgAudio) {
       bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
       bgAudio.play().catch(() => {});
@@ -1154,8 +1146,22 @@
     go("landing");
   }
 
+  // ============================================================
+  // VISIBILITY / FOCUS HANDLING — pause music when tab is hidden
+  // ============================================================
   document.addEventListener("touchstart", () => { initAudio(); if (musicEnabled) playBgMusic(); }, { once: true });
   document.addEventListener("click", () => { initAudio(); if (musicEnabled) playBgMusic(); }, { once: true });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopBgMusic();
+    } else {
+      if (musicEnabled && getToken()) playBgMusic();
+    }
+  });
+
+  window.addEventListener("blur", () => stopBgMusic());
+  window.addEventListener("focus", () => { if (musicEnabled && getToken()) playBgMusic(); });
 
   if (getToken()) showGame();
   else go("landing");
