@@ -12,7 +12,6 @@
   .page { display: none; flex-direction: column; min-height: 100vh; }
   .page.active { display: flex; }
 
-  /* LANDING */
   #landing { align-items: center; justify-content: space-between; padding: 24px; background-image: linear-gradient(rgba(13,27,42,0.55), rgba(13,27,42,0.9)), url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1600'); background-size: cover; background-position: center; }
   #landing .top { width: 100%; text-align: right; font-size: 11px; color: rgba(255,255,255,0.5); }
   #landing .mid { text-align: center; }
@@ -24,7 +23,6 @@
   #landing .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
   #landing .footer { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 10px; }
 
-  /* FORMS */
   .form-page { align-items: center; justify-content: center; padding: 24px; background: #0d1b2a; }
   .form-card { width: 100%; max-width: 380px; background: #fff; border-radius: 24px; padding: 24px; }
   .form-card h2 { color: #0d1b2a; font-size: 22px; margin-bottom: 18px; font-weight: 800; }
@@ -36,7 +34,6 @@
   .form-card .switch { color: #666; font-size: 13px; text-align: center; margin-top: 14px; }
   .form-card .switch a { color: #f4a300; cursor: pointer; text-decoration: none; font-weight: 700; }
 
-  /* GAME */
   #game { padding: 0 0 80px 0; background: linear-gradient(180deg, #87b7d8 0%, #b8d4e8 45%, #f0e6d2 100%); min-height: 100vh; display: flex; flex-direction: column; }
 
   .topbar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12px; background: rgba(255,255,255,0.65); backdrop-filter: blur(8px); color: #1a1a1a; font-weight: 600; }
@@ -108,7 +105,6 @@
   .wish-row .txt { flex: 1; font-size: 13px; color: #1a1a1a; font-weight: 600; }
   .wish-row .pts { font-size: 12px; color: #f4a300; font-weight: 800; }
 
-  /* SKILLS with progress bar */
   .skill-row { background: #f9fafb; padding: 14px 16px; border-radius: 14px; margin-bottom: 8px; }
   .skill-row .top { display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px; }
   .skill-row .dots { display: flex; gap: 3px; margin-bottom: 6px; }
@@ -260,10 +256,9 @@
   const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
 
   // ============================================================
-  // AUDIO ENGINE — Web Audio API (generated sounds, no files)
+  // AUDIO ENGINE
   // ============================================================
   let audioCtx = null;
-  let bgMusicEl = null;
   let soundEnabled = true;
   let musicEnabled = true;
 
@@ -271,7 +266,10 @@
     if (audioCtx) return;
     try {
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) { /* silent */ }
+    } catch (e) {}
+    if (audioCtx && audioCtx.state === "suspended") {
+      audioCtx.resume();
+    }
   }
 
   function playTone(freq, duration = 0.1, type = "sine", volume = 0.15) {
@@ -306,26 +304,90 @@
     heart:    () => { playTone(700, 0.08, "sine", 0.1); setTimeout(() => playTone(700, 0.08, "sine", 0.1), 150); }
   };
 
+  // ============================================================
+  // AMBIENT MUSIC — generated with Web Audio API
+  // Soft chord pad cycling every 4 seconds. No external files.
+  // ============================================================
+  let musicNodes = null;
+  let musicTimer = null;
+  let musicStep = 0;
+
+  const CHORDS = [
+    [130.81, 164.81, 196.00],
+    [146.83, 174.61, 220.00],
+    [164.81, 196.00, 246.94],
+    [174.61, 220.00, 261.63],
+    [196.00, 246.94, 293.66],
+    [174.61, 220.00, 261.63],
+    [164.81, 196.00, 246.94],
+    [146.83, 174.61, 220.00]
+  ];
+
   function playBgMusic() {
     if (!musicEnabled) return;
-    if (bgMusicEl) {
-      bgMusicEl.volume = 0.15;
-      bgMusicEl.play().catch(() => {});
-      return;
+    initAudio();
+    if (!audioCtx) return;
+    if (musicNodes) return;
+
+    const masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.06;
+    masterGain.connect(audioCtx.destination);
+
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.value = 800;
+    filter.Q.value = 0.7;
+    filter.connect(masterGain);
+
+    musicNodes = { masterGain, filter };
+
+    const playChord = () => {
+      if (!musicEnabled || !musicNodes) return;
+      const chord = CHORDS[musicStep % CHORDS.length];
+      musicStep++;
+      chord.forEach((freq) => {
+        const osc = audioCtx.createOscillator();
+        const oscGain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        const now = audioCtx.currentTime;
+        oscGain.gain.setValueAtTime(0, now);
+        oscGain.gain.linearRampToValueAtTime(0.35, now + 1.2);
+        oscGain.gain.linearRampToValueAtTime(0, now + 4.0);
+        osc.connect(oscGain);
+        oscGain.connect(filter);
+        osc.start(now);
+        osc.stop(now + 4.2);
+      });
+    };
+
+    playChord();
+    musicTimer = setInterval(playChord, 4000);
+  }
+
+  function stopBgMusic() {
+    if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
+    if (musicNodes && audioCtx) {
+      try {
+        const now = audioCtx.currentTime;
+        musicNodes.masterGain.gain.cancelScheduledValues(now);
+        musicNodes.masterGain.gain.setValueAtTime(musicNodes.masterGain.gain.value, now);
+        musicNodes.masterGain.gain.linearRampToValueAtTime(0, now + 0.5);
+      } catch (e) {}
+      setTimeout(() => {
+        if (musicNodes) {
+          try { musicNodes.masterGain.disconnect(); } catch (e) {}
+          musicNodes = null;
+        }
+      }, 600);
     }
-    // Calm ambient loop — Pixabay royalty-free
-    bgMusicEl = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_8cbd9c8d9c.mp3?filename=calm-ambient-114922.mp3");
-    bgMusicEl.loop = true;
-    bgMusicEl.volume = 0.15;
-    bgMusicEl.play().catch(() => {});
   }
 
   function toggleBgMusic() {
     musicEnabled = !musicEnabled;
     if (musicEnabled) playBgMusic();
-    else if (bgMusicEl) bgMusicEl.pause();
+    else stopBgMusic();
     state.music = musicEnabled;
-    state.sound = soundEnabled;
     if (state.tab === "settings" && document.getElementById("sheet-wrap").classList.contains("active")) renderSheet();
   }
 
@@ -815,7 +877,6 @@
     return `<div class="wish-row"><span class="icon">${icon}</span><span class="txt">${text}</span><span class="pts">${pts}</span></div>`;
   }
 
-  // SKILLS — Level 0, XP based
   function paneSkills() {
     const p = state.player;
     const skills = [
@@ -1050,13 +1111,12 @@
     setToken(null);
     Object.assign(state, { player: null, cities: null, jobs: null, foods: null, username: null });
     if (clockTimer) clearInterval(clockTimer);
-    if (bgMusicEl) { bgMusicEl.pause(); bgMusicEl = null; }
+    stopBgMusic();
     go("landing");
   }
 
-  // Unlock audio on first tap anywhere
-  document.addEventListener("touchstart", () => initAudio(), { once: true });
-  document.addEventListener("click", () => initAudio(), { once: true });
+  document.addEventListener("touchstart", () => { initAudio(); if (musicEnabled) playBgMusic(); }, { once: true });
+  document.addEventListener("click", () => { initAudio(); if (musicEnabled) playBgMusic(); }, { once: true });
 
   if (getToken()) showGame();
   else go("landing");
