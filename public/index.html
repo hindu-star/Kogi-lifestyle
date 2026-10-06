@@ -6,119 +6,321 @@
 <title>Kogi Lifestyle</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-  body { background: #0a0a0a; color: #fff; min-height: 100vh; }
+  html, body { height: 100%; overflow: hidden; }
+  body { background: #0d1b2a; color: #1a1a1a; }
 
-  .page { display: none; min-height: 100vh; flex-direction: column; }
+  .page { display: none; flex-direction: column; min-height: 100vh; }
   .page.active { display: flex; }
 
-  /* LANDING */
+  /* ============ LANDING ============ */
   #landing {
-    align-items: center;
-    justify-content: space-between;
-    padding: 24px;
-    background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.9)),
+    align-items: center; justify-content: space-between; padding: 24px;
+    background-image: linear-gradient(rgba(13,27,42,0.55), rgba(13,27,42,0.9)),
       url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=1600');
-    background-size: cover;
-    background-position: center;
+    background-size: cover; background-position: center;
   }
   #landing .top { width: 100%; text-align: right; font-size: 11px; color: rgba(255,255,255,0.5); }
   #landing .mid { text-align: center; }
   #landing h1 {
     font-size: 52px; font-weight: 900; line-height: 1; letter-spacing: -1px;
-    background: linear-gradient(90deg, #f59e0b, #ef4444, #10b981);
+    background: linear-gradient(90deg, #f4a300, #d64545, #1f9d8c);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   }
   #landing .tag { margin-top: 14px; color: rgba(255,255,255,0.8); font-size: 15px; font-style: italic; }
   #landing .bottom { width: 100%; max-width: 380px; display: flex; flex-direction: column; gap: 10px; }
-  #landing .bottom button { padding: 16px; border-radius: 14px; font-size: 15px; font-weight: 800; letter-spacing: 1px; border: none; cursor: pointer; font-family: inherit; }
-  #landing .btn-primary { background: #f59e0b; color: #000; }
+  #landing .bottom button { padding: 16px; border-radius: 30px; font-size: 15px; font-weight: 800; letter-spacing: 1px; border: none; cursor: pointer; font-family: inherit; }
+  #landing .btn-primary { background: #f4a300; color: #0d1b2a; }
   #landing .btn-secondary { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
   #landing .footer { color: rgba(255,255,255,0.4); font-size: 10px; text-align: center; margin-top: 10px; }
 
-  /* FORM */
-  .form-page { align-items: center; justify-content: center; padding: 24px; background: #0a0a0a; }
-  .form-card { width: 100%; max-width: 380px; background: #161b22; border: 1px solid #30363d; border-radius: 18px; padding: 24px; }
-  .form-card h2 { color: #f59e0b; font-size: 22px; margin-bottom: 18px; }
-  .form-card input { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 14px; color: #fff; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; }
-  .form-card input:focus { border-color: #f59e0b; }
-  .form-card button { width: 100%; background: #f59e0b; color: #000; font-weight: 800; padding: 14px; border-radius: 12px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
+  /* ============ FORMS ============ */
+  .form-page { align-items: center; justify-content: center; padding: 24px; background: #0d1b2a; }
+  .form-card { width: 100%; max-width: 380px; background: #fff; border-radius: 24px; padding: 24px; }
+  .form-card h2 { color: #0d1b2a; font-size: 22px; margin-bottom: 18px; font-weight: 800; }
+  .form-card input { width: 100%; background: #f4f6f8; border: 2px solid transparent; border-radius: 14px; padding: 14px; color: #1a1a1a; font-size: 15px; margin-bottom: 12px; outline: none; font-family: inherit; }
+  .form-card input:focus { border-color: #f4a300; background: #fff; }
+  .form-card button { width: 100%; background: #f4a300; color: #0d1b2a; font-weight: 800; padding: 16px; border-radius: 30px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
   .form-card button:disabled { opacity: 0.5; }
-  .form-card .err { color: #f87171; font-size: 13px; margin-top: 6px; }
-  .form-card .switch { color: #8b949e; font-size: 13px; text-align: center; margin-top: 14px; }
-  .form-card .switch a { color: #f59e0b; cursor: pointer; text-decoration: none; }
+  .form-card .err { color: #d64545; font-size: 13px; margin-top: 6px; }
+  .form-card .switch { color: #666; font-size: 13px; text-align: center; margin-top: 14px; }
+  .form-card .switch a { color: #f4a300; cursor: pointer; text-decoration: none; font-weight: 700; }
 
-  /* GAME LAYOUT */
-  #game { padding: 12px; padding-bottom: 90px; }
+  /* ============ GAME SHELL ============ */
+  #game { padding: 0; background: linear-gradient(180deg, #87b7d8 0%, #b8d4e8 45%, #f0e6d2 100%); min-height: 100vh; }
 
-  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px; color: #8b949e; }
-  .topbar .username { color: #f59e0b; font-weight: 700; }
-  .topbar button { background: none; border: none; color: #8b949e; font-size: 12px; cursor: pointer; font-family: inherit; }
+  /* TOP BAR */
+  .topbar {
+    display: flex; align-items: center; gap: 8px; padding: 10px 14px; font-size: 12px;
+    background: rgba(255,255,255,0.65); backdrop-filter: blur(8px); color: #1a1a1a; font-weight: 600;
+  }
+  .topbar .time { display: flex; align-items: center; gap: 3px; }
+  .topbar .weather { color: #1f9d8c; font-weight: 700; }
+  .topbar .sound { margin-left: auto; font-size: 16px; cursor: pointer; }
+  .topbar .money-chip {
+    background: #0d1b2a; color: #fff; padding: 6px 12px; border-radius: 20px;
+    display: flex; align-items: center; gap: 6px; font-weight: 800; font-size: 12px;
+  }
+  .topbar .plus {
+    background: #22c55e; color: #fff; width: 26px; height: 26px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px;
+    cursor: pointer; border: none;
+  }
+  .topbar .stats-row {
+    display: flex; gap: 6px; padding: 0 14px 8px; font-size: 10px;
+  }
+  .topbar .badge {
+    background: rgba(255,255,255,0.75); color: #1a1a1a; padding: 4px 10px;
+    border-radius: 12px; font-weight: 700; backdrop-filter: blur(4px);
+  }
 
-  .header { border-radius: 16px; padding: 16px; margin-bottom: 12px; position: relative; }
-  .header.nepo { background: linear-gradient(135deg, #d97706, #92400e); }
-  .header.lapo { background: linear-gradient(135deg, #047857, #064e3b); }
-  .header .cls { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.75); }
-  .header .city { font-size: 22px; font-weight: 900; margin-top: 2px; }
-  .header .zone { font-size: 13px; color: rgba(255,255,255,0.85); }
+  /* BOTTOM SHEET */
+  .sheet-wrap {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 50;
+    display: none; align-items: flex-end;
+  }
+  .sheet-wrap.active { display: flex; }
+  .sheet {
+    background: #fff; width: 100%; max-height: 92vh; border-radius: 24px 24px 0 0;
+    overflow-y: auto; padding-bottom: 40px; animation: sheetUp 0.25s ease;
+  }
+  @keyframes sheetUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  .money-strip { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .money-cell { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 10px 12px; }
-  .money-cell .label { font-size: 10px; color: #8b949e; }
-  .money-cell .value { font-size: 16px; font-weight: 800; color: #10b981; margin-top: 2px; }
-  .money-cell .value.red { color: #f87171; }
+  .sheet-handle {
+    width: 40px; height: 4px; background: #d1d5db; border-radius: 4px; margin: 10px auto 4px;
+  }
 
-  /* NEEDS BARS */
-  .needs { background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-  .need { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .need:last-child { margin-bottom: 0; }
-  .need .icon { font-size: 16px; width: 22px; }
-  .need .info { flex: 1; }
-  .need .name { font-size: 11px; color: #8b949e; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .need .bar { height: 8px; background: #0d1117; border-radius: 4px; overflow: hidden; }
-  .need .fill { height: 100%; transition: width 0.3s ease; border-radius: 4px; }
-  .need .fill.good { background: #10b981; }
-  .need .fill.mid { background: #f59e0b; }
-  .need .fill.bad { background: #ef4444; }
+  /* PROFILE HEADER (inside sheet) */
+  .profile-head {
+    padding: 12px 20px 16px; display: flex; align-items: center; gap: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .avatar-circle {
+    width: 54px; height: 54px; border-radius: 50%; background: #f4f6f8;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    border: 2px solid #f4a300; overflow: hidden;
+  }
+  .profile-head .name { font-size: 17px; font-weight: 800; color: #0d1b2a; }
+  .profile-head .status { font-size: 12px; color: #888; margin-top: 2px; }
 
-  /* TABS */
-  .tabs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin-bottom: 12px; background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 4px; }
-  .tab { padding: 10px 4px; text-align: center; font-size: 18px; cursor: pointer; border-radius: 8px; transition: background 0.15s; }
-  .tab.active { background: #f59e0b; }
-  .tab.disabled { opacity: 0.4; }
+  /* TAB ROW */
+  .tab-row {
+    display: flex; gap: 8px; padding: 12px 16px; overflow-x: auto;
+    scrollbar-width: none; border-bottom: 1px solid #f0f0f0;
+  }
+  .tab-row::-webkit-scrollbar { display: none; }
+  .tab-pill {
+    padding: 10px 18px; background: #f4f6f8; border-radius: 20px; font-size: 13px;
+    font-weight: 700; color: #555; white-space: nowrap; cursor: pointer; border: none;
+    font-family: inherit; transition: all 0.15s;
+  }
+  .tab-pill.active { background: #0d1b2a; color: #fff; }
+  .tab-pill .emoji { margin-right: 4px; }
 
-  .tab-content { background: #161b22; border: 1px solid #30363d; border-radius: 14px; padding: 16px; }
-  .tab-content h3 { font-size: 15px; color: #f59e0b; margin-bottom: 12px; }
-  .tab-content .sub { font-size: 12px; color: #8b949e; margin-bottom: 14px; line-height: 1.5; }
+  /* TAB CONTENT */
+  .tab-pane { padding: 16px 20px; }
+  .tab-pane h3 { font-size: 15px; color: #0d1b2a; margin-bottom: 12px; font-weight: 800; }
 
-  .action-btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; margin-bottom: 8px; }
-  .action-btn.primary { background: #f59e0b; color: #000; }
-  .action-btn.secondary { background: #21262d; color: #fff; border: 1px solid #30363d; }
-  .action-btn.danger { background: #7f1d1d; color: #fff; }
-  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  /* NEEDS */
+  .need-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .need-row .emoji-bubble {
+    width: 40px; height: 40px; border-radius: 50%; background: #f4f6f8;
+    display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+  }
+  .need-row .info { flex: 1; }
+  .need-row .name-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+  .need-row .bar { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; }
+  .need-row .fill { height: 100%; border-radius: 5px; transition: width 0.4s; }
 
-  .job-card, .food-card, .city-card { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-  .job-card .info, .food-card .info, .city-card .info { flex: 1; }
-  .job-card .name, .food-card .name, .city-card .name { font-size: 14px; font-weight: 700; }
-  .job-card .meta, .food-card .meta, .city-card .meta { font-size: 11px; color: #8b949e; margin-top: 2px; }
-  .job-card button, .food-card button, .city-card button { background: #f59e0b; color: #000; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: inherit; }
-  .job-card button:disabled, .food-card button:disabled, .city-card button:disabled { opacity: 0.4; cursor: not-allowed; }
-  .job-card.current { border-color: #10b981; background: rgba(16,185,129,0.08); }
-  .job-card .badge { background: #10b981; color: #000; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 700; }
+  .feelings-title { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #888; margin: 20px 0 10px; }
+  .feeling-card {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px;
+    background: #f9fafb; border-radius: 14px; margin-bottom: 8px;
+  }
+  .feeling-card .icon { font-size: 22px; }
+  .feeling-card .body { flex: 1; }
+  .feeling-card .title { font-size: 14px; font-weight: 800; color: #1a1a1a; }
+  .feeling-card .desc { font-size: 11px; color: #888; margin-top: 2px; }
+  .feeling-card .pts { font-size: 14px; font-weight: 900; color: #22c55e; }
 
-  .toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #f59e0b; color: #000; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.5); z-index: 100; animation: toastIn 0.3s ease; max-width: 90%; text-align: center; }
-  .toast.error { background: #ef4444; color: #fff; }
+  /* GOALS */
+  .dream-card {
+    background: linear-gradient(135deg, #4c1d95, #7c3aed); padding: 20px;
+    border-radius: 20px; color: #fff; margin-bottom: 14px;
+  }
+  .dream-card .label { font-size: 10px; letter-spacing: 1.5px; opacity: 0.8; font-weight: 700; }
+  .dream-card .title { font-size: 20px; font-weight: 900; margin: 6px 0 4px; }
+  .dream-card .desc { font-size: 12px; opacity: 0.9; margin-bottom: 12px; }
+  .dream-card .bar { height: 6px; background: rgba(255,255,255,0.2); border-radius: 3px; }
+  .dream-card .fill { height: 100%; background: #fff; border-radius: 3px; width: 25%; }
+  .dream-card .pct { text-align: right; font-size: 11px; margin-top: 4px; opacity: 0.9; }
+
+  .badge-card {
+    background: #f4f6f8; padding: 14px 16px; border-radius: 16px; margin-bottom: 10px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .badge-card .icon { font-size: 28px; }
+  .badge-card .title { font-size: 14px; font-weight: 800; color: #1a1a1a; }
+  .badge-card .sub { font-size: 12px; color: #666; margin-top: 2px; }
+  .badge-card .tag { font-size: 12px; color: #1f9d8c; font-weight: 700; margin-top: 6px; }
+
+  .wish-row {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px;
+    background: #f9fafb; border-radius: 12px; margin-bottom: 8px;
+  }
+  .wish-row .icon { font-size: 18px; }
+  .wish-row .txt { flex: 1; font-size: 13px; color: #1a1a1a; font-weight: 600; }
+  .wish-row .pts { font-size: 12px; color: #f4a300; font-weight: 800; }
+
+  /* SKILLS */
+  .skill-row { background: #f9fafb; padding: 14px 16px; border-radius: 14px; margin-bottom: 8px; }
+  .skill-row .top { display: flex; justify-content: space-between; font-size: 14px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px; }
+  .skill-row .dots { display: flex; gap: 3px; }
+  .skill-row .dot { height: 8px; flex: 1; background: #e5e7eb; border-radius: 4px; }
+  .skill-row .dot.on { background: #4c7ce8; }
+  .skill-row .lvl { color: #4c7ce8; font-weight: 800; }
+
+  /* CAREER */
+  .job-hero {
+    background: #f4f6f8; padding: 18px; border-radius: 18px; margin-bottom: 16px;
+    display: flex; gap: 14px; align-items: center;
+  }
+  .job-hero .icon { font-size: 34px; width: 56px; height: 56px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .job-hero .body { flex: 1; }
+  .job-hero .cat { font-size: 11px; color: #888; font-weight: 700; letter-spacing: 0.5px; }
+  .job-hero .title { font-size: 18px; font-weight: 900; color: #0d1b2a; margin: 4px 0; }
+  .job-hero .pay { font-size: 12px; color: #555; }
+
+  .perf-row { display: flex; justify-content: space-between; font-size: 13px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px; }
+  .perf-bar { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; margin-bottom: 10px; }
+  .perf-bar .fill { height: 100%; background: #22c55e; border-radius: 5px; transition: width 0.4s; }
+  .next-promo { font-size: 12px; color: #666; margin-bottom: 16px; }
+  .next-promo b { color: #1a1a1a; }
+
+  .week-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 14px; }
+  .day-pill { padding: 10px 0; text-align: center; border-radius: 12px; font-size: 13px; font-weight: 800; background: #f4f6f8; color: #888; }
+  .day-pill.worked { background: #22c55e; color: #fff; }
+  .day-pill.today { box-shadow: inset 0 0 0 2px #0d1b2a; }
+  .worked-note { font-size: 12px; color: #666; text-align: center; padding: 10px; background: #f9fafb; border-radius: 10px; }
+
+  .work-btn {
+    width: 100%; padding: 16px; border-radius: 30px; border: none; font-size: 15px;
+    font-weight: 800; cursor: pointer; font-family: inherit; background: #f4a300; color: #0d1b2a;
+    margin-bottom: 10px;
+  }
+  .work-btn:disabled { background: #e5e7eb; color: #999; cursor: not-allowed; }
+  .ghost-btn { background: #f4f6f8; color: #0d1b2a; }
+  .danger-btn { background: #fee2e2; color: #991b1b; }
+
+  .action-btn {
+    width: 100%; padding: 14px; border-radius: 30px; border: none; font-size: 14px;
+    font-weight: 800; cursor: pointer; font-family: inherit; background: #f4f6f8; color: #0d1b2a;
+    margin-bottom: 8px;
+  }
+  .action-btn.primary { background: #f4a300; color: #0d1b2a; }
+  .action-btn.danger { background: #fee2e2; color: #991b1b; }
+  .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .list-card { background: #f9fafb; border-radius: 14px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .list-card .info { flex: 1; }
+  .list-card .name { font-size: 14px; font-weight: 800; color: #1a1a1a; }
+  .list-card .meta { font-size: 11px; color: #888; margin-top: 3px; }
+  .list-card button { background: #f4a300; color: #0d1b2a; border: none; padding: 9px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; font-family: inherit; }
+  .list-card button:disabled { background: #e5e7eb; color: #999; cursor: not-allowed; }
+  .list-card.current { background: #ecfdf5; box-shadow: inset 0 0 0 2px #22c55e; }
+  .list-card .badge-green { background: #22c55e; color: #fff; font-size: 10px; padding: 3px 8px; border-radius: 8px; font-weight: 800; }
+
+  /* PROFILE TAB */
+  .avatar-box {
+    background: linear-gradient(180deg, #e0f0ff, #f0f8ff); border-radius: 24px;
+    padding: 20px; text-align: center; margin-bottom: 16px;
+  }
+  .avatar-box .big-avatar { width: 140px; height: 220px; margin: 0 auto; }
+  .avatar-box .hint { font-size: 11px; color: #888; margin-top: 8px; }
+
+  .field-label { font-size: 13px; font-weight: 800; color: #0d1b2a; margin: 18px 0 8px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+  .choice-pill {
+    padding: 8px 16px; background: #f4f6f8; border-radius: 18px; font-size: 13px;
+    font-weight: 700; color: #555; cursor: pointer; border: none; font-family: inherit;
+  }
+  .choice-pill.active { background: #0d1b2a; color: #fff; }
+  .color-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .color-dot {
+    width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
+    border: 3px solid transparent; transition: border 0.15s;
+  }
+  .color-dot.active { border-color: #0d1b2a; }
+
+  .save-bar {
+    position: sticky; bottom: 0; background: #fff; padding: 12px 20px;
+    border-top: 1px solid #f0f0f0; margin: 20px -20px 0;
+  }
+  .save-btn {
+    width: 100%; padding: 16px; border-radius: 30px; border: none; font-size: 15px;
+    font-weight: 800; font-family: inherit; cursor: pointer;
+    background: #d1fae5; color: #065f46;
+  }
+  .save-btn.dirty { background: #22c55e; color: #fff; }
+
+  /* SETTINGS */
+  .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+  .toggle-row .label { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+  .toggle-row .sub { font-size: 11px; color: #888; margin-top: 2px; max-width: 240px; }
+  .toggle {
+    width: 50px; height: 28px; background: #e5e7eb; border-radius: 14px; position: relative;
+    cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+  }
+  .toggle.on { background: #22c55e; }
+  .toggle::after {
+    content: ''; position: absolute; width: 24px; height: 24px; background: #fff;
+    border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .toggle.on::after { left: 24px; }
+
+  .link-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer; }
+  .link-row .label { font-size: 14px; font-weight: 700; color: #1a1a1a; }
+
+  /* PEOPLE */
+  .empty-state { text-align: center; padding: 40px 20px; }
+  .empty-state .emoji { font-size: 48px; }
+  .empty-state .msg { font-size: 14px; color: #666; margin-top: 10px; line-height: 1.6; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+    background: #0d1b2a; color: #fff; padding: 14px 22px; border-radius: 14px;
+    font-size: 13px; font-weight: 700; box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+    z-index: 200; max-width: 90%; text-align: center; animation: toastIn 0.25s ease;
+  }
+  .toast.err { background: #d64545; }
+  .toast.ok { background: #22c55e; }
   @keyframes toastIn { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-  .center-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; flex-direction: column; gap: 16px; }
-  .big-btn { background: #f59e0b; color: #000; font-weight: 800; padding: 16px 32px; border-radius: 14px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
-  .loading { color: #8b949e; font-size: 14px; }
+  /* LOADING */
+  .center-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; flex-direction: column; gap: 16px; background: #0d1b2a; color: #fff; }
+  .loading { color: #bbb; font-size: 14px; }
+  .big-btn { background: #f4a300; color: #0d1b2a; font-weight: 800; padding: 16px 32px; border-radius: 30px; border: none; font-size: 15px; cursor: pointer; font-family: inherit; }
+
+  /* MODAL */
+  .modal-wrap { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; display: none; align-items: center; justify-content: center; padding: 24px; }
+  .modal-wrap.active { display: flex; }
+  .modal { background: #fff; border-radius: 20px; padding: 24px; max-width: 340px; width: 100%; text-align: center; animation: sheetUp 0.2s ease; }
+  .modal .emoji { font-size: 44px; }
+  .modal h3 { font-size: 18px; color: #0d1b2a; margin: 10px 0 6px; font-weight: 900; }
+  .modal p { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 16px; }
+  .modal .btn-row { display: flex; gap: 8px; }
+  .modal button { flex: 1; padding: 12px; border-radius: 24px; border: none; font-size: 14px; font-weight: 800; cursor: pointer; font-family: inherit; }
+  .modal .cancel { background: #f4f6f8; color: #0d1b2a; }
+  .modal .confirm { background: #f4a300; color: #0d1b2a; }
+  .modal .confirm.danger { background: #d64545; color: #fff; }
 </style>
 </head>
 <body>
 
 <!-- LANDING -->
 <div id="landing" class="page active">
-  <div class="top">v0.2 — Alpha</div>
+  <div class="top">v0.3 — Alpha</div>
   <div class="mid">
     <h1>KOGI<br>LIFESTYLE</h1>
     <div class="tag">Which Kogi you go live today?</div>
@@ -126,7 +328,7 @@
   <div class="bottom">
     <button class="btn-primary" onclick="go('signup')">SIGN UP</button>
     <button class="btn-secondary" onclick="go('login')">LOGIN</button>
-    <div class="footer">© Kogi Lifestyle 2026 — Confluence of Rivers Niger &amp; Benue</div>
+    <div class="footer">© Kogi Lifestyle 2026</div>
   </div>
 </div>
 
@@ -162,22 +364,55 @@
 <!-- GAME -->
 <div id="game" class="page"></div>
 
-<script>
-  const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
-  let state = { player: null, cities: null, jobs: null, foods: null, tab: "home", username: null };
-  let pollTimer = null;
+<!-- BOTTOM SHEET (populated by JS) -->
+<div id="sheet-wrap" class="sheet-wrap" onclick="if(event.target===this)closeSheet()">
+  <div class="sheet" id="sheet"></div>
+</div>
 
-  // ---- Navigation ----
+<!-- MODAL -->
+<div id="modal-wrap" class="modal-wrap">
+  <div class="modal" id="modal"></div>
+</div>
+
+</body>
+</html>
+<script>
+  // ============================================================
+  // KOGI LIFESTYLE v0.3 — Frontend logic
+  // ============================================================
+  const API = window.KOGI_API_URL || "https://kogi-lifestyle-api.onrender.com";
+
+  const state = {
+    player: null,
+    cities: null,
+    jobs: null,
+    foods: null,
+    tab: "profile",
+    username: null,
+    dirty: false,
+    // avatar customization (stored locally + synced later)
+    avatar: {
+      gender: "woman",
+      skin: "#8B5A3C",
+      hair: "#1a1a1a",
+      hairstyle: "afro",
+      topColor: "#f4a300",
+      bottomColor: "#0d1b2a",
+      outfit: "casual"
+    }
+  };
+
+  // ---------- NAV ----------
   function go(pageId) {
     document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
     document.getElementById(pageId).classList.add("active");
-    if (pageId !== "game") stopPoll();
   }
 
-  // ---- Auth helpers ----
+  // ---------- TOKEN ----------
   function getToken() { return localStorage.getItem("kogi_token"); }
   function setToken(t) { t ? localStorage.setItem("kogi_token", t) : localStorage.removeItem("kogi_token"); }
 
+  // ---------- API ----------
   async function api(path, options = {}) {
     const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
     const token = getToken();
@@ -188,16 +423,25 @@
     return data;
   }
 
-  // ---- Toast ----
-  function toast(msg, isError = false) {
+  // ---------- TOAST ----------
+  function toast(msg, kind = "ok") {
     const t = document.createElement("div");
-    t.className = "toast" + (isError ? " error" : "");
+    t.className = "toast " + kind;
     t.textContent = msg;
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2500);
+    setTimeout(() => t.remove(), 2600);
   }
 
-  // ---- Signup ----
+  // ---------- MODAL ----------
+  function showModal(html) {
+    document.getElementById("modal").innerHTML = html;
+    document.getElementById("modal-wrap").classList.add("active");
+  }
+  function closeModal() {
+    document.getElementById("modal-wrap").classList.remove("active");
+  }
+
+  // ---------- AUTH ----------
   async function handleSignup() {
     const username = document.getElementById("signup-username").value.trim();
     const password = document.getElementById("signup-password").value;
@@ -205,7 +449,9 @@
     const btn = document.getElementById("signup-btn");
     err.textContent = ""; btn.disabled = true; btn.textContent = "Creating...";
     try {
-      const { token, username: uname } = await api("/api/auth/signup", { method: "POST", body: JSON.stringify({ username, password }) });
+      const { token, username: uname } = await api("/api/auth/signup", {
+        method: "POST", body: JSON.stringify({ username, password })
+      });
       setToken(token);
       state.username = uname;
       await showGame();
@@ -213,7 +459,6 @@
     finally { btn.disabled = false; btn.textContent = "SIGN UP"; }
   }
 
-  // ---- Login ----
   async function handleLogin() {
     const username = document.getElementById("login-username").value.trim();
     const password = document.getElementById("login-password").value;
@@ -221,7 +466,9 @@
     const btn = document.getElementById("login-btn");
     err.textContent = ""; btn.disabled = true; btn.textContent = "Logging in...";
     try {
-      const { token, username: uname } = await api("/api/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
+      const { token, username: uname } = await api("/api/auth/login", {
+        method: "POST", body: JSON.stringify({ username, password })
+      });
       setToken(token);
       state.username = uname;
       await showGame();
@@ -229,17 +476,18 @@
     finally { btn.disabled = false; btn.textContent = "LOGIN"; }
   }
 
-  // ---- Game ----
+  // ---------- GAME ----------
   async function showGame() {
     go("loading");
     try {
       const { player } = await api("/api/player/me");
       if (!player) return renderNoLife();
       await refreshState();
+      loadAvatarFromPlayer();
       renderGame();
-      startPoll();
     } catch (e) {
-      setToken(null); go("login");
+      setToken(null);
+      go("login");
     }
   }
 
@@ -251,292 +499,753 @@
     state.foods = data.foods;
   }
 
-  function startPoll() {
-    stopPoll();
-    pollTimer = setInterval(async () => {
-      try {
-        await refreshState();
-        renderGame();
-      } catch (e) { /* silent */ }
-    }, 60000); // refresh every 60s
-  }
-  function stopPoll() { if (pollTimer) { clearInterval(pollTimer); pollTimer = null; } }
-
-  // ---- Render ----
   function renderNoLife() {
     const g = document.getElementById("game");
     g.innerHTML = `
       <div class="center-screen">
-        <div style="font-size:48px;">🎲</div>
+        <div style="font-size:56px;">🎲</div>
         <div>
-          <h2 style="color:#f59e0b; font-size:24px;">NO LIFE YET</h2>
-          <p style="color:#8b949e; font-size:13px; margin-top:8px; max-width:280px;">Your class go be randomly assigned.<br>Nepo or Lapo — na luck.</p>
+          <h2 style="color:#f4a300; font-size:24px; font-weight:900;">NO LIFE YET</h2>
+          <p style="color:#bbb; font-size:13px; margin-top:8px; max-width:280px;">Your class go be randomly assigned.<br>Nepo or Lapo — na luck.</p>
         </div>
         <button class="big-btn" onclick="createLife()">START NEW LIFE</button>
-        <button style="background:none;border:none;color:#8b949e;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;" onclick="logout()">Logout</button>
+        <button style="background:none;border:none;color:#888;font-size:12px;text-decoration:underline;cursor:pointer;font-family:inherit;" onclick="logout()">Logout</button>
       </div>
     `;
     go("game");
-    stopPoll();
   }
 
   async function createLife() {
     try {
       await api("/api/player/create", { method: "POST" });
       await refreshState();
+      loadAvatarFromPlayer();
       renderGame();
-      startPoll();
-    } catch (e) { toast(e.message, true); }
+    } catch (e) { toast(e.message, "err"); }
   }
 
+  // ============================================================
+  // AVATAR (SVG)
+  // ============================================================
+  function loadAvatarFromPlayer() {
+    const p = state.player;
+    if (!p) return;
+    if (p.avatar_gender) state.avatar.gender = p.avatar_gender;
+    if (p.avatar_skin) state.avatar.skin = p.avatar_skin;
+    if (p.avatar_hair_color) state.avatar.hair = p.avatar_hair_color;
+    if (p.avatar_hairstyle) state.avatar.hairstyle = p.avatar_hairstyle;
+    if (p.avatar_top_color) state.avatar.topColor = p.avatar_top_color;
+    if (p.avatar_bottom_color) state.avatar.bottomColor = p.avatar_bottom_color;
+    if (p.avatar_outfit) state.avatar.outfit = p.avatar_outfit;
+  }
+
+  function avatarSVG(size = 140) {
+    const a = state.avatar;
+    const h = size * 1.57;
+    const cx = size / 2;
+
+    // Hair shapes
+    let hairPath = "";
+    if (a.hairstyle === "afro") {
+      hairPath = `<circle cx="${cx}" cy="${size * 0.32}" r="${size * 0.24}" fill="${a.hair}"/>`;
+    } else if (a.hairstyle === "lowcut") {
+      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.20}" ry="${size * 0.10}" fill="${a.hair}"/>`;
+    } else if (a.hairstyle === "braids") {
+      hairPath = `
+        <ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.13}" fill="${a.hair}"/>
+        <rect x="${cx - size * 0.24}" y="${size * 0.32}" width="${size * 0.06}" height="${size * 0.55}" rx="3" fill="${a.hair}"/>
+        <rect x="${cx + size * 0.18}" y="${size * 0.32}" width="${size * 0.06}" height="${size * 0.55}" rx="3" fill="${a.hair}"/>
+      `;
+    } else if (a.hairstyle === "bun") {
+      hairPath = `
+        <ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/>
+        <circle cx="${cx}" cy="${size * 0.14}" r="${size * 0.10}" fill="${a.hair}"/>
+      `;
+    } else if (a.hairstyle === "ponytail") {
+      hairPath = `
+        <ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/>
+        <path d="M ${cx} ${size * 0.18} Q ${cx + size * 0.20} ${size * 0.42} ${cx + size * 0.22} ${size * 0.72} L ${cx + size * 0.18} ${size * 0.72} Q ${cx + size * 0.14} ${size * 0.42} ${cx} ${size * 0.22} Z" fill="${a.hair}"/>
+      `;
+    } else if (a.hairstyle === "locs") {
+      hairPath = `
+        <ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.13}" fill="${a.hair}"/>
+        ${Array.from({length: 6}).map((_, i) => {
+          const x = cx - size * 0.20 + i * size * 0.08;
+          return `<rect x="${x}" y="${size * 0.32}" width="${size * 0.045}" height="${size * 0.50}" rx="4" fill="${a.hair}"/>`;
+        }).join("")}
+      `;
+    } else if (a.hairstyle === "gele") {
+      hairPath = `<ellipse cx="${cx}" cy="${size * 0.22}" rx="${size * 0.30}" ry="${size * 0.18}" fill="#d64545"/>`;
+    } else if (a.hairstyle === "long") {
+      hairPath = `
+        <ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.24}" ry="${size * 0.14}" fill="${a.hair}"/>
+        <rect x="${cx - size * 0.24}" y="${size * 0.30}" width="${size * 0.48}" height="${size * 0.50}" rx="14" fill="${a.hair}"/>
+      `;
+    } else {
+      hairPath = `<ellipse cx="${cx}" cy="${size * 0.28}" rx="${size * 0.22}" ry="${size * 0.12}" fill="${a.hair}"/>`;
+    }
+
+    const isMale = a.gender === "man";
+    const bodyWidth = isMale ? size * 0.36 : size * 0.30;
+
+    return `
+      <svg viewBox="0 0 ${size} ${h}" width="${size}" height="${h}" xmlns="http://www.w3.org/2000/svg">
+        <!-- Shadow -->
+        <ellipse cx="${cx}" cy="${h - 6}" rx="${size * 0.32}" ry="6" fill="rgba(0,0,0,0.15)"/>
+
+        <!-- Legs -->
+        <rect x="${cx - bodyWidth * 0.55}" y="${size * 1.05}" width="${bodyWidth * 0.42}" height="${size * 0.42}" rx="6" fill="${a.skin}"/>
+        <rect x="${cx + bodyWidth * 0.13}" y="${size * 1.05}" width="${bodyWidth * 0.42}" height="${size * 0.42}" rx="6" fill="${a.skin}"/>
+
+        <!-- Skirt/Pants -->
+        <rect x="${cx - bodyWidth * 0.62}" y="${size * 0.90}" width="${bodyWidth * 1.24}" height="${size * 0.22}" rx="6" fill="${a.bottomColor}"/>
+
+        <!-- Torso -->
+        <rect x="${cx - bodyWidth * 0.55}" y="${size * 0.60}" width="${bodyWidth * 1.10}" height="${size * 0.35}" rx="10" fill="${a.topColor}"/>
+
+        <!-- Arms -->
+        <rect x="${cx - bodyWidth * 0.90}" y="${size * 0.62}" width="${bodyWidth * 0.36}" height="${size * 0.36}" rx="8" fill="${a.topColor}"/>
+        <rect x="${cx + bodyWidth * 0.54}" y="${size * 0.62}" width="${bodyWidth * 0.36}" height="${size * 0.36}" rx="8" fill="${a.topColor}"/>
+
+        <!-- Hands -->
+        <circle cx="${cx - bodyWidth * 0.72}" cy="${size * 1.00}" r="${bodyWidth * 0.18}" fill="${a.skin}"/>
+        <circle cx="${cx + bodyWidth * 0.72}" cy="${size * 1.00}" r="${bodyWidth * 0.18}" fill="${a.skin}"/>
+
+        <!-- Neck -->
+        <rect x="${cx - size * 0.05}" y="${size * 0.54}" width="${size * 0.10}" height="${size * 0.10}" fill="${a.skin}"/>
+
+        <!-- Head -->
+        <ellipse cx="${cx}" cy="${size * 0.38}" rx="${size * 0.17}" ry="${size * 0.19}" fill="${a.skin}"/>
+
+        <!-- Ears -->
+        <circle cx="${cx - size * 0.17}" cy="${size * 0.38}" r="${size * 0.03}" fill="${a.skin}"/>
+        <circle cx="${cx + size * 0.17}" cy="${size * 0.38}" r="${size * 0.03}" fill="${a.skin}"/>
+
+        <!-- Hair -->
+        ${hairPath}
+
+        <!-- Eyes -->
+        <circle cx="${cx - size * 0.06}" cy="${size * 0.38}" r="${size * 0.015}" fill="#1a1a1a"/>
+        <circle cx="${cx + size * 0.06}" cy="${size * 0.38}" r="${size * 0.015}" fill="#1a1a1a"/>
+
+        <!-- Mouth -->
+        <path d="M ${cx - size * 0.04} ${size * 0.44} Q ${cx} ${size * 0.47} ${cx + size * 0.04} ${size * 0.44}" stroke="#7a2c1c" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      </svg>
+    `;
+  }
+
+  function avatarCircle(size = 54) {
+    return `<div style="width:${size}px;height:${size}px;overflow:hidden;border-radius:50%;display:flex;align-items:flex-end;justify-content:center;">
+      ${avatarSVG(size)}
+    </div>`;
+  }
+
+  // ============================================================
+  // MAIN GAME RENDER
+  // ============================================================
   function renderGame() {
     const p = state.player;
     if (!p) return;
-    const isNepo = p.class === "nepo";
-    const money = Number(p.money).toLocaleString();
+
     const g = document.getElementById("game");
+    const onlineCount = 1000 + Math.floor(Math.random() * 500);
+    const visits = (15.9 + Math.random() * 0.5).toFixed(1);
+
     g.innerHTML = `
       <div class="topbar">
-        <span>👤 <span class="username">${state.username || "player"}</span></span>
-        <button onclick="logout()">Logout</button>
+        <span class="time">${clockEmoji()} <span id="live-clock">${liveClock()}</span></span>
+        <span class="weather">☀️ Ver...</span>
+        <span class="sound" onclick="toast('🔊 Sound toggled')">🔊</span>
+        <span class="money-chip">₦${formatMoney(p.money)} <button class="plus" onclick="toast('💳 Coming soon: top up')">+</button></span>
+      </div>
+      <div class="topbar stats-row" style="background:transparent;">
+        <span class="badge">👀 ${visits}m visits</span>
+        <span class="badge">🟢 ${onlineCount} online</span>
       </div>
 
-      <div class="header ${isNepo ? "nepo" : "lapo"}">
-        <div class="cls">${isNepo ? "💎 Nepo Pikin" : "🧺 Lapo Pikin"}</div>
-        <div class="city">${p.city}</div>
-        <div class="zone">${p.zone}</div>
-      </div>
-
-      <div class="money-strip">
-        <div class="money-cell">
-          <div class="label">💰 Money</div>
-          <div class="value">₦${money}</div>
+      <div style="padding:0 0 40px;">
+        <div class="profile-head" onclick="openSheet('profile')" style="cursor:pointer;background:#fff;border-radius:20px;margin:8px 16px;">
+          <div class="avatar-circle">${avatarSVG(54)}</div>
+          <div style="flex:1;">
+            <div class="name">${state.username || "player"}</div>
+            <div class="status">${statusText(p)}</div>
+          </div>
+          <div style="font-size:20px;color:#888;">›</div>
         </div>
-        <div class="money-cell">
-          <div class="label">${p.bank_debt > 0 ? "🏦 Debt" : "🤝 Cred"}</div>
-          <div class="value ${p.bank_debt > 0 ? "red" : ""}">${p.bank_debt > 0 ? "₦" + Number(p.bank_debt).toLocaleString() : p.cred}</div>
+
+        <div style="padding:12px 16px 0;">
+          <button class="work-btn" onclick="openSheet('career')">💼 Career &amp; Work</button>
+          <button class="work-btn ghost-btn" onclick="openSheet('needs')">🍽️ Needs</button>
+        </div>
+
+        <div style="padding:16px;font-size:11px;color:#666;text-align:center;">
+          Tap your avatar above to open your profile
         </div>
       </div>
-
-      ${renderNeeds(p)}
-
-      <div class="tabs">
-        ${tabBtn("home", "🏠")}
-        ${tabBtn("job", "💼")}
-        ${tabBtn("food", "🍽️")}
-        ${tabBtn("travel", "🗺️")}
-        ${tabBtn("profile", "👤")}
-      </div>
-
-      <div class="tab-content" id="tab-content">${renderTab()}</div>
     `;
     go("game");
+    startClock();
   }
 
-  function tabBtn(id, icon) {
-    return `<div class="tab ${state.tab === id ? "active" : ""}" onclick="switchTab('${id}')">${icon}</div>`;
+  function statusText(p) {
+    const mood = p.energy > 60 ? "Very Happy" : p.energy > 30 ? "Okay" : "Tired";
+    const feeling = p.money > 500000 ? "FUNDED!!!" : p.cred > 50 ? "Street Smart" : "Hustling";
+    return `${mood} · ${feeling}`;
+  }
+
+  function formatMoney(n) {
+    n = Number(n);
+    if (n >= 1e9) return (n / 1e9).toFixed(1) + "B";
+    if (n >= 1e6) return (n / 1e6).toFixed(1) + "M";
+    return n.toLocaleString();
+  }
+
+  function clockEmoji() {
+    const h = new Date().getHours();
+    if (h < 12) return "🌅";
+    if (h < 17) return "☀️";
+    return "🌆";
+  }
+  function liveClock() {
+    const d = new Date();
+    return d.toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' });
+  }
+  let clockTimer = null;
+  function startClock() {
+    if (clockTimer) clearInterval(clockTimer);
+    clockTimer = setInterval(() => {
+      const el = document.getElementById("live-clock");
+      if (el) el.textContent = liveClock();
+    }, 30000);
+  }
+
+  // ============================================================
+  // BOTTOM SHEET
+  // ============================================================
+  function openSheet(tab) {
+    state.tab = tab || "profile";
+    renderSheet();
+    document.getElementById("sheet-wrap").classList.add("active");
+  }
+  function closeSheet() {
+    document.getElementById("sheet-wrap").classList.remove("active");
+  }
+
+  function renderSheet() {
+    const p = state.player;
+    const sheet = document.getElementById("sheet");
+    sheet.innerHTML = `
+      <div class="sheet-handle"></div>
+      <div class="profile-head">
+        <div class="avatar-circle">${avatarSVG(54)}</div>
+        <div style="flex:1;">
+          <div class="name">${state.username || "player"}</div>
+          <div class="status">${statusText(p)}</div>
+        </div>
+      </div>
+      <div class="tab-row">
+        ${tabPill("profile", "✏️", "Profile")}
+        ${tabPill("needs", "🍽️", "Needs")}
+        ${tabPill("goals", "🎯", "Goals")}
+        ${tabPill("skills", "🎓", "Skills")}
+        ${tabPill("career", "💼", "Career")}
+        ${tabPill("people", "👥", "People")}
+        ${tabPill("settings", "⚙️", "Settings")}
+      </div>
+      <div class="tab-pane" id="tab-pane">
+        ${renderPane()}
+      </div>
+    `;
+  }
+
+  function tabPill(id, emoji, label) {
+    return `<button class="tab-pill ${state.tab === id ? "active" : ""}" onclick="switchTab('${id}')"><span class="emoji">${emoji}</span>${label}</button>`;
   }
 
   function switchTab(id) {
     state.tab = id;
-    renderGame();
+    state.dirty = false;
+    renderSheet();
   }
 
-  function renderNeeds(p) {
-    const needs = [
-      { key: "hunger", label: "Hunger", icon: "🍽️" },
-      { key: "energy", label: "Energy", icon: "⚡" },
-      { key: "fun", label: "Fun", icon: "🎉" },
-      { key: "social", label: "Social", icon: "👥" },
-      { key: "hygiene", label: "Hygiene", icon: "🚿" }
-    ];
-    return `
-      <div class="needs">
-        ${needs.map(n => {
-          const v = p[n.key] ?? 100;
-          const cls = v > 60 ? "good" : v > 30 ? "mid" : "bad";
-          return `
-            <div class="need">
-              <div class="icon">${n.icon}</div>
-              <div class="info">
-                <div class="name">${n.label} — ${v}%</div>
-                <div class="bar"><div class="fill ${cls}" style="width:${v}%"></div></div>
-              </div>
-            </div>
-          `;
-        }).join("")}
-      </div>
-    `;
-  }
-
-  function renderTab() {
+  function renderPane() {
     switch (state.tab) {
-      case "home": return renderHome();
-      case "job": return renderJob();
-      case "food": return renderFood();
-      case "travel": return renderTravel();
-      case "profile": return renderProfile();
+      case "profile": return paneProfile();
+      case "needs": return paneNeeds();
+      case "goals": return paneGoals();
+      case "skills": return paneSkills();
+      case "career": return paneCareer();
+      case "people": return panePeople();
+      case "settings": return paneSettings();
       default: return "";
     }
   }
 
-  function renderHome() {
-    const p = state.player;
-    const city = state.cities[p.city];
+  // ============================================================
+  // PANE: PROFILE
+  // ============================================================
+  function paneProfile() {
+    const a = state.avatar;
     return `
-      <h3>🏠 Home — ${p.city}</h3>
-      <div class="sub">${city.tagline}</div>
-      <button class="action-btn primary" onclick="doWork()" ${p.job_id ? "" : "disabled"}>
-        ${p.job_id ? `💼 Work as ${state.jobs[p.job_id].name} (+₦${state.jobs[p.job_id].pay.toLocaleString()})` : "❌ No job yet — go Career tab"}
-      </button>
-      <button class="action-btn secondary" onclick="doSleep()">😴 Sleep (+40 energy, -5 hunger)</button>
-      ${p.job_id ? `<div class="sub" style="margin-top:12px;">Work cooldown: 30 mins between shifts</div>` : ""}
-    `;
-  }
-
-  function renderJob() {
-    const p = state.player;
-    const city = state.cities[p.city];
-    const jobsHere = city.jobs.map(id => ({ id, ...state.jobs[id] }));
-    return `
-      <h3>💼 Career — ${p.city}</h3>
-      <div class="sub">Jobs wey dey available for ${p.city}. Travel go find more.</div>
-      ${jobsHere.map(j => `
-        <div class="job-card ${p.job_id === j.id ? "current" : ""}">
-          <div class="info">
-            <div class="name">${j.emoji} ${j.name}</div>
-            <div class="meta">₦${j.pay.toLocaleString()} / shift · ⚡${j.energyCost} cost · +${j.cred} cred</div>
-          </div>
-          ${p.job_id === j.id
-            ? `<span class="badge">CURRENT</span>`
-            : `<button onclick="doApply('${j.id}')">Apply</button>`}
-        </div>
-      `).join("")}
-    `;
-  }
-
-  function renderFood() {
-    const p = state.player;
-    return `
-      <h3>🍽️ Food & Drinks</h3>
-      <div class="sub">Buy food to restore hunger and energy. Prices dey same everywhere.</div>
-      ${Object.entries(state.foods).map(([id, f]) => {
-        const canAfford = Number(p.money) >= f.cost;
-        return `
-          <div class="food-card">
-            <div class="info">
-              <div class="name">${f.emoji} ${f.name}</div>
-              <div class="meta">₦${f.cost.toLocaleString()} · +${f.hunger}🍽️ · +${f.energy}⚡</div>
-            </div>
-            <button onclick="doEat('${id}')" ${canAfford ? "" : "disabled"}>Buy</button>
-          </div>
-        `;
-      }).join("")}
-    `;
-  }
-
-  function renderTravel() {
-    const p = state.player;
-    return `
-      <h3>🗺️ Travel</h3>
-      <div class="sub">Transport: ₦3,000 + ⚡15 energy. Travel to find new jobs and cities.</div>
-      ${Object.entries(state.cities).map(([id, c]) => `
-        <div class="city-card">
-          <div class="info">
-            <div class="name">${id === p.city ? "📍 " : "🌍 "}${c.name}</div>
-            <div class="meta">${c.tagline}</div>
-          </div>
-          ${id === p.city
-            ? `<span class="badge">HERE</span>`
-            : `<button onclick="doTravel('${id}')">Go</button>`}
-        </div>
-      `).join("")}
-    `;
-  }
-
-  function renderProfile() {
-    const p = state.player;
-    return `
-      <h3>👤 Profile</h3>
-      <div class="sub">
-        Class: <b style="color:#f59e0b;">${p.class === "nepo" ? "💎 Nepo Pikin" : "🧺 Lapo Pikin"}</b><br>
-        City: <b>${p.city}</b> — ${p.zone}<br>
-        Money: <b style="color:#10b981;">₦${Number(p.money).toLocaleString()}</b><br>
-        Cred: <b>${p.cred}</b><br>
-        ${p.bank_debt > 0 ? `Bank Debt: <b style="color:#f87171;">₦${Number(p.bank_debt).toLocaleString()}</b><br>` : ""}
-        Job: <b>${p.job_id ? state.jobs[p.job_id].emoji + " " + state.jobs[p.job_id].name : "None"}</b>
+      <div class="avatar-box">
+        <div style="margin:0 auto;">${avatarSVG(140)}</div>
+        <div class="hint">Your Kogi character</div>
       </div>
-      <button class="action-btn danger" onclick="deleteLife()">🗑️ Delete this life &amp; reroll</button>
-      <div class="sub" style="margin-top:12px; font-size:11px;">Coming soon: Needs, Goals, Skills, People, Settings — just like Lagos Life</div>
+
+      <div class="field-label">Body</div>
+      <div class="pill-row">
+        ${genderPill("woman", "Woman")}
+        ${genderPill("man", "Man")}
+      </div>
+
+      <div class="field-label">Hairstyle</div>
+      <div class="pill-row">
+        ${hairstylePill("afro", "Afro")}
+        ${hairstylePill("braids", "Braids")}
+        ${hairstylePill("bun", "Bun")}
+        ${hairstylePill("ponytail", "Ponytail")}
+        ${hairstylePill("long", "Long")}
+        ${hairstylePill("locs", "Locs")}
+        ${hairstylePill("lowcut", "Low cut")}
+        ${hairstylePill("gele", "Gele")}
+      </div>
+
+      <div class="field-label">Outfit</div>
+      <div class="pill-row">
+        ${outfitPill("casual", "Casual")}
+        ${outfitPill("office", "Office")}
+        ${outfitPill("owambe", "Owambe")}
+        ${outfitPill("sitework", "Site work")}
+      </div>
+
+      <div class="field-label">Skin tone</div>
+      <div class="color-row">
+        ${skinDot("#F1C27D")}
+        ${skinDot("#E0AC69")}
+        ${skinDot("#C68642")}
+        ${skinDot("#8B5A3C")}
+        ${skinDot("#6B4423")}
+        ${skinDot("#4A2E19")}
+        ${skinDot("#2C1810")}
+      </div>
+
+      <div class="field-label">Hair colour</div>
+      <div class="color-row">
+        ${hairDot("#1a1a1a")}
+        ${hairDot("#3a2418")}
+        ${hairDot("#5a3a22")}
+        ${hairDot("#8b5a2b")}
+        ${hairDot("#b8860b")}
+        ${hairDot("#d4a017")}
+        ${hairDot("#6b21a8")}
+      </div>
+
+      <div class="field-label">Top colour</div>
+      <div class="color-row">
+        ${topDot("#f4a300")}
+        ${topDot("#d64545")}
+        ${topDot("#1f9d8c")}
+        ${topDot("#4c7ce8")}
+        ${topDot("#ec4899")}
+        ${topDot("#0d1b2a")}
+        ${topDot("#e5e7eb")}
+      </div>
+
+      <div class="field-label">Bottom colour</div>
+      <div class="color-row">
+        ${botDot("#0d1b2a")}
+        ${botDot("#1f9d8c")}
+        ${botDot("#d64545")}
+        ${botDot("#4c7ce8")}
+        ${botDot("#f4a300")}
+        ${botDot("#e5e7eb")}
+        ${botDot("#6b4423")}
+      </div>
+
+      <div class="save-bar">
+        <button class="save-btn ${state.dirty ? "dirty" : ""}" onclick="saveAvatar()">
+          ${state.dirty ? "Save changes" : "No changes yet"}
+        </button>
+      </div>
     `;
   }
 
-  // ---- Actions ----
+  function genderPill(v, label) {
+    return `<button class="choice-pill ${state.avatar.gender === v ? "active" : ""}" onclick="setAvatar('gender','${v}')">${label}</button>`;
+  }
+  function hairstylePill(v, label) {
+    return `<button class="choice-pill ${state.avatar.hairstyle === v ? "active" : ""}" onclick="setAvatar('hairstyle','${v}')">${label}</button>`;
+  }
+  function outfitPill(v, label) {
+    return `<button class="choice-pill ${state.avatar.outfit === v ? "active" : ""}" onclick="setAvatar('outfit','${v}')">${label}</button>`;
+  }
+  function skinDot(c) { return `<div class="color-dot ${state.avatar.skin === c ? "active" : ""}" style="background:${c}" onclick="setAvatar('skin','${c}')"></div>`; }
+  function hairDot(c) { return `<div class="color-dot ${state.avatar.hair === c ? "active" : ""}" style="background:${c}" onclick="setAvatar('hair','${c}')"></div>`; }
+  function topDot(c) { return `<div class="color-dot ${state.avatar.topColor === c ? "active" : ""}" style="background:${c}" onclick="setAvatar('topColor','${c}')"></div>`; }
+  function botDot(c) { return `<div class="color-dot ${state.avatar.bottomColor === c ? "active" : ""}" style="background:${c}" onclick="setAvatar('bottomColor','${c}')"></div>`; }
+
+  function setAvatar(field, value) {
+    state.avatar[field] = value;
+    state.dirty = true;
+    renderSheet();
+  }
+
+  async function saveAvatar() {
+    try {
+      await api("/api/game/avatar", {
+        method: "POST",
+        body: JSON.stringify(state.avatar)
+      });
+      state.dirty = false;
+      toast("Saved ✅");
+      renderSheet();
+    } catch (e) { toast(e.message, "err"); }
+  }
+
+  // ============================================================
+  // PANE: NEEDS
+  // ============================================================
+  function paneNeeds() {
+    const p = state.player;
+    return `
+      <h3>Needs</h3>
+      ${needRow("🍳", "Hunger", p.hunger, "#f97316")}
+      ${needRow("⚡", "Energy", p.energy, "#3b82f6")}
+      ${needRow("🎉", "Fun", p.fun, "#eab308")}
+      ${needRow("💬", "Social", p.social, "#ec4899")}
+      ${needRow("🫧", "Hygiene", p.hygiene, "#14b8a6")}
+      ${needRow("🚽", "Bladder", 100, "#a855f7")}
+      <div class="feelings-title">FEELINGS</div>
+      ${feelingCard("🚀", "FUNDED!!!", "Seed round closed. Yaba unicorn loading...", "+40")}
+      ${feelingCard("🎉", "Promoted!", "Oga at the top energy.", "+30")}
+      ${feelingCard("💘", "In Love", "Your babe don enter your head.", "+20")}
+    `;
+  }
+
+  function needRow(emoji, label, value, color) {
+    value = Math.round(value ?? 100);
+    return `
+      <div class="need-row">
+        <div class="emoji-bubble">${emoji}</div>
+        <div class="info">
+          <div class="name-row"><span>${label}</span><span>${value}%</span></div>
+          <div class="bar"><div class="fill" style="width:${value}%; background:${color};"></div></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function feelingCard(icon, title, desc, pts) {
+    return `
+      <div class="feeling-card">
+        <div class="icon">${icon}</div>
+        <div class="body">
+          <div class="title">${title}</div>
+          <div class="desc">${desc}</div>
+        </div>
+        <div class="pts">${pts}</div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // PANE: GOALS
+  // ============================================================
+  function paneGoals() {
+    return `
+      <h3>Goals</h3>
+      <div class="dream-card">
+        <div class="label">LIFETIME DREAM</div>
+        <div class="title">💼 Oga at the Top</div>
+        <div class="desc">Reach the top level of any career.</div>
+        <div class="bar"><div class="fill"></div></div>
+        <div class="pct">25%</div>
+      </div>
+
+      <div class="badge-card">
+        <div class="icon">🏛️</div>
+        <div>
+          <div class="title">LAPO Baby</div>
+          <div class="sub">Self-made hits different.</div>
+          <div class="tag">Loan paid off. Self-made 💪</div>
+        </div>
+      </div>
+
+      <div class="feelings-title">WISHES <span style="float:right;color:#f4a300;">✨ 87</span></div>
+      ${wishRow("🎭", "See art at Freedom Park", "+3✨")}
+      ${wishRow("⚽", "Watch a match at the viewing centre", "+3✨")}
+      ${wishRow("🎵", "Play some music", "+2✨")}
+      ${wishRow("🍲", "Chop jollof at a party", "+2✨")}
+      ${wishRow("🏖️", "Swim at the confluence", "+5✨")}
+    `;
+  }
+
+  function wishRow(icon, text, pts) {
+    return `
+      <div class="wish-row">
+        <span class="icon">${icon}</span>
+        <span class="txt">${text}</span>
+        <span class="pts">${pts}</span>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // PANE: SKILLS
+  // ============================================================
+  function paneSkills() {
+    const skills = [
+      { icon: "🍳", name: "Cooking", lvl: 3 },
+      { icon: "😎", name: "Charisma", lvl: 5 },
+      { icon: "💪", name: "Fitness", lvl: 4 },
+      { icon: "💻", name: "Coding", lvl: 2 },
+      { icon: "🎸", name: "Music", lvl: 1 },
+      { icon: "💼", name: "Hustle", lvl: 7 },
+      { icon: "💃", name: "Dance", lvl: 2 },
+      { icon: "🎤", name: "Comedy", lvl: 1 },
+      { icon: "📷", name: "Photography", lvl: 2 }
+    ];
+    return `
+      <h3>Skills</h3>
+      ${skills.map(s => skillRow(s.icon, s.name, s.lvl)).join("")}
+    `;
+  }
+
+  function skillRow(icon, name, lvl) {
+    const dots = Array.from({ length: 10 }).map((_, i) =>
+      `<div class="dot ${i < lvl ? "on" : ""}"></div>`
+    ).join("");
+    return `
+      <div class="skill-row">
+        <div class="top"><span>${icon} ${name}</span><span class="lvl">Level ${lvl}</span></div>
+        <div class="dots">${dots}</div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // PANE: CAREER
+  // ============================================================
+  function paneCareer() {
+    const p = state.player;
+    const city = state.cities[p.city];
+    const workedToday = didWorkToday();
+
+    if (!p.job_id) {
+      // No job yet — show available jobs
+      const jobsHere = city.jobs.map(id => ({ id, ...state.jobs[id] }));
+      return `
+        <h3>Career — ${p.city}</h3>
+        <p style="font-size:12px;color:#666;margin-bottom:14px;">Pick a job. Work 5 days a week, 1 hour per shift.</p>
+        ${jobsHere.map(j => `
+          <div class="list-card">
+            <div class="info">
+              <div class="name">${j.emoji} ${j.name}</div>
+              <div class="meta">₦${j.pay.toLocaleString()} / shift · ⚡${j.energyCost} · +${j.cred} cred</div>
+            </div>
+            <button onclick="doApply('${j.id}')">Apply</button>
+          </div>
+        `).join("")}
+      `;
+    }
+
+    const job = state.jobs[p.job_id];
+    return `
+      <h3>Career</h3>
+      <div class="job-hero">
+        <div class="icon">${job.emoji}</div>
+        <div class="body">
+          <div class="cat">${p.city} · Level 2</div>
+          <div class="title">${job.name}</div>
+          <div class="pay">₦${job.pay.toLocaleString()} per shift · 1 hour duration</div>
+        </div>
+      </div>
+
+      <div class="perf-row"><span>Performance</span><span>45%</span></div>
+      <div class="perf-bar"><div class="fill" style="width:45%;"></div></div>
+      <div class="next-promo">Next: <b>Senior ${job.name}</b> — reach 100% performance.</div>
+
+      <div class="week-row">
+        ${["S","M","T","W","T","F","S"].map((d, i) => {
+          const isWorked = [1,2,3,4,5].includes(i);
+          const isToday = i === new Date().getDay();
+          return `<div class="day-pill ${isWorked ? "worked" : ""} ${isToday ? "today" : ""}">${d}</div>`;
+        }).join("")}
+      </div>
+
+      ${workedToday
+        ? `<div class="worked-note">✅ You don work today. Come back tomorrow.</div>`
+        : `<button class="work-btn" onclick="doWork()">💼 Go to Work (+₦${job.pay.toLocaleString()})</button>`}
+
+      <button class="action-btn danger" onclick="confirmQuit()">🚪 Quit this job</button>
+    `;
+  }
+
+  function didWorkToday() {
+    const p = state.player;
+    if (!p.last_work_at) return false;
+    const last = new Date(p.last_work_at);
+    const today = new Date();
+    return last.toDateString() === today.toDateString();
+  }
+
+  // ============================================================
+  // PANE: PEOPLE
+  // ============================================================
+  function panePeople() {
+    return `
+      <h3>People</h3>
+      <div class="empty-state">
+        <div class="emoji">👥</div>
+        <div class="msg">
+          <b>Friends, babes & sneaky links dey come.</b><br><br>
+          In Phase 3, you go fit:<br>
+          • Chat with other players<br>
+          • Become babes (max 5)<br>
+          • Get sneaky links (max 2, risky)<br>
+          • Transfer money to friends
+        </div>
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // PANE: SETTINGS
+  // ============================================================
+  function paneSettings() {
+    return `
+      <h3>Settings</h3>
+
+      <div style="background:#f4f6f8;border-radius:14px;padding:12px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:800;color:#0d1b2a;margin-bottom:6px;">Data &amp; battery saver</div>
+        <div style="font-size:11px;color:#888;margin-bottom:10px;">Uses less data. Kogi still looks like Kogi.</div>
+        <div class="pill-row">
+          <button class="choice-pill">Auto</button>
+          <button class="choice-pill active">On</button>
+          <button class="choice-pill">Off</button>
+        </div>
+      </div>
+
+      <div class="toggle-row">
+        <div>
+          <div class="label">Sound effects</div>
+        </div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="label">Music</div>
+        </div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="label">Free will</div>
+        </div>
+        <div class="toggle on" onclick="this.classList.toggle('on')"></div>
+      </div>
+
+      <div class="toggle-row" style="border-bottom:none;margin-top:20px;">
+        <div>
+          <div class="label">Notifications</div>
+          <div class="sub">Friends' messages, new jobs, announcements</div>
+        </div>
+        <div class="toggle" onclick="this.classList.toggle('on')"></div>
+      </div>
+
+      <div style="margin-top:24px;">
+        <div class="link-row"><span class="label">💡 Help &amp; guide</span><span>›</span></div>
+        <div class="link-row"><span class="label">🎯 Replay walkthrough</span><span>›</span></div>
+      </div>
+
+      <div style="margin-top:24px;display:flex;flex-direction:column;gap:10px;">
+        <button class="action-btn" onclick="logout()">Log out</button>
+        <button class="action-btn" onclick="closeSheet();toast('Main menu coming soon')">Main menu</button>
+        <button class="action-btn danger" onclick="confirmNewLife()">New life</button>
+      </div>
+
+      <div style="margin-top:24px;font-size:10px;color:#999;text-align:center;">
+        Terms · Privacy · Disclaimer · 18+
+      </div>
+    `;
+  }
+
+  // ============================================================
+  // ACTIONS
+  // ============================================================
   async function doWork() {
     try {
       const r = await api("/api/game/work", { method: "POST" });
-      state.player = r.player;
-      if (r.mishap) toast("😬 " + r.mishap + " (+₦" + r.earned.toLocaleString() + ")", true);
-      else toast("💼 Worked! +₦" + r.earned.toLocaleString());
+      await refreshState();
+      if (r.mishap) toast("😬 " + r.mishap + " (+₦" + r.earned.toLocaleString() + ")", "err");
+      else toast("💼 Worked! +₦" + r.earned.toLocaleString() + " 🎉", "ok");
       renderGame();
-    } catch (e) { toast(e.message, true); }
-  }
-
-  async function doSleep() {
-    try {
-      const r = await api("/api/game/sleep", { method: "POST" });
-      state.player = r.player;
-      toast("😴 Rested. +40 energy");
-      renderGame();
-    } catch (e) { toast(e.message, true); }
+      renderSheet();
+    } catch (e) { toast(e.message, "err"); }
   }
 
   async function doApply(jobId) {
     try {
       await api("/api/game/apply", { method: "POST", body: JSON.stringify({ jobId }) });
-      state.player.job_id = jobId;
-      toast("🎉 Hired!");
-      state.tab = "home";
-      renderGame();
-    } catch (e) { toast(e.message, true); }
+      await refreshState();
+      toast("🎉 Hired!", "ok");
+      renderSheet();
+    } catch (e) { toast(e.message, "err"); }
   }
 
-  async function doEat(foodId) {
+  function confirmQuit() {
+    showModal(`
+      <div class="emoji">🚪</div>
+      <h3>Quit this job?</h3>
+      <p>You go lose this work. But you can apply for another job today — you just no go work today.</p>
+      <div class="btn-row">
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+        <button class="confirm danger" onclick="doQuit()">Quit</button>
+      </div>
+    `);
+  }
+
+  async function doQuit() {
     try {
-      const r = await api("/api/game/eat", { method: "POST", body: JSON.stringify({ foodId }) });
-      state.player = r.player;
-      toast("🍽️ " + r.food.name + " chop!");
-      renderGame();
-    } catch (e) { toast(e.message, true); }
+      await api("/api/game/quit", { method: "POST" });
+      await refreshState();
+      closeModal();
+      toast("Job quit. Find new work.", "ok");
+      renderSheet();
+    } catch (e) { toast(e.message, "err"); }
   }
 
-  async function doTravel(city) {
-    try {
-      const r = await api("/api/game/travel", { method: "POST", body: JSON.stringify({ city }) });
-      state.player = r.player;
-      toast("🚌 You don reach " + city);
-      renderGame();
-    } catch (e) { toast(e.message, true); }
+  function confirmNewLife() {
+    showModal(`
+      <div class="emoji">⚠️</div>
+      <h3>Start a new life?</h3>
+      <p>This go delete your current life permanently. You go get a new random class.</p>
+      <div class="btn-row">
+        <button class="cancel" onclick="closeModal()">Cancel</button>
+        <button class="confirm danger" onclick="doNewLife()">Yes, new life</button>
+      </div>
+    `);
   }
 
-  async function deleteLife() {
-    if (!confirm("Delete this life? You go get new random class.")) return;
+  async function doNewLife() {
     try {
       await api("/api/player/me", { method: "DELETE" });
+      closeModal();
+      closeSheet();
       renderNoLife();
-    } catch (e) { toast(e.message, true); }
+    } catch (e) { toast(e.message, "err"); }
   }
 
   function logout() {
     setToken(null);
-    state = { player: null, cities: null, jobs: null, foods: null, tab: "home", username: null };
-    stopPoll();
+    Object.assign(state, { player: null, cities: null, jobs: null, foods: null, username: null });
+    if (clockTimer) clearInterval(clockTimer);
     go("landing");
   }
 
-  // ---- Boot ----
+  // ============================================================
+  // BOOT
+  // ============================================================
   if (getToken()) showGame();
   else go("landing");
 </script>
-</body>
-</html>
