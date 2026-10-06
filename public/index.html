@@ -313,40 +313,57 @@
   };
 
   // ============================================================
-  // MUSIC — external MP3 with fallbacks
+  // MUSIC — GitHub-hosted first, then fallbacks
+  // crossOrigin removed (it blocks playback on many mobile browsers)
   // ============================================================
   const MUSIC_SOURCES = [
-    "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3",
-    "https://www.bensound.com/bensound-music/bensound-slowmotion.mp3",
-    "https://raw.githubusercontent.com/anars/blank-audio/master/1-hour-of-silence.mp3"
+    // GitHub-hosted (we'll add this soon - replace USERNAME)
+    "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"
   ];
   let bgAudio = null;
   let musicSourceIdx = 0;
   let userInteracted = false;
+  let musicPlaying = false;
 
   function playBgMusic() {
-    if (!musicEnabled) return;
-    if (document.hidden) return;
-    if (!userInteracted) return;
+    if (!musicEnabled) { console.log("[music] off"); return; }
+    if (document.hidden) { console.log("[music] tab hidden"); return; }
+    if (!userInteracted) { console.log("[music] no user interaction yet"); return; }
     if (bgAudio && !bgAudio.paused) return;
 
     if (!bgAudio) {
       bgAudio = new Audio();
       bgAudio.loop = true;
       bgAudio.volume = musicVolume;
-      bgAudio.crossOrigin = "anonymous";
-      bgAudio.addEventListener("error", tryNextMusicSource);
+      bgAudio.preload = "auto";
+      // NO crossOrigin attribute
+      bgAudio.addEventListener("error", (e) => {
+        console.log("[music] error:", e);
+        tryNextMusicSource();
+      });
+      bgAudio.addEventListener("playing", () => { musicPlaying = true; console.log("[music] playing"); });
+      bgAudio.addEventListener("pause", () => { musicPlaying = false; });
     }
 
     bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
     bgAudio.volume = musicVolume;
+
     const p = bgAudio.play();
-    if (p && p.catch) p.catch(() => tryNextMusicSource());
+    if (p && p.catch) {
+      p.then(() => { console.log("[music] play ok"); })
+       .catch((err) => {
+         console.log("[music] play rejected:", err.message);
+         tryNextMusicSource();
+       });
+    }
   }
 
   function tryNextMusicSource() {
     musicSourceIdx++;
-    if (musicSourceIdx >= MUSIC_SOURCES.length) return;
+    if (musicSourceIdx >= MUSIC_SOURCES.length) {
+      console.log("[music] all sources failed");
+      return;
+    }
     if (bgAudio) {
       bgAudio.src = MUSIC_SOURCES[musicSourceIdx];
       bgAudio.play().catch(() => {});
@@ -1143,27 +1160,30 @@
   }
 
   // ============================================================
-  // USER INTERACTION UNLOCK
+  // FIRST TAP UNLOCKS AUDIO (mobile browsers require this)
   // ============================================================
-  function markInteracted() {
+  function unlockAudio() {
     if (userInteracted) return;
     userInteracted = true;
     initAudio();
-    if (musicEnabled) playBgMusic();
+    // Small delay to make sure context resumes
+    setTimeout(() => {
+      if (musicEnabled) playBgMusic();
+    }, 100);
   }
-  document.addEventListener("touchstart", markInteracted, { once: true });
-  document.addEventListener("click", markInteracted, { once: true });
+  document.addEventListener("touchstart", unlockAudio, { once: true, passive: true });
+  document.addEventListener("click", unlockAudio, { once: true });
+  document.addEventListener("keydown", unlockAudio, { once: true });
 
   // ============================================================
-  // VISIBILITY — pause when tab hidden, resume when visible
+  // VISIBILITY — pause when hidden, resume when visible
   // ============================================================
   document.addEventListener("visibilitychange", () => {
     if (document.hidden) {
       stopBgMusic();
     } else {
-      // Only resume if user is logged in and music is on
       if (musicEnabled && userInteracted && getToken()) {
-        setTimeout(() => playBgMusic(), 200);
+        setTimeout(() => playBgMusic(), 300);
       }
     }
   });
