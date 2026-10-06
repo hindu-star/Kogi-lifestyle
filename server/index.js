@@ -68,6 +68,13 @@ async function initDb() {
   await addCol("job_id", "VARCHAR(32)");
   await addCol("last_tick", "TIMESTAMPTZ DEFAULT NOW()");
   await addCol("last_work_at", "TIMESTAMPTZ");
+  await addCol("avatar_gender", "VARCHAR(16)");
+  await addCol("avatar_skin", "VARCHAR(16)");
+  await addCol("avatar_hair_color", "VARCHAR(16)");
+  await addCol("avatar_hairstyle", "VARCHAR(24)");
+  await addCol("avatar_top_color", "VARCHAR(16)");
+  await addCol("avatar_bottom_color", "VARCHAR(16)");
+  await addCol("avatar_outfit", "VARCHAR(24)");
 
   console.log("DB tables ready");
 }
